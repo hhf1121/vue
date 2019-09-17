@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+.class1{
+	color:red;
+}
+</style>
+<body>
+<div style="border: 1px pink solid;" id="app">
+  {{ message }}<br>
+</div>
+
+
+<div style="border: 1px pink solid;" id="app-2">
+     v-bind:title--->将data绑定到某个title<br>
+  <span v-bind:title="message">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+</div>
+
+
+<div style="border: 1px pink solid;" id="app-3">
+  <p v-if="seen">app3.seen={{seen}}</p><!-- 数字0,false,undefined :都是false -->
+  (angularJs->ng-if)
+</div>
+
+
+<div style="border: 1px pink solid;" id="app-4">
+  <ol>
+    <li v-for="todo in todos">
+      {{ todo.text }}
+    </li>
+  </ol>
+  (angularJs->ng-repeat)
+  <!-- 控制台输入 app4.todos.push({ text: '新项目' })，可动态修改todos -->
+</div>
+
+
+<div style="border: 1px pink solid;" id="app-5">
+  <p>{{ message }}</p>
+  <button @click="reverseMessage">逆转消息</button><!-- 点击，触发click事件：调用"reverseMessage"方法 -->
+	<br>v-on:click 指令添加一个事件监听器(此处为点击事件)，可调用vue实例里methods的函数  <br>
+	(angularJs->ng-click)
+</div>
+
+<div style="border: 1px pink solid;" id="mouse">
+  <P>{{ message }}</P>
+  <div style="border: 1px pink solid;width: 50px;height: 50px" v-on:mouseover="mouseoverEvent" v-on:mouseout="mouseoutEvent" v-on:dblclick="dblclickEvent">
+  	<span style="font-size: 20px; color: green">操作面板</span>
+  </div>
+</div>
+
+
+<div style="border: 1px pink solid;"  id="app-6">
+  <p>{{ message }}</p>
+  <p>{{getDataByPage(message) }}</p>{{ }}中也可放入函数
+  <input v-model="message" v-on:click="getData(message)">
+  v-model 指令，它能轻松实现表单输入和应用状态之间的双向绑定.
+  <br>(angularJs->ng-model)
+</div>
+
+<div style="border: 1px pink solid;" id="appMyItem" >
+<my-item></my-item>
+</div>
+<br/>
+
+
+<div id="app-7">
+  <ol>
+    <todo-item
+      v-for="i in list"
+      v-bind:param="i"
+    ></todo-item>
+  </ol>
+</div>
+
+<br>
+
+<p>vue有自己的实例属性与方法。它们都有前缀 $。  例如实例的el和data，可以写成$el,$data<br>
+	例如：vue.$el=document.getElementById('');
+</p>
+<br>
+<div id="html" style="border: 1px pink solid">
+使用 v-html 指令用于输出 html 代码：
+	<div v-html="message"></div>
+</div>
+
+<div id="class">
+	<input type="checkbox" v-model="flag"/><br>
+	<div v-bind:class="{'class1':flag}">
+	v-bind:class----->{{flag}}
+	</div>
+</div>
+
+<div id="box" v-bind:style="{color:activeColor, fontSize:size}">v-bind:style</div><!-- "-"的属性，需要改成驼峰命名 -->
+
+<img class="box" v-bind:src="url" v-bind:title="title">
+<br>
+
+<div id="filter" >
+filters:过滤器.在双括号中&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span style="color: red">{{ message | Str }}</span>
+<!-- 在 v-bind 指令中 -->
+<div v-bind:id="rawId | formatId">在 v-bind 指令中:<span style="color: red">{{ rawId }}</span></div>
+</div>
+
+<div>
+v-bind:id--->简写:id<br>
+v-on:changMethod-->简写：@changMethod
+</div>
+
+
+<script type="text/javascript"  src="../js/vue.js"></script>
+<script type="text/javascript">
+<!-- src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" -->
+var app = new Vue({
+	  el: '#app',
+	  data: {
+	    message: 'Hello Vue!'
+	  }
+	})
+var app2 = new Vue({
+	  el: '#app-2',
+	  data: {
+	    message: '页面加载于 ' + new Date().toLocaleString()
+	  }
+	})
+var app3 = new Vue({
+	  el: '#app-3',
+	  data: {
+	    seen: true
+	  }
+	})
+var app4 = new Vue({
+	  el: '#app-4',
+	  data: {
+	    todos: [
+	      { text: '学习 JavaScript' },
+	      { text: '学习 Vue' },
+	      { text: '整个牛项目' }
+	    ]
+	  }
+	})
+var app5 = new Vue({
+	  el: '#app-5',
+	  data: {
+	    message: 'Hello Vue.js!'
+	  },
+	  methods: {
+	    reverseMessage: function () {
+	    	alert("以' '分割之后反转元素位置，再加上' '");
+	      this.message = this.message.split(' ').reverse().join(' ');//以' '分割之后反转元素位置，再加上' '
+	    }
+	  }
+	})
+var app6 = new Vue({
+	  el: '#app-6',
+	  data: {
+	    message: 'Hello Vue...'
+	  },
+	  methods:{
+		  getData:function(data){
+			  alert(data);
+		  },
+		  getDataByPage:function(data){
+			  alert("页面{{}}中，放入的函数执行："+data);
+		  }
+	  }
+	})
+
+//自定义组件----类似angluarjs的自定义标签
+Vue.component('myItem', {
+  template: '<li>这是个组件：component</li>'
+});
+new Vue({
+  el:'#appMyItem',
+});
+
+
+Vue.component('todoItem', {//todoItem也可写成todo-item
+	  props: ['param'],
+	  template: '<li style="color:red" v-on:click="getKey(param.id)">{{ param.text }}</li>',
+	  methods:{
+			 getKey:function(data){
+				alert(data);
+			 }
+		  }
+	});
+
+var app7 = new Vue({
+	  el: '#app-7',
+	  data: {
+	    list: [
+	      { id: 0, text: '蔬菜' },
+	      { id: 1, text: '奶酪' },
+	      { id: 2, text: '随便其它什么人吃的东西' }
+	    ]
+	  }
+	});
+	
+var  mouseover1=new Vue({
+	el:"#mouse",
+	data:{
+		message:'等待操作...'
+	},
+	methods:{
+		mouseoverEvent:function(){
+		 this.message='鼠标移入...';
+		},
+		mouseoutEvent:function(){
+			this.message='鼠标移出...';
+		},
+		dblclickEvent:function(){
+			this.message="双击！";
+		}
+	}
+});
+//mousedown:鼠标按钮被按下（左键或者右键）时触发。不能通过键盘触发。
+//mouseup:鼠标按钮被释放弹起时触发。不能通过键盘触发。
+//click:单击鼠标左键或者按下回车键时触发。这点对确保易访问性很重要，意味着onclick事件处理程序既可以通过键盘也可以通过鼠标执行。
+//dblclick:双击鼠标左键时触发。
+//mouseover:鼠标移入目标元素上方。鼠标移到其后代元素上时会触发。
+//mouseout:鼠标移出目标元素上方。
+//mouseenter:鼠标移入元素范围内触发，该事件不冒泡，即鼠标移到其后代元素上时不会触发。
+//mouseleave:鼠标移出元素范围时触发，该事件不冒泡，即鼠标移到其后代元素时不会触发。
+//mousemove:鼠标在元素内部移到时不断触发。不能通过键盘触发。
+new Vue({
+	el:'#html',
+	data:{
+		message:'<h1>my vue</h1>'
+	}
+});
+
+new Vue({
+	el:'#class',
+	data:{
+		flag:false
+	}
+});
+var cssStyle=new Vue({
+    el:'#box',
+    data:{
+        activeColor:'#f00',
+        size:'30px',
+        shadow:'5px 2px 6px #000'
+    }
+});
+var srcurl= new Vue({
+    el:'.box',//类选择器
+    data:{
+        url:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551258220301&di=b72c580b03a9aff579f38c215715b685&imgtype=0&src=http%3A%2F%2Fimg3.redocn.com%2F20100203%2FRedocn_2010020208535944.jpg",
+        title:"引用的网络图片"
+    }
+});
+
+var filterStr=new Vue({
+	  el: '#filter',
+	  data: {
+	    message: 'runoob',
+	    rawId:'id2'
+	  },
+	  filters: {
+	    Str: function (value) {
+	      if (!value) return '!'+value;
+	      value = value.toString();
+	      return value.charAt(0).toUpperCase() + value.slice(1,2);//获取下标为0的值，转化大写。+value从下标为1(包含)，到下标为2的值(不包含)。
+	    },
+	    formatId:function(value){
+	    	if(value=='id1'){
+	    	return value.toUpperCase();
+	    	}else{
+	    	return value;
+	    	}
+	    }
+	  }
+	})
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="vm1" style="border: 1px pink solid;">
+{{a}}<br>
+{{b}}
+</div>
+<div id="id2" style="border: 1px pink solid;">
+{{ newTodoText }}
+{{ visitCount }}
+{{ hideCompletedTodos }}
+<div v-for="todo in todos">
+{{ todo.t }}
+</div>
+{{ error }}
+</div>
+
+<div id="app" style="border: 1px red solid;">
+  <p>{{ foo }}</p>
+  <!-- 这里的 `foo` 不会更新！ -->
+  <button v-on:click="foo +=1">+1</button>
+</div>
+<div id="example"  style="border: 1px red solid;">
+{{example}}<br>
+{{example2}}
+</div>
+
+<div id="app2" style="border: 1px pink solid">
+{{ message2 }}
+</div>
+
+<script type="text/javascript"  src="../js/vue.js"></script>
+<script type="text/javascript">
+//我们的数据对象
+var data = { a: 1 ,b:''};
+//当这些数据改变时，视图会进行重渲染。值得注意的是只有当实例被创建时 data 中存在的属性才是响应式的.
+// 该对象被加入到一个 Vue 实例中
+var vm = new Vue({
+  el: '#vm1',
+  data: data
+});
+var data2= new Vue({
+	el:"#id2",
+	data: {
+		  newTodoText: '',
+		  visitCount: 0,
+		  hideCompletedTodos: false,
+		  todos: [],
+		  error: null
+		}
+});
+
+var obj = {foo: 1};
+	//Object.freeze(obj);//这里唯一的例外是使用 Object.freeze()，这会阻止修改现有的属性，也意味着响应系统无法再追踪变化。
+	new Vue({
+		  el: '#app',
+		  data: obj
+		});
+
+	
+var data3 = { example: 1 ,example2:2};
+var vm3 = new Vue({
+	  el: '#example',
+	  data: data3,
+	  watch:{//用来监控
+		  example(newD){//监控example
+				  console.log("改变之后："+newD);
+		  },
+		  example2(newD,oldD){//监控example2
+				  alert(newD);
+				  console.log("改变之前："+oldD);
+		  }
+	  }
+	});
+//监控也可写成下面的形式
+//vm3.$watch('example',function(newD,oldD){alert(newD);console.log("改变之前的值："+oldD)});
+
+var vm4 = new Vue({
+    el: '#app2',
+    data: {
+        message2: '我是消息，'
+    },
+    methods: {
+        methodTest() {
+            return this.message2 + '现在我用的是methods'
+        }
+    },
+    computed: {
+        computedTest() {
+            return this.message2 + '现在我用的是computed'
+        }
+    },
+    //生命周期钩子的函数：
+    created: function () {
+        // `this` 指向 vm 实例
+        console.log('message2 is  created: ' + this.message2);
+      },
+    updated: function(){
+    	console.log('message2 is  updated: ' + this.message2);
+    },
+    destroyed:function(){
+    	console.log('message2 is  destroyed: ' + this.message2);
+    }
+})
+
+
+</script>
+
+</body>
+</html>
