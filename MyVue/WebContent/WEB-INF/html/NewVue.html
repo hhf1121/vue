@@ -30,6 +30,20 @@
 
 
 <div style="border: 1px pink solid;" id="app-4">
+	<table>
+		<tr>
+			<th>序号</th>
+			<th>名字</th>
+			<th>年纪</th>
+			<th>爱好</th>
+		</tr>
+		<tr v-for="(entity,index) in  todos">
+			<th>{{index+1}}</th>
+			<th>{{entity.name}}</th>
+			<th>{{entity.age}}</th>
+			<th>{{entity.text}}</th>
+		</tr>
+	</table>
   <ol>
     <li v-for="todo in todos">
       {{ todo.text }}
@@ -73,7 +87,7 @@
   <ol>
     <todo-item
       v-for="i in list"
-      v-bind:param="i"
+      :param="i"
     ></todo-item>
   </ol>
 </div>
@@ -113,6 +127,31 @@ v-bind:id--->简写:id<br>
 v-on:changMethod-->简写：@changMethod
 </div>
 
+<div id="mycomponent" style="border:1px red solid;">
+	<fuqin></fuqin>
+</div>
+
+<template id="t1">
+	<div>
+	父组件:
+	{{attr1}}<br><span style="color: red">{{attr2}}</span>
+	<erzi :attr1="attr1"  @get-sonparam="getData"></erzi> 子组件调用父组件的属性，必须将父组件的属性字段传过去。
+	</div>
+</template>
+<template id="t2">
+	<div>
+	子组件:
+	{{attr2}}<br>
+	{{attr1}}
+	<button @click="sendParam">传递参数</button>也可放入钩子函数中mounted
+	</div>
+</template>
+
+<div id="brothercomponent">
+<component1></component1>
+<component2></component2>
+</div>
+
 
 <script type="text/javascript"  src="../js/vue.js"></script>
 <script type="text/javascript">
@@ -139,9 +178,9 @@ var app4 = new Vue({
 	  el: '#app-4',
 	  data: {
 	    todos: [
-	      { text: '学习 JavaScript' },
-	      { text: '学习 Vue' },
-	      { text: '整个牛项目' }
+	      { text: '学习 JavaScript',name:'小米',age:21 },
+	      { text: '学习 Vue',name:'小明',age:22 },
+	      { text: '整个牛项目',name:'小华',age:26}
 	    ]
 	  }
 	})
@@ -176,11 +215,12 @@ var app6 = new Vue({
 Vue.component('myItem', {
   template: '<li>这是个组件：component</li>'
 });
+
 new Vue({
   el:'#appMyItem',
 });
 
-
+//全局组件
 Vue.component('todoItem', {//todoItem也可写成todo-item
 	  props: ['param'],
 	  template: '<li style="color:red" v-on:click="getKey(param.id)">{{ param.text }}</li>',
@@ -277,7 +317,98 @@ var filterStr=new Vue({
 	    	}
 	    }
 	  }
-	})
+	});
+
+/* 组件的数据通信↓↓↓↓↓↓↓ */
+
+//父子组件通信
+new Vue({
+	el:"#mycomponent",
+	data:{},
+ 	components:{//局部组件
+		"fuqin":{
+			template:"#t1",
+			data(){
+				return {
+					attr1:"我是id为component的vue的局部组件[fuqin]",
+					attr2:""//为传递子组件属性做预留
+				}
+			},
+			methods:{
+				getData(data){
+					this.attr2=data;
+				}
+			},
+			components:{
+				"erzi":{
+					template:"#t2",
+					data(){
+						return{
+							attr2:"我是id为component的vue的局部组件[fuqin]下的组件[erzi]"
+						}
+					},
+					props:['attr1'],//子组件想使用父组件的属性，必须用props属性去接收父组件的数据。
+					methods:{
+						sendParam(){
+							this.$emit("get-sonparam",this.attr2);//通过$emit将attr2属性传给父组件的getSonParam事件
+						}
+					},
+					mounted(){
+						this.$emit("get-sonparam",this.attr2);//通过$emit将attr2属性传给父组件的getSonParam事件
+					}
+				}
+			}
+		}
+	} 
+});
+
+//兄弟组件通信
+var byvalue=new Vue();
+
+new Vue({
+	el:"#brothercomponent",
+	data:{},
+	components:{
+		"component1":{
+			template:"<div>{{attr1}}{{attr2}}</div>",
+			data(){
+				return{
+					attr1:"我是components1",
+					attr2:""
+				}
+			},
+			mounted(){
+				//通过vue空对象，接收值
+				byvalue.$on("tovalue",attr2=>{
+					this.attr2=attr2;
+				})
+			}
+		},
+		"component2":{
+			template:"<div><input v-model='attr2'/></div>",
+			data(){
+				return{
+					attr2:"我是components2"
+				}
+			},
+			/* methods:{
+				datachange(){
+					byvalue.$emit("tovalue",this.attr2);
+				}
+			}, */
+			watch:{//通过watch事件，实时把值传递给tovalue事件
+				attr2(val){
+					byvalue.$emit("tovalue",this.attr2);
+				}
+			},
+			mounted(){
+				//通过vue空对象，传值
+				byvalue.$emit("tovalue",this.attr2);
+			}
+		}
+	}
+});
+
 
 
 </script>
