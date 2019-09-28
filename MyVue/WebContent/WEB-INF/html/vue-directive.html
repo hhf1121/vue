@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>vue自定义指令/常用属性方法</title>
+</head>
+<body>
+
+<div id="app">
+	<input  v-hhf type="text" v-model="msg">{{msg}}
+</div>
+<div id="app1">
+	<input type="text" v-model="msg"/><div ref="mytitle">{{msg}}</div>
+	$refs.title：{{afterData}}
+</div>
+<div id="vm2">
+	<input type="text" v-model="msg"/>
+	<input type="text" v-model="user.name"/>
+</div>
+
+
+
+<script type="text/javascript"  src="../js/vue.js"></script>
+<script type="text/javascript">
+	//自定义指令directive
+	Vue.directive("hhf",{
+		bind(el,binding){
+			el.style.color="red";
+		},
+		inserted(){
+			console.log("被绑定自定义指令的元素插入到其父节点的时候调用...");
+		},
+		update(){
+			console.log("被绑定自定义指令的元素里面的值更新的时候调用...");
+		},
+		unbind(){
+			
+		}
+	});
+
+	var  vm = new Vue({
+		el:"#app",
+		data:{
+			msg:"hello"
+		}
+	});
+
+	//nextTick
+	var vm1=new Vue({
+		el:"#app1",
+		data:{
+			msg:"app1",
+			afterData:""
+		},
+		mounted(){
+			this.msg="tom";//改变了msg的值，但是下面获取docment的时候，还是之前的app1
+			//this.afterData=this.$refs.mytitle.textContent;
+			//修复：
+			this.$nextTick(function(){
+				this.afterData=this.$refs.mytitle.textContent;
+			})
+		}
+	});
+	
+	//数据监听:watch
+	var vm2=new Vue({
+		el:"#vm2",
+		data:{
+			msg:"info",
+			user:{
+				id:01,
+				name:"xiaoming",
+				age:21
+			}
+		},
+		watch:{
+			//单属性
+			msg:function(old,fresh){
+				console.log("旧值："+old+";新值："+fresh);
+			},
+			//对象属性：方式1
+			//"user.name":function(old,fresh){
+			//	console.log("旧值："+old+";新值："+fresh);
+			//},
+			//对象属性：方式2
+			user:{
+				handler:function(old,fresh){
+					console.log("旧值："+old.name+";新值："+fresh.name);
+				},
+				deep:true//深度监听，当对象中的属性发生改变的时候也会监听
+			}
+		}
+	});
+	
+</script>
+</body>
+</html>
