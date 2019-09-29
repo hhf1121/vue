@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>vue-router</title>
+<script type="text/javascript"  src="../js/vue.js"></script>
+<script type="text/javascript"  src="../js/vue-router.js"></script>
+</head>
+<body>
+
+<div id="app">
+	<router-link to="/home">主页</router-link>
+	<router-link to="/user">用户</router-link>
+	<div>
+		<router-view></router-view>
+	</div>
+</div>
+<template id="user">
+	<h1>用户context</h1>
+	<div>
+		<router-link to="/user/login?name=hhf&id=123">用户登录</router-link>
+		<router-link to="/user/reg/tom/123">用户注册</router-link>
+		<div>
+			<router-view></router-view>
+		</div>
+	</div>
+</template>
+
+<script type="text/javascript">
+	//定义组件
+	var home={
+			template:"<h1>主页context</h1>"
+	}
+	var user={
+			template:"#user"
+	}
+	var login={
+			template:"<div><h1>用户登录</h1>{{$route.query.name}}-{{$route.query.id}}</div>"//传值1
+	}
+	var reg={
+			template:"<div><h1>用户注册</h1>{{$route.params.name}}-{{$route.params.id}}</div>"//传值2：rest风格
+	}
+	//配置路由
+	var routes=[
+	            {path:"/home",compinent:home},
+	            {
+	            	path:"/user",
+	            	compinent:user,
+	            	children:[
+	            	        {path:"login",compinent:login},//子路由
+	          	            {path:"reg/:name/:id",compinent:reg}
+	            	        ]
+	            },
+	            {path:"/",redirect:"/home"}//默认主页是home
+	            ]
+	//实例化一个vuerouter的对象
+	var router=new VueRouter({
+		routes
+		//mode:"history"
+	})
+	//将router挂载到vue
+	var vm=new Vue({
+		el:"#app",
+		router
+	})
+	
+</script>
+</body>
+</html>
