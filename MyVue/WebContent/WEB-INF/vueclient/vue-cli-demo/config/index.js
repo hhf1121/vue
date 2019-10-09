@@ -10,12 +10,19 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {//解决跨域
+    proxyTable: {//解决跨域（需要重启vue项目）
       '/api': {//http://localhost:8082/user/queryVIP?yes=1
         target: 'http://localhost:8082/', //设置你调用的接口域名和端口号别忘了加http
         changeOrigin: true,//是否跨域
         pathRewrite: {
           '^/api': ''   //需要rewrite重写的,
+        }
+      },
+      '/myApi': {//http://localhost:8082/user/queryVIP?yes=1
+        target: 'http://localhost:8080/', //设置你调用的接口域名和端口号别忘了加http
+        changeOrigin: true,//是否跨域
+        pathRewrite: {
+          '^/myApi': ''   //需要rewrite重写的,
         }
       }
     },

@@ -1,13 +1,10 @@
 <template>
   <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form-item label="账号" prop="username">
+      <el-input type="text" v-model="ruleForm.username"></el-input>
+    </el-form-item>
     <el-form-item label="密码" prop="pass">
-      <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="确认密码" prop="checkPass">
-      <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="年龄" prop="age">
-      <el-input v-model.number="ruleForm.age"></el-input>
+      <el-input type="password" v-model="ruleForm.pass" ></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -17,29 +14,66 @@
 </template>
 
 <script>
-    export default {
-        name: "Login",
-      data(){
-          return{
-            ruleForm: {
-              pass: '',
-              checkPass: '',
-              age: ''
-            },
-            rules: {
-              pass: [
-                // { validator: validatePass, trigger: 'blur' }
-              ],
-              checkPass: [
-                // { validator: validatePass2, trigger: 'blur' }
-              ],
-              age: [
-                // { validator: checkAge, trigger: 'blur' }
-              ]
-            }
+  import axios from 'axios'
+  export default {
+    data() {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          callback();
+        }
+      };
+      var validateUserName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入账号'));
+        }  else {
+          callback();
+        }
+      };
+      return {
+        ruleForm: {
+          pass: '',
+          username: ''
+        },
+        rules: {
+          pass: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          username: [
+            { validator: validateUserName, trigger: 'blur' }
+          ]
+        }
+      };
+    },
+    methods: {
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            //后端请求数据
+            axios.get('/myApi/book01/user/login.html?userName=' + this.ruleForm.username+'&passWord='+this.ruleForm.pass)
+              .then(res => {
+                debugger
+                if(res.data.indexOf("欢迎你")==-1){//密码或账号错误
+                  this.$message.error({message: '密码或账号错误',center: true});
+                }else{
+                  this.$message.success({message: '登录成功',center: true});
+                }
+                // console.log(res)
+              }).catch(err => {
+              this.$message.error({message: '请求错误',center: true});
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
           }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
     }
+  }
 </script>
 
 <style scoped>
