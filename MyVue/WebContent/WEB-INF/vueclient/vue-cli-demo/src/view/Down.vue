@@ -16,18 +16,17 @@
     cursor: pointer;
     color: #409EFF;
   }
+
   .el-icon-arrow-down {
     font-size: 12px;
   }
 </style>
 
 <script>
-  export default {
-    name: "Down",
-    data(){
-      return{
-      }
-    }
+export default {
+  name: 'Down',
+  data () {
+    return {}
   }
+}
 </script>
-
