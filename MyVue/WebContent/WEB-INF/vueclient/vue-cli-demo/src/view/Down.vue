@@ -1,3 +1,4 @@
+<template>
 <el-dropdown>
   <span class="el-dropdown-link">
     下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
@@ -10,7 +11,7 @@
     <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
-
+</template>
 <style>
   .el-dropdown-link {
     cursor: pointer;

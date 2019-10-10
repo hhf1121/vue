@@ -18,7 +18,7 @@ import axios from 'axios'
 
 export default {
   name: 'Login',
-  data () {
+  data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
@@ -49,17 +49,19 @@ export default {
     }
   },
   methods: {
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 后端请求数据
-          axios.get('/myApi/book01/user/login.html?userName=' + this.ruleForm.username + '&passWord=' + this.ruleForm.pass)
+          axios.get('/api/user/queryByVue?userName=' + this.ruleForm.username + '&passWord=' + this.ruleForm.pass)
             .then(res => {
-
-              if (res.data.indexOf('欢迎你') === -1) { // 密码或账号错误
+              debugger
+              if (res.data.data == null) { // 密码或账号错误
                 this.$message.error({message: '密码或账号错误', center: true})
               } else {
                 this.$message.success({message: '登录成功', center: true})
+                // 成功之后，路由到数据列表,并查询此用户类型的数据
+                this.$router.push({path: '/MyData?yes='+ res.data.data.yes})
               }
               // console.log(res)
             }).catch(err => {
@@ -71,7 +73,7 @@ export default {
         }
       })
     },
-    resetForm(formName) {
+    resetForm (formName) {
       this.$refs[formName].resetFields()
     }
   }
