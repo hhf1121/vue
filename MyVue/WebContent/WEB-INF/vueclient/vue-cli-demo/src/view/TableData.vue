@@ -16,44 +16,43 @@
     </el-select>
     <el-button type="success" @click="getData" style="float:left;">查询</el-button>
     <el-button type="success" @click="insertDate" style="float:left;">新增</el-button>
-    <el-table
-      :data="tableData"
-      style="width: 100%">
-      <el-table-column
-        prop="userName"
-        label="账号"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="createDate"
-        label="日期"
-        :formatter="formatDate"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="150">
-        <template slot-scope="scope">
-          <el-button @click="viewData(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" @click="editData(scope.row)" size="small">编辑</el-button>
-          <el-button type="text" @click="deleteData(scope.row)" size="small">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"
-                   style="width: 500px"></add-or-update>
+      <el-table
+        :data="tableData"
+        style="width: 100%">
+        <el-table-column
+          prop="userName"
+          label="账号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="createDate"
+          label="日期"
+          :formatter="formatDate"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="150">
+          <template slot-scope="scope">
+            <el-button @click="viewData(scope.row)" type="text" size="small">查看</el-button>
+            <el-button type="text" @click="editData(scope.row)" size="small">编辑</el-button>
+            <el-button type="text" @click="deleteData(scope.row)" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"
+                     style="width: 500px"></add-or-update>
   </div>
-
 </template>
 
 <script>
@@ -72,8 +71,7 @@ export default {
       dropdown: [],
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       defaultDate: new Date(),
-      addOrUpdateVisible: false,
-      yes: ''
+      addOrUpdateVisible: false
     }
   },
   methods: {
@@ -150,8 +148,13 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.query.yes) { // 传了用户类型yes
-      this.params.yes = this.$route.query.yes
+    setInterval(() => {
+      this.defaultDate = new Date() // 动态时间
+    }, 1000)
+
+    if (this.$route.params.id !== '' && this.$route.params.id !== undefined) {
+      this.params.yes = parseInt(this.$route.params.id)
+      this.options.key = this.params.yes
       this.getData()
     }
   }

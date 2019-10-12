@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'// 引入ElementUI
 import 'element-ui/lib/theme-chalk/index.css'// ElementUI组件需要手动引入样式
+import D2Crud from '@d2-projects/d2-crud' // 引入d2crud组件
+import VCharts from 'v-charts' // 引入
 import axios from 'axios'
 // 设置axios超时：
 Vue.prototype.$http = axios.create({
@@ -13,6 +15,8 @@ Vue.prototype.$http = axios.create({
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)// 在所有的vue文件中，都可使用
+Vue.use(D2Crud)
+Vue.use(VCharts)
 
 /* eslint-disable no-new */
 new Vue({

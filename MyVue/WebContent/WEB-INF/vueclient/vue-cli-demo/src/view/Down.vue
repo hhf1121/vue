@@ -1,33 +1,30 @@
 <template>
-<el-dropdown>
-  <span class="el-dropdown-link">
-    下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
-  </span>
-  <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item>黄金糕</el-dropdown-item>
-    <el-dropdown-item>狮子头</el-dropdown-item>
-    <el-dropdown-item>螺蛳粉</el-dropdown-item>
-    <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-    <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-  </el-dropdown-menu>
-</el-dropdown>
+  <div>
+    <ve-line :data="chartData"></ve-line>
+  </div>
 </template>
 <style>
-  .el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
 
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
 </style>
 
 <script>
+
 export default {
   name: 'Down',
   data () {
-    return {}
+    return {
+      chartData: {
+        columns: ['日期', '访问用户', '下单用户', '下单率', '自定义'],
+        rows: [
+          {'日期': '1/1', '访问用户': 1393, '下单用户': 1093, '下单率': 0.32, '自定义': 1111},
+          {'日期': '1/2', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26, '自定义': 2222},
+          {'日期': '1/3', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76, '自定义': 3333},
+          {'日期': '1/4', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49, '自定义': 4444},
+          {'日期': '1/5', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323, '自定义': 5555},
+          {'日期': '1/6', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78, '自定义': 6666}
+        ]
+      }
+    }
   }
 }
 </script>

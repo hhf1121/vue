@@ -4,9 +4,9 @@
     <div>
       <router-link to="/">首页</router-link>
       <router-link to="/home">我的</router-link>
-      <router-link to="/Login">登录</router-link>
-      <router-link to="/Down">下拉</router-link>
+      <router-link to="/Down">数据曲线图</router-link>
       <router-link to="/MyData">数据</router-link>
+      <router-link to="/D2Table">D2表格</router-link>
     </div>
     <div>
       <router-view/>

@@ -49,7 +49,7 @@ export default {
     }
   },
   methods: {
-    submitForm (formName) {
+    submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 后端请求数据
@@ -60,8 +60,13 @@ export default {
                 this.$message.error({message: '密码或账号错误', center: true})
               } else {
                 this.$message.success({message: '登录成功', center: true})
-                // 成功之后，路由到数据列表,并查询此用户类型的数据
-                this.$router.push({path: '/MyData?yes='+ res.data.data.yes})
+                // 成功之后，路由到数据列表,传参id查询此用户类型的数据
+                this.$router.push(
+                  {
+                    name: 'MyData', params: {
+                      id: res.data.data.yes
+                    }
+                  })
               }
               // console.log(res)
             }).catch(err => {
@@ -73,7 +78,7 @@ export default {
         }
       })
     },
-    resetForm (formName) {
+    resetForm(formName) {
       this.$refs[formName].resetFields()
     }
   }

@@ -5,6 +5,7 @@ import MyHome from '@/components/MyHome'
 import Login from '@/view/Login'
 import Down from '@/view/Down'
 import MyData from '@/view/TableData'
+import D2Table from '@/view/D2Table'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/MyData',
       name: 'MyData',
       component: MyData
+    },
+    {
+      path: '/D2Table',
+      name: 'D2Table',
+      component: D2Table
     }
   ]
 })
