@@ -53,7 +53,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 后端请求数据
-          axios.get('/api/user/queryByVue?userName=' + this.ruleForm.username + '&passWord=' + this.ruleForm.pass)
+          axios.get('/api/springBoot/vue/queryByVue?userName=' + this.ruleForm.username + '&passWord=' + this.ruleForm.pass)
             .then(res => {
               debugger
               if (res.data.data == null) { // 密码或账号错误

@@ -84,7 +84,7 @@ export default {
         this.$message.success({message: '正在查询,请稍后...', center: true})
       }
       // 后端请求数据
-      axios.get('/api/user/queryVIP?yes=' + this.params.yes)
+      axios.get('/api/springBoot/user/queryVIP?yes=' + this.params.yes)
         .then(res => {
           this.tableData = res.data.data
           this.$message.success({message: '请求成功', center: true})
@@ -121,7 +121,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        axios.get('api/user/deleteByVue?id=' + data.id).then(res => {
+        axios.get('api/springBoot/vue/deleteByVue?id=' + data.id).then(res => {
           this.$message.success({message: '删除成功', center: true})
           this.getData()
         }).catch(err => {

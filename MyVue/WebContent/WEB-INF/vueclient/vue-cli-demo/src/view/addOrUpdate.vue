@@ -91,7 +91,7 @@ export default {
           var entity = this.addForm
           if (entity.id) {
             // 后端请求数据post
-            axios.post('/api/user/updateDataByVue', entity)
+            axios.post('/api/springBoot/vue/updateDataByVue', entity)
               .then(res => {
                 if (res.data.data != null) {
                   this.$message.success({message: '更新成功', center: true})
@@ -108,7 +108,7 @@ export default {
 
           } else {
             // 后端请求数据post
-            axios.post('/api/user/insertDataByVue', entity)
+            axios.post('/api/springBoot/vue/insertDataByVue', entity)
               .then(res => {
                 if (res.data.data != null) {
                   this.$message.success({message: '新增成功', center: true})
