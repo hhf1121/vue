@@ -53,6 +53,16 @@
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"
                      style="width: 500px"></add-or-update>
   </div>
+  <!--<el-pagination @size-change="handleSizeChange"-->
+                 <!--@current-change="handleCurrentChange"-->
+                 <!--:pagination="pagination"-->
+                 <!--:current-page="pagination.currentPage"-->
+                 <!--:page-sizes="[10, 20, 50, 100]"-->
+                 <!--:page-size="10"-->
+                 <!--:background="true"-->
+                 <!--layout="total,-> ,prev, pager, next, sizes,jumper"-->
+                 <!--:total="pagination.total">-->
+  <!--</el-pagination>-->
 </template>
 
 <script>

@@ -14,6 +14,16 @@
         <el-form-item label="地址" prop="address">
           <el-input v-model="addForm.address"></el-input>
         </el-form-item>
+        <el-form-item label="类型" prop="address">
+          <el-select v-model="addForm.yes" placeholder="请选择类型" style="float:left;width: 200px;">
+            <el-option
+              v-for="item in options"
+              :label="item.value"
+              :key="item.value"
+              :value="item.key">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="success" @click="save('addForm')" style="text-align: center" v-if="isview">保存</el-button>
           <el-button type="success" @click="cancel" style="text-align: center">取消</el-button>
@@ -65,6 +75,7 @@ export default {
         address: '',
         name: ''
       },
+      options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       isview: true,
       addformVisable: false,
       title: '',
