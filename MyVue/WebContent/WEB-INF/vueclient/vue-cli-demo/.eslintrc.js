@@ -1,29 +1,22 @@
-// https://eslint.org/docs/user-guide/configuring
-
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    node: true
+  },
   parserOptions: {
     parser: 'babel-eslint'
   },
-  env: {
-    browser: true,
-  },
-  extends: [
-    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential', 
-    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-    'standard'
-  ],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
+  extends: ['plugin:nuxt/recommended'],
   // add your custom rules here
   rules: {
-    // allow async-await
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    semi: ['error', 'always'], // 要求使用分号结束
+    quotes: ['error', 'single'], // 强制单引号
+    indent: ['error', 4], // 代码缩进4
+    'space-before-function-paren': ['error', { anonymous: 'always', named: 'never' }],
     'generator-star-spacing': 'off',
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-var': 'error' // 不能用var申明
   }
-}
+};

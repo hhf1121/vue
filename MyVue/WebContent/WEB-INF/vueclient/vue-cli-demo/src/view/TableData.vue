@@ -1,5 +1,8 @@
 <template>
   <div class="mystyle">
+    <el-row  style="padding-left: 30px;">
+      <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline"  @click="insertDate">新增</el-button>
+    </el-row>
     {{ defaultDate|formatDate}}
     <el-date-picker style="float:left;width: 200px;"
                     v-model="params.data"
@@ -15,7 +18,7 @@
       </el-option>
     </el-select>
     <el-button type="success" @click="getData" style="float:left;">查询</el-button>
-    <el-button type="success" @click="insertDate" style="float:left;">新增</el-button>
+    <el-button type="success" @click="getReset" style="float:left;">重置</el-button>
       <el-table
         :data="tableData"
         style="width: 100%">
@@ -52,24 +55,24 @@
       </el-table>
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"
                      style="width: 500px"></add-or-update>
+  <el-pagination @size-change="handleSizeChange"
+                 @current-change="paginationCurrentChange"
+                 :pagination="pagination"
+                 :current-page="pagination.currentPage"
+                 :page-sizes="[5, 10, 20]"
+                 :page-size="5"
+                 :background="true"
+                 layout="total,-> ,prev, pager, next, sizes,jumper"
+                 :total="pagination.total">
+  </el-pagination>
   </div>
-  <!--<el-pagination @size-change="handleSizeChange"-->
-                 <!--@current-change="handleCurrentChange"-->
-                 <!--:pagination="pagination"-->
-                 <!--:current-page="pagination.currentPage"-->
-                 <!--:page-sizes="[10, 20, 50, 100]"-->
-                 <!--:page-size="10"-->
-                 <!--:background="true"-->
-                 <!--layout="total,-> ,prev, pager, next, sizes,jumper"-->
-                 <!--:total="pagination.total">-->
-  <!--</el-pagination>-->
 </template>
 
 <script>
 import axios from 'axios'
 import dayjs from 'dayjs'
 import addOrUpdate from '@/view/addOrUpdate'
-
+let isSearch;
 export default {
   components: {
     addOrUpdate
@@ -81,33 +84,43 @@ export default {
       dropdown: [],
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       defaultDate: new Date(),
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      pagination: {currentPage: 1, pageSize: 10},
+      queryData:{}
     }
   },
   methods: {
     getData: function () {
+      debugger;
       // 校验
-      if (this.params.yes == null || this.params.yes === '') {
+      if (!this.params.yes&&!this.params.data) {
         this.$message.error({message: '请选择查询条件', center: true})
         return
       } else {
-        this.$message.success({message: '正在查询,请稍后...', center: true})
-      }
-      // 后端请求数据
-      axios.get('/api/springBoot/user/queryVIP?yes=' + this.params.yes)
-        .then(res => {
-          this.tableData = res.data.data
-          this.$message.success({message: '请求成功', center: true})
-          // console.log(res)
-        }).catch(err => {
+        this.params.pageIndex=this.pagination.currentPage;
+        this.params.pageSize=this.pagination.pageSize;
+        this.queryData=this.params;
+        // 后端请求数据
+        axios.post('/api/springBoot/user/queryVIP',this.queryData)
+          .then(res => {
+            this.tableData = res.data.data
+            isSearch=true;
+            this.$message.success({message: '请求成功', center: true})
+            // console.log(res)
+          }).catch(err => {
           this.$message.error({message: '请求失败', center: true})
           console.log(err)
         })
+      }
     },
-    getListData: function () { // 刷新
+    getReset(){
+      this.params.date="";
+      this.params.yes="";
+    },
+    getListData () { // 刷新
       this.getData()
     },
-    insertDate: function () { // 新增
+    insertDate () { // 新增
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init('')
@@ -149,7 +162,21 @@ export default {
       var value = cellValue.createDate
       console.log('-------------------formatDate')
       return null != value ? dayjs(value).format('YYYY-MM-DD HH:mm:ss') : null
-    }
+    },
+    paginationCurrentChange(currentPage) {
+      if (!isSearch) {
+        return this.$message.error({ message: '请先点击查询', center: true });
+      }
+      this.pagination.currentPage = currentPage;
+      this.refresh();
+    },
+    handleSizeChange(sizes) {
+      if (!isSearch) {
+        return this.$message.success({ message: '请先点击查询', center: true });
+      }
+      this.pagination.pageSize = sizes;
+      this.refresh();
+    },
   },
   filters: {// 过滤器
     formatDate: function (cellValue) {
