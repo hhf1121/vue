@@ -1,14 +1,18 @@
 <template>
   <div class="mystyle">
-    <el-row  style="padding-left: 30px;">
-      <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline"  @click="insertDate">新增</el-button>
+    <el-row  style="">
+      <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" style="float: left"  @click="insertDate">新增</el-button>
     </el-row>
     {{ defaultDate|formatDate}}
+    <el-form :inline="true" ref="myForm" :model="params" label-width="80px" style="float: left">
+    <el-form-item label="创建时间" prop="createDate">
     <el-date-picker style="float:left;width: 200px;"
                     v-model="params.createDate"
                     type="date"
                     placeholder="选择日期">
     </el-date-picker>
+    </el-form-item>
+    <el-form-item label="会员类型" prop="yes">
     <el-select v-model="params.yes" placeholder="请选择类型" style="float:left;width: 200px;">
       <el-option
         v-for="item in options"
@@ -17,10 +21,15 @@
         :value="item.key">
       </el-option>
     </el-select>
-    <el-button type="success" @click="getData" style="float:left;">查询</el-button>
-    <el-button type="success" @click="getReset" style="float:left;">重置</el-button>
+    </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="getData" style="float:left;">查询</el-button>
+        <el-button type="success" @click="getReset('myForm')" style="float:left;">重置</el-button>
+      </el-form-item>
+    </el-form>
       <el-table
         :data="tableData"
+        height="350"
         style="width: 100%">
         <el-table-column
           prop="userName"
@@ -53,8 +62,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"
-                     style="width: 500px"></add-or-update>
+      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"></add-or-update>
   <el-pagination @size-change="handleSizeChange"
                  @current-change="paginationCurrentChange"
                  :pagination="pagination"
@@ -62,6 +70,7 @@
                  :page-sizes="[5, 10, 20]"
                  :page-size="5"
                  :background="true"
+                 style="float: left"
                  layout="total,-> ,prev, pager, next, sizes,jumper"
                  :total="pagination.total">
   </el-pagination>
@@ -80,7 +89,10 @@ export default {
   data() {
     return {
       tableData: [],
-      params: {},
+      params: {
+        createDate:null,
+        yes:''
+      },
       dropdown: [],
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       defaultDate: new Date(),
@@ -115,9 +127,8 @@ export default {
         })
       }
     },
-    getReset(){
-      this.params.date="";
-      this.params.yes="";
+    getReset(myForm){
+      this.$refs[myForm].resetFields();
     },
     getListData () { // 刷新
       this.getData()

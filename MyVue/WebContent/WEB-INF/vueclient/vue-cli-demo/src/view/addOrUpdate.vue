@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <el-dialog :title="title" :visible.sync="addformVisable">
+    <el-dialog :title="title" :visible.sync="addformVisable" height="100px" width="800px" style="text-align: center">
       <el-form :model="addForm" label-width="40px" :rules="addFormRules" ref="addForm">
         <el-form-item label="账号" prop="userName">
           <el-input v-model="addForm.userName"></el-input>
@@ -30,7 +29,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-  </div>
 </template>
 
 <script>
