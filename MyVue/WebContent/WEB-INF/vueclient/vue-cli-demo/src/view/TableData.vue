@@ -5,7 +5,7 @@
     </el-row>
     {{ defaultDate|formatDate}}
     <el-date-picker style="float:left;width: 200px;"
-                    v-model="params.data"
+                    v-model="params.createDate"
                     type="date"
                     placeholder="选择日期">
     </el-date-picker>
@@ -85,7 +85,7 @@ export default {
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       defaultDate: new Date(),
       addOrUpdateVisible: false,
-      pagination: {currentPage: 1, pageSize: 10},
+      pagination: {currentPage: 1, pageSize: 5},
       queryData:{}
     }
   },
@@ -93,7 +93,7 @@ export default {
     getData: function () {
       debugger;
       // 校验
-      if (!this.params.yes&&!this.params.data) {
+      if (!this.params.yes&&!this.params.createDate) {
         this.$message.error({message: '请选择查询条件', center: true})
         return
       } else {
@@ -101,9 +101,11 @@ export default {
         this.params.pageSize=this.pagination.pageSize;
         this.queryData=this.params;
         // 后端请求数据
-        axios.post('/api/springBoot/user/queryVIP',this.queryData)
+        axios.post('/api/springBoot/user/queryPage',this.queryData)
           .then(res => {
-            this.tableData = res.data.data
+            debugger;
+            this.tableData = res.data.data.data.records;
+            this.pagination.total = res.data.data.data.total;
             isSearch=true;
             this.$message.success({message: '请求成功', center: true})
             // console.log(res)
@@ -168,14 +170,14 @@ export default {
         return this.$message.error({ message: '请先点击查询', center: true });
       }
       this.pagination.currentPage = currentPage;
-      this.refresh();
+      this.getData();
     },
     handleSizeChange(sizes) {
       if (!isSearch) {
         return this.$message.success({ message: '请先点击查询', center: true });
       }
       this.pagination.pageSize = sizes;
-      this.refresh();
+      this.getData();
     },
   },
   filters: {// 过滤器
