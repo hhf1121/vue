@@ -6,6 +6,7 @@ import Login from '@/view/Login'
 import Down from '@/view/Down'
 import MyData from '@/view/TableData'
 import D2Table from '@/view/D2Table'
+import menu from '@/view/menu'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/Login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/menu',
+      name: 'menu',
+      component: menu
     },
     {
       path: '/Down',

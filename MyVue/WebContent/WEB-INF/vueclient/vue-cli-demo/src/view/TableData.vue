@@ -1,10 +1,12 @@
 <template>
-  <div class="mystyle">
-    <el-row  style="">
-      <el-button size="mini" type="primary" icon="el-icon-circle-plus-outline" style="float: left"  @click="insertDate">新增</el-button>
-    </el-row>
-    {{ defaultDate|formatDate}}
-    <el-form :inline="true" ref="myForm" :model="params" label-width="80px" style="float: left">
+  <div>
+    <el-form style="padding-top: 10px;padding-left:10px">
+      <el-button  type="primary" icon="el-icon-circle-plus-outline" style="float: left;"  @click="insertDate">新增</el-button>
+      <el-row style="float: right;color: dodgerblue">
+        {{ defaultDate|formatDate}}
+      </el-row>
+    </el-form>
+    <el-form :inline="true" ref="myForm" :model="params" label-width="80px" style="float: right;padding-top: 50px">
     <el-form-item label="创建时间" prop="createDate">
     <el-date-picker style="float:left;width: 200px;"
                     v-model="params.createDate"
@@ -13,7 +15,7 @@
     </el-date-picker>
     </el-form-item>
     <el-form-item label="会员类型" prop="yes">
-    <el-select v-model="params.yes" placeholder="请选择类型" style="float:left;width: 200px;">
+    <el-select filterable v-model="params.yes" placeholder="请选择类型" style="float:left;width: 200px;">
       <el-option
         v-for="item in options"
         :key="item.value"
@@ -27,18 +29,19 @@
         <el-button type="success" @click="getReset('myForm')" style="float:left;">重置</el-button>
       </el-form-item>
     </el-form>
+    <div style="display: inline-block;padding-top: 100px;position: relative">
       <el-table
         :data="tableData"
-        height="350"
-        style="width: 100%">
+        height="340"
+        style="width: 100%;text-align: center;border: lightgrey 1px dashed">
         <el-table-column
           prop="userName"
           label="账号"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="createDate"
-          label="日期"
+          label="创建日期"
           :formatter="formatDate"
           width="180">
         </el-table-column>
@@ -62,15 +65,17 @@
           </template>
         </el-table-column>
       </el-table>
+    </div>
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"></add-or-update>
-  <el-pagination @size-change="handleSizeChange"
+  <el-pagination
+                 @size-change="handleSizeChange"
                  @current-change="paginationCurrentChange"
                  :pagination="pagination"
                  :current-page="pagination.currentPage"
                  :page-sizes="[5, 10, 20]"
                  :page-size="5"
                  :background="true"
-                 style="float: left"
+                 style="margin-right: 300px"
                  layout="total,-> ,prev, pager, next, sizes,jumper"
                  :total="pagination.total">
   </el-pagination>
@@ -83,6 +88,7 @@ import dayjs from 'dayjs'
 import addOrUpdate from '@/view/addOrUpdate'
 let isSearch;
 export default {
+  name:"TableDate",
   components: {
     addOrUpdate
   },
@@ -103,7 +109,6 @@ export default {
   },
   methods: {
     getData: function () {
-      debugger;
       // 校验
       if (!this.params.yes&&!this.params.createDate) {
         this.$message.error({message: '请选择查询条件', center: true})
@@ -113,13 +118,12 @@ export default {
         this.params.pageSize=this.pagination.pageSize;
         this.queryData=this.params;
         // 后端请求数据
-        axios.post('/api/springBoot/user/queryPage',this.queryData)
-          .then(res => {
-            debugger;
-            this.tableData = res.data.data.data.records;
-            this.pagination.total = res.data.data.data.total;
+        this.$api.queryPage(this.queryData).then(res => {
+          debugger;
+            this.tableData = res.data.data.records;
+            this.pagination.total = res.data.data.total;
             isSearch=true;
-            this.$message.success({message: '请求成功', center: true})
+            // this.$message.success({message: '请求成功', center: true})
             // console.log(res)
           }).catch(err => {
           this.$message.error({message: '请求失败', center: true})
@@ -157,7 +161,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        axios.get('api/springBoot/vue/deleteByVue?id=' + data.id).then(res => {
+        debugger
+        this.$api.deleteById({'id':data.id}).then(res => {
           this.$message.success({message: '删除成功', center: true})
           this.getData()
         }).catch(err => {
@@ -173,7 +178,7 @@ export default {
     },
     formatDate: function (cellValue) {
       var value = cellValue.createDate
-      console.log('-------------------formatDate')
+      // console.log('-------------------formatDate')
       return null != value ? dayjs(value).format('YYYY-MM-DD HH:mm:ss') : null
     },
     paginationCurrentChange(currentPage) {
@@ -193,7 +198,6 @@ export default {
   },
   filters: {// 过滤器
     formatDate: function (cellValue) {
-      console.log('-------------------filters')
       return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
     }
   },

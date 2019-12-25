@@ -1,6 +1,6 @@
 <template>
-    <el-dialog :title="title" :visible.sync="addformVisable" height="100px" width="800px" style="text-align: center">
-      <el-form :model="addForm" label-width="40px" :rules="addFormRules" ref="addForm">
+    <el-dialog :title="title" :visible.sync="addformVisable" width="500px" style="text-align: center">
+      <el-form :model="addForm" label-width="100px" :rules="addFormRules" ref="addForm">
         <el-form-item label="账号" prop="userName">
           <el-input v-model="addForm.userName"></el-input>
         </el-form-item>
@@ -13,7 +13,7 @@
         <el-form-item label="地址" prop="address">
           <el-input v-model="addForm.address"></el-input>
         </el-form-item>
-        <el-form-item label="类型" prop="address">
+        <el-form-item label="用户类型" prop="address">
           <el-select v-model="addForm.yes" placeholder="请选择类型" style="float:left;width: 200px;">
             <el-option
               v-for="item in options"
@@ -98,11 +98,11 @@ export default {
       this.$refs[addForm].validate((valid) => {
         if (valid) {
           var entity = this.addForm
+          debugger
           if (entity.id) {
             // 后端请求数据post
-            axios.post('/api/springBoot/vue/updateDataByVue', entity)
-              .then(res => {
-                if (res.data.data != null) {
+            this.$api.updateUser(entity).then(res => {
+                if (res.data != null) {
                   this.$message.success({message: '更新成功', center: true})
                   this.addformVisable = false
                   this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
@@ -117,9 +117,8 @@ export default {
 
           } else {
             // 后端请求数据post
-            axios.post('/api/springBoot/vue/insertDataByVue', entity)
-              .then(res => {
-                if (res.data.data != null) {
+            this.$api.createUser(entity).then(res => {
+                if (res.data != null) {
                   this.$message.success({message: '新增成功', center: true})
                   this.addformVisable = false
                   this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新

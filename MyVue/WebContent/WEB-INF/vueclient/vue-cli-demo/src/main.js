@@ -8,6 +8,11 @@ import 'element-ui/lib/theme-chalk/index.css'// ElementUI组件需要手动引�
 import D2Crud from '@d2-projects/d2-crud' // 引入d2crud组件
 import VCharts from 'v-charts' // 引入
 import axios from 'axios'
+
+import {server} from './providers/http-service'
+
+//定义全局变量
+Vue.prototype.$api=server;
 // 设置axios超时：
 Vue.prototype.$http = axios.create({
   timeout: 10 * 1000
