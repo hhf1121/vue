@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form style="padding-top: 10px;padding-left:10px">
-      <el-button  type="primary" icon="el-icon-circle-plus-outline" style="float: left;"  @click="insertDate">新增</el-button>
+      <el-button  type="primary" icon="el-icon-circle-plus-outline" style="float: left;" round  @click="insertDate">新增</el-button>
       <el-row style="float: right;color: dodgerblue">
         {{ defaultDate|formatDate}}
       </el-row>
@@ -14,7 +14,7 @@
                     placeholder="选择日期">
     </el-date-picker>
     </el-form-item>
-    <el-form-item label="会员类型" prop="yes">
+    <el-form-item label="用户类型" prop="yes">
     <el-select filterable v-model="params.yes" placeholder="请选择类型" style="float:left;width: 200px;">
       <el-option
         v-for="item in options"
@@ -26,7 +26,7 @@
     </el-form-item>
       <el-form-item>
         <el-button type="success" @click="getData" style="float:left;">查询</el-button>
-        <el-button type="success" @click="getReset('myForm')" style="float:left;">重置</el-button>
+        <el-button type="warning" @click="getReset('myForm')" style="float:left;">重置</el-button>
       </el-form-item>
     </el-form>
     <div style="display: inline-block;padding-top: 100px;position: relative">

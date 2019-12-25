@@ -98,7 +98,6 @@ export default {
       this.$refs[addForm].validate((valid) => {
         if (valid) {
           var entity = this.addForm
-          debugger
           if (entity.id) {
             // 后端请求数据post
             this.$api.updateUser(entity).then(res => {

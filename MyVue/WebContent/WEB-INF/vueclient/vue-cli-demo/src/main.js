@@ -11,6 +11,10 @@ import axios from 'axios'
 
 import {server} from './providers/http-service'
 
+import {NoteType} from './database/notetype'
+
+Vue.prototype.NoteType = NoteType
+
 //定义全局变量
 Vue.prototype.$api=server;
 // 设置axios超时：

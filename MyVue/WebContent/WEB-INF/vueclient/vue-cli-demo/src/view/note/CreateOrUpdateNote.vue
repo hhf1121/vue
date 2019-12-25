@@ -1,13 +1,17 @@
 <template>
 <el-dialog :title="title" :visible="dialogShow" width="600px" style="text-align: center" @close="cancelForm('ruleForm')">
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" >
-  <el-form-item label="活动名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-button type="danger" icon="el-icon-refresh-right" size="mini" circle
+             @click="resetForm('ruleForm')" @mouseover.native='isShow=true' @mouseout.native="isShow=false"
+             style="position: absolute;left: 550px;top: 50px;width: 20px;height: 20px" :loading="myloading">
+    <div v-show="isShow" style="position: absolute;top: -12px;right:10px;color: royalblue" >点击重置</div>
+  </el-button>
+  <el-form-item label="标题" prop="noteTitle">
+    <el-input v-model="ruleForm.noteTitle"></el-input>
   </el-form-item>
-  <el-form-item label="活动地点" prop="region">
-    <el-select filterable v-model="ruleForm.region" placeholder="请选择活动区域" style="float: left">
-      <el-option label="区域一" value="shanghai"></el-option>
-      <el-option label="区域二" value="beijing"></el-option>
+  <el-form-item label="花销类型" prop="noteType">
+    <el-select filterable v-model="ruleForm.noteType" placeholder="请选择" style="float: left">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" ></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="活动时间" required>
@@ -43,7 +47,6 @@
   <el-form-item>
     <el-button type="success" @click="submitForm('ruleForm')">创建</el-button>
     <el-button type="primary" @click="cancelForm('ruleForm')">取消</el-button>
-    <el-button type="warning" @click="resetForm('ruleForm')">重置</el-button>
   </el-form-item>
 </el-form>
 </el-dialog>
@@ -62,8 +65,8 @@ export default {
       type:Object,
       default(){
         return{
-          name: '',
-          region: '',
+          noteTitle: '',
+          noteType: '',
           date1: '',
           date2: '',
           delivery: false,
@@ -81,12 +84,12 @@ export default {
   data() {
     return {
       rules: {
-        name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
+        noteTitle: [
+          { required: true, message: '请输入标题名称', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        region: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
+        noteType: [
+          { required: true, message: '请选择花销类型', trigger: 'change' }
         ],
         date1: [
           { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
@@ -103,7 +106,10 @@ export default {
         noteRemark: [
           { required: true, message: '请填写备注信息', trigger: 'blur' }
         ]
-      }
+      },
+      myloading:false,
+      isShow:false,
+      options:this.NoteType
     };
   },
   methods: {
@@ -121,8 +127,19 @@ export default {
       this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
     },
     resetForm(formName) {
+      this.myloading=true;
       this.$refs[formName].resetFields();
+      setTimeout(() => {
+        this.myloading=false
+      },1000)
     }
   }
 }
 </script>
+<style scoped>
+  .el-icon-refresh-right{
+    position: relative;
+    right:-3px;
+    top:-3px;
+}
+</style>

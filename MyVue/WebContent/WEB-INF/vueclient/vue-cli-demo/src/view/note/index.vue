@@ -1,121 +1,259 @@
 <template>
   <div>
-  <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
-    <el-button size="medium" type="success" icon="el-icon-circle-plus-outline" @click="add()">新增</el-button>
-    <el-button size="medium" type="primary" icon="el-icon-edit" @click="edit()">编辑</el-button>
-    <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
-  </el-row>
-    <query style="text-align: right;padding-right: 10px" :queryData="formModel"/>
+    <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
+      <el-button size="medium" type="success" icon="el-icon-circle-plus-outline" @click="add()">新增</el-button>
+      <el-button size="medium" type="primary" icon="el-icon-edit" @click="edit()">编辑</el-button>
+      <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
+    </el-row>
+    <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query"/>
     <d2-crud
       ref="d2Crud"
       :columns="columns"
       :data="resultData"
       :loading="loading"
+      :options="options"
       selection-row
       @selection-change="handleSelectionChange"
+      :rowHandle="rowHandle"
+      @edit-emit="edit"
+      @update-emit="update"
+      @cell-data-change="handleCellDataChange"
     />
-    <create-or-update  :dialogShow="dialogShow"  @freshData="isFresh()" />
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="paginationCurrentChange"
+      :pagination="pagination"
+      :current-page="pagination.currentPage"
+      :page-sizes="[5, 10, 20]"
+      :page-size="5"
+      :background="true"
+      style="margin-right: 300px"
+      layout="total,-> ,prev, pager, next, sizes,jumper"
+      :total="pagination.total">
+    </el-pagination>
+    <create-or-update :dialogShow="dialogShow" @freshData="isFresh()"/>
   </div>
 </template>
 
 <script>
 import Query from '@/view/note/Query'
 import CreateOrUpdate from '@/view/note/CreateOrUpdateNote'
+import dayjs from 'dayjs'
+
+let isSearch
 export default {
-    name: 'index',
-    components:{
-         Query,CreateOrUpdate
-      },
-  data(){
-      return {
-        formModel:{
-
-        },
-        loading:false,
-        dialogShow:false,
-        columns: [
-          {
-            title: '花销类型',
-            key: 'noteType',
-            component: {
-              name: 'el-input-number',
-              size: 'small'
-            }
-          },
-          {
-            title: '金额(元)',
-            key: 'noteMoney',
-            width:'100',
-            component: {
-              name: 'el-input-number',
-              size: 'small'
-            }
-          },
-          {
-            title: '备注',
-            key: 'noteRemark',
-            width:'500'
-          },
-          {
-            title: '创建人',
-            key: 'creater',
-            width: '100'
-          },
-          {
-            title: '创建时间',
-            key: 'createrTime',
-            width: '200',
-            formatter:function (row, column, cellValue, index) {
-              return null!=cellValue?dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss'):null;}
-          },
-          {
-            title: '修改人',
-            key: 'modifier',
-            width: '100'
-          },
-          {
-            title: '修改时间',
-            key: 'modifierTime',
-            width: '200',
-            formatter:function (row, column, cellValue, index) {
-              return null!=cellValue?dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss'):null;}
-          }
-        ],
-        resultData: []
-      }
+  name: 'index',
+  components: {
+    Query, CreateOrUpdate
   },
-  methods:{
-    add(){
-      this.dialogShow=true;
+  data() {
+    return {
+      formModel: {},
+      pagination: {currentPage: 1, pageSize: 5},
+      loading: false,
+      dialogShow: false,
+      columns: [
+        // {
+        //   title: 'id',
+        //   key: 'id',
+        //   minWidth:"1%",
+        //   show :false
+        // },
+        {
+          title: '标题',
+          key: 'noteTitle',
+          minWidth: '8%',
+          disabled: true
+        },
+        {
+          title: '花销类型',
+          key: 'noteType',
+          minWidth: '8%',
+          size: 'small',
+          component: {
+            name: 'el-select',
+            options: this.NoteType,
+            disabled: true
+          },
+        },
+        {
+          title: '金额(元)',
+          key: 'noteMoney',
+          minWidth: '8%',
+          component: {
+            name: 'el-input-number',
+            size: 'small',
+            disabled: true
+          }
+        },
+        {
+          title: '备注',
+          key: 'noteRemark',
+          minWidth: '30%',
+          component: {
+            name: 'el-input',
+            size: 'small',
+            disabled: true
+          }
+        },
+        {
+          title: '用户',
+          key: 'creater',
+          minWidth: '8%',
+          disabled: true
+        },
+        {
+          title: '创建时间',
+          key: 'createrTime',
+          minWidth: '10%',
+          disabled: true,
+          formatter: function (row, column, cellValue, index) {
+            return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
+          }
+        },
+        {
+          title: '修改人',
+          key: 'modifier',
+          minWidth: '8%',
+          disabled: true,
+        },
+        {
+          title: '修改时间',
+          key: 'modifierTime',
+          minWidth: '10%',
+          disabled: true,
+          formatter: function (row, column, cellValue, index) {
+            return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
+          }
+        }
+      ],
+      rowHandle: {
+        custom: [
+          {
+            text: '编辑',
+            type: 'warning',
+            size: 'small',
+            emit: 'edit-emit',
+          },
+          {
+            text: '保存',
+            type: 'success',
+            size: 'small',
+            emit: 'update-emit'
+          },
+        ],
+        minWidth: '10%',
+      },
+      options: {
+        maxHeight: '500',
+        height: '500px'
+      },
+      resultData: [],
+      updateData: {}
+    }
+  },
+  methods: {
+    add() {
+      this.dialogShow = true
     },
-    edit(){
+    edit() {
+      let row = this.columns
+      row[1].component.disabled = false
+      row[2].component.disabled = false
+      row[3].component.disabled = false
+      let button = this.rowHandle.custom
+      button[0].show = false
+      button[1].show = true
+    },
+    update() {
+      debugger
+      // let button = this.rowHandle.custom
+      // button[1].disabled = true;
+      if(this.updateData.id){
+          this.$api.updateNote(this.updateData).then(re=>{
+            if(re.success){
+              this.$message.success({message: '更新成功', center: true})
+              this.updateData.id=undefined;
+              this.resetDisable();
+              this.query();
+            }else{
+              this.$message.error({message: '更新失败', center: true})
+            }
+          }).catch(err=>{
+            this.$message.error({message: '请求出错', center: true})
+          })
+      }else{
+        this.resetDisable();
+      }
+      // button[1].disabled = false;
+    },
+    resetDisable(){
+      let button = this.rowHandle.custom
+      button[0].show = true
+      button[1].show = false
+      let row = this.columns
+      row[1].component.disabled = true
+      row[2].component.disabled = true
+      row[3].component.disabled = true
+    },
+    remove() {
 
     },
-    remove(){
-
+    isFresh() {
+      this.dialogShow = false
+      this.query()
     },
-    isFresh(){
-      this.dialogShow=false;
-      this.$message.success({message: '刷新', center: true})
+    query() {
+      this.resetDisable();
+      this.params = {}
+      this.params = this.formModel
+      this.params.pageIndex = this.pagination.currentPage
+      this.params.pageSize = this.pagination.pageSize
+      // 后端请求数据
+      this.$api.queryPageNotes(this.params).then(res => {
+        this.resultData = res.records
+        this.pagination.total = res.total
+        isSearch = true
+      }).catch(err => {
+        this.$message.error({message: '请求失败', center: true})
+        // console.log(err)
+      })
+
     },
     handleSelectionChange(selection) {//多选框事件
-      const ids= selection.map(re=>{
-        return {
-          id : re.idStr,
-          sourceCode:re.sourceCode,
-          destCode:re.destCode,
-          enableTime:re.enableTime,
-          disableTime:re.disableTime,
-          status:re.isLive
-        };
-      });
-      this.selectionData=Object.freeze(ids);//保存选择的id
+      const ids = selection.map(re => {
+        return {}
+      })
+      this.selectionData = Object.freeze(ids)//保存选择的id
+    },
+    handleSizeChange(sizes) {
+      if (!isSearch) {
+        return this.$message.success({message: '请先点击查询', center: true})
+      }
+      this.pagination.pageSize = sizes
+      this.query()
+    },
+    paginationCurrentChange(currentPage) {
+      if (!isSearch) {
+        return this.$message.error({message: '请先点击查询', center: true})
+      }
+      this.pagination.currentPage = currentPage
+      this.query()
+    },
+    handleCellDataChange({rowIndex, key, value, row}) {//行内数据变化时
+      this.updateData = row
     }
   },
   filters: {// 过滤器
     formatDate: function (cellValue) {
       return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
     }
+  },
+  mounted() {
+    //默认编辑显示、保存不显示
+    let button = this.rowHandle.custom
+    button[0].show = true
+    button[1].show = false
   }
 }
 </script>

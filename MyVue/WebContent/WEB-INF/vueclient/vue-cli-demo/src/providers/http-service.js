@@ -138,4 +138,6 @@ export const server = {
   deleteById: paramObj => get('api/springBoot/vue/deleteByVue', paramObj),
   createUser: paramObj => post('/api/springBoot/vue/insertDataByVue', paramObj),
   updateUser: paramObj => post('/api/springBoot/vue/updateDataByVue', paramObj),
+  queryPageNotes: paramObj => post('/api/note/queryNoteLits', paramObj),
+  updateNote: paramObj => post('/api//note/updateNote', paramObj),
 }
