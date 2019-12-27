@@ -2,7 +2,6 @@
   <div>
     <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
       <el-button size="medium" type="success" icon="el-icon-circle-plus-outline" @click="add()">新增</el-button>
-      <el-button size="medium" type="primary" icon="el-icon-edit" @click="edit()">编辑</el-button>
       <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
     </el-row>
     <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query"/>
@@ -15,10 +14,11 @@
       selection-row
       @selection-change="handleSelectionChange"
       :rowHandle="rowHandle"
+      @cell-data-change="handleCellDataChange"
       @edit-emit="edit"
       @update-emit="update"
-      @cell-data-change="handleCellDataChange"
     />
+
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="paginationCurrentChange"
@@ -53,17 +53,10 @@ export default {
       loading: false,
       dialogShow: false,
       columns: [
-        // {
-        //   title: 'id',
-        //   key: 'id',
-        //   minWidth:"1%",
-        //   show :false
-        // },
         {
           title: '标题',
           key: 'noteTitle',
           minWidth: '8%',
-          disabled: true
         },
         {
           title: '花销类型',
@@ -98,15 +91,13 @@ export default {
         },
         {
           title: '用户',
-          key: 'creater',
-          minWidth: '8%',
-          disabled: true
+          key: 'noteName',
+          minWidth: '6%',
         },
         {
           title: '创建时间',
           key: 'createrTime',
-          minWidth: '10%',
-          disabled: true,
+          minWidth: '12%',
           formatter: function (row, column, cellValue, index) {
             return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
           }
@@ -114,14 +105,19 @@ export default {
         {
           title: '修改人',
           key: 'modifier',
-          minWidth: '8%',
+          minWidth: '6%',
           disabled: true,
         },
         {
           title: '修改时间',
           key: 'modifierTime',
-          minWidth: '10%',
-          disabled: true,
+          minWidth: '15%',
+          component: {
+            name: 'el-date-picker',
+            size: 'small',
+            type:"datetime",
+            disabled: true
+          },
           formatter: function (row, column, cellValue, index) {
             return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
           }
@@ -133,7 +129,7 @@ export default {
             text: '编辑',
             type: 'warning',
             size: 'small',
-            emit: 'edit-emit',
+            emit: 'edit-emit'
           },
           {
             text: '保存',
@@ -149,26 +145,34 @@ export default {
         height: '500px'
       },
       resultData: [],
-      updateData: {}
+      updateData: {},
+      selectionData:[]
     }
   },
   methods: {
     add() {
       this.dialogShow = true
     },
-    edit() {
-      let row = this.columns
-      row[1].component.disabled = false
-      row[2].component.disabled = false
-      row[3].component.disabled = false
+    edit({index,row}) {
+      debugger
+      row;
+      // this.$refs.d2Crud[index].custom.component.disabled=false;
+      let columns = this.columns
+      columns[1].component.disabled = false
+      columns[2].component.disabled = false
+      columns[3].component.disabled = false
       let button = this.rowHandle.custom
       button[0].show = false
       button[1].show = true
     },
-    update() {
-      debugger
+    handleEdit(row){
+      debugger;
+      row;
+    },
+    update(row) {
       // let button = this.rowHandle.custom
       // button[1].disabled = true;
+      debugger;
       if(this.updateData.id){
           this.$api.updateNote(this.updateData).then(re=>{
             if(re.success){
@@ -183,6 +187,7 @@ export default {
             this.$message.error({message: '请求出错', center: true})
           })
       }else{
+
         this.resetDisable();
       }
       // button[1].disabled = false;
@@ -197,7 +202,31 @@ export default {
       row[3].component.disabled = true
     },
     remove() {
-
+        let length = this.selectionData.length;
+        if(length>0){
+          this.$confirm('删除此数据, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            var deleteEntity={
+              ids:[]
+            };
+            deleteEntity.ids=this.selectionData;
+            this.$api.deleteNote(deleteEntity).then(re=>{
+                if(re.success){
+                  this.$message.success({message: '删除成功', center: true})
+                  this.query();
+                }else{
+                  this.$message.error({message: '删除失败', center: true})
+                }
+            }).catch(err=>{
+              this.$message.error({message: '请求失败', center: true})
+            })
+          }).catch(()=>{})
+        }else{
+          this.$message({type: 'info', message: '已取消删除',center:true})
+        }
     },
     isFresh() {
       this.dialogShow = false
@@ -221,14 +250,15 @@ export default {
 
     },
     handleSelectionChange(selection) {//多选框事件
+      debugger;
       const ids = selection.map(re => {
-        return {}
+        return re.idStr
       })
       this.selectionData = Object.freeze(ids)//保存选择的id
     },
     handleSizeChange(sizes) {
       if (!isSearch) {
-        return this.$message.success({message: '请先点击查询', center: true})
+        return this.$message.error({message: '请先点击查询', center: true})
       }
       this.pagination.pageSize = sizes
       this.query()

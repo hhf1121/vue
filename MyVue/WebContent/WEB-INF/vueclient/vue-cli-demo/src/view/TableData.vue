@@ -170,10 +170,7 @@ export default {
         })
         this.$message({type: 'success', message: '删除成功!'})
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        this.$message({type: 'info', message: '已取消删除'})
       })
     },
     formatDate: function (cellValue) {
@@ -190,7 +187,7 @@ export default {
     },
     handleSizeChange(sizes) {
       if (!isSearch) {
-        return this.$message.success({ message: '请先点击查询', center: true });
+        return this.$message.error({ message: '请先点击查询', center: true });
       }
       this.pagination.pageSize = sizes;
       this.getData();

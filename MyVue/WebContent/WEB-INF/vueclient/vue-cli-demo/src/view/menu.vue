@@ -23,7 +23,11 @@
   <el-menu-item index="3">账单管理</el-menu-item>
   <el-menu-item index="4">账单趋势</el-menu-item>
   <el-menu-item index="5" disabled>暂不开放</el-menu-item>
-  <el-menu-item index="6"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">帮助中心</a></el-menu-item>
+  <el-submenu index="6">
+    <template slot="title">帮助中心</template>
+      <el-menu-item index="6-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
+      <el-menu-item index="6-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
+  </el-submenu>
   <el-submenu index="7" style="float: right">
     <template slot="title">当前登录人</template>
     <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>

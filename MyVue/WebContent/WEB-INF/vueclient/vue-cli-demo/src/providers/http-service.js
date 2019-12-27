@@ -139,5 +139,7 @@ export const server = {
   createUser: paramObj => post('/api/springBoot/vue/insertDataByVue', paramObj),
   updateUser: paramObj => post('/api/springBoot/vue/updateDataByVue', paramObj),
   queryPageNotes: paramObj => post('/api/note/queryNoteLits', paramObj),
-  updateNote: paramObj => post('/api//note/updateNote', paramObj),
+  updateNote: paramObj => post('/api/note/updateNote', paramObj),
+  deleteNote: paramObj => post('/api/note/deleteNotes', paramObj),
+  createNote: paramObj => post('/api/note/createNote', paramObj)
 }
