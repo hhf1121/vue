@@ -141,5 +141,6 @@ export const server = {
   queryPageNotes: paramObj => post('/api/note/queryNoteLits', paramObj),
   updateNote: paramObj => post('/api/note/updateNote', paramObj),
   deleteNote: paramObj => post('/api/note/deleteNotes', paramObj),
-  createNote: paramObj => post('/api/note/createNote', paramObj)
+  createNote: paramObj => post('/api/note/createNote', paramObj),
+  getCurrentUser: paramObj => get('/api/springBoot/getCurrentUser', paramObj),
 }

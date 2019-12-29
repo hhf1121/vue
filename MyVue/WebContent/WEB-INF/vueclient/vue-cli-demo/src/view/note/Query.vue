@@ -35,6 +35,7 @@ export default {
           noteTitle:'',
           noteName:'',
           noteType:'',
+          noteAddress:'',
           noteRemark:'',
           noteMoney:''
         }

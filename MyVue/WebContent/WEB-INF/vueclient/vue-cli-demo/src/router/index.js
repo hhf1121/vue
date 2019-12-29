@@ -7,6 +7,7 @@ import Down from '@/view/Down'
 import MyData from '@/view/TableData'
 import D2Table from '@/view/D2Table'
 import menu from '@/view/menu'
+import ChinaMap from '@/view/ChinaMap/map'
 
 Vue.use(Router)
 
@@ -50,6 +51,11 @@ export default new Router({
       path: '/D2Table',
       name: 'D2Table',
       component: D2Table
-    }
+    },
+    {
+      path: '/ChinaMap',
+      name: 'ChinaMap',
+      component: ChinaMap
+    },
   ]
 })

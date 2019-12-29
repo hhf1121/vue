@@ -119,7 +119,6 @@ export default {
         this.queryData=this.params;
         // 后端请求数据
         this.$api.queryPage(this.queryData).then(res => {
-          debugger;
             this.tableData = res.data.data.records;
             this.pagination.total = res.data.data.total;
             isSearch=true;
@@ -161,7 +160,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        debugger
         this.$api.deleteById({'id':data.id}).then(res => {
           this.$message.success({message: '删除成功', center: true})
           this.getData()

@@ -15,6 +15,9 @@
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="地址" prop="noteAddress">
+        <el-input v-model="ruleForm.noteAddress"></el-input>
+      </el-form-item>
       <!--<el-form-item label="活动时间" required>
 		<el-col :span="10">
 		  <el-form-item prop="date1">
@@ -62,14 +65,19 @@ export default {
         return '新增'
       }
     },
+    userName:{
+      type:String
+    },
     ruleForm: {
       type: Object,
       default() {
         return {
           noteTitle: '',
           noteType: '',
+          noteAddress: '',
           noteRemark: '',
-          noteMoney: ''
+          noteMoney: '',
+          userName:''
         }
       }
     },
@@ -87,6 +95,9 @@ export default {
         noteType: [
           {required: true, message: '请选择花销类型', trigger: 'change'}
         ],
+        noteAddress: [
+          {required: true, message: '请输入地址', trigger: 'blur'}
+        ],
         noteMoney: [
           {required: true, message: '请输入花费金额', trigger: 'blur'}
         ],
@@ -103,9 +114,12 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.ruleForm);
           this.$api.createNote(this.ruleForm).then(re => {
-            debugger
-            re
+            if(re.success){
+              this.$message.success({message: '新增成功', center: true});
+              this.$emit('freshData');
+            }
           }).catch(er => {
 
           })
@@ -116,6 +130,7 @@ export default {
       })
     },
     cancelForm() {
+      this.resetForm('ruleForm');
       this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
     },
     resetForm(formName) {
@@ -125,6 +140,13 @@ export default {
         this.myloading = false
       }, 300)
     }
+  },
+  mounted(){
+    //初始页面时，查询数据
+    this.$nextTick(function () {
+      this.ruleForm.noteName=this.userName;
+    });
+
   }
 }
 </script>

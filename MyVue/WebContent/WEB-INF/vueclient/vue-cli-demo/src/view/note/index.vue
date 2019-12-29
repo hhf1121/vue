@@ -31,18 +31,32 @@
       layout="total,-> ,prev, pager, next, sizes,jumper"
       :total="pagination.total">
     </el-pagination>
-    <create-or-update :dialogShow="dialogShow" @freshData="isFresh()"/>
+    <create-or-update :dialogShow="dialogShow" :userName="userName" @freshData="isFresh()"/>
   </div>
 </template>
-
 <script>
 import Query from '@/view/note/Query'
 import CreateOrUpdate from '@/view/note/CreateOrUpdateNote'
 import dayjs from 'dayjs'
 
 let isSearch
+const styleWidth = { width: '90%' };
+const exportColumns = [
+  { label: '标题', prop: 'noteTitle', width: styleWidth },
+  { label: '花销类型', prop: 'noteType', width: styleWidth },
+  { label: '地址', prop: 'noteAddress', width: styleWidth },
+  { label: '金额(元)', prop: 'noteMoney', width: styleWidth },
+  { label: '备注', prop: 'noteRemark', width: styleWidth },
+  { label: '用户', prop: 'noteName', width: styleWidth, sortable: true },
+  { label: '创建时间', prop: 'createrTime', width: styleWidth }
+];
 export default {
   name: 'index',
+  props:{
+    userName:{
+      type:String
+    }
+  },
   components: {
     Query, CreateOrUpdate
   },
@@ -55,19 +69,25 @@ export default {
       columns: [
         {
           title: '标题',
+          position:'center',
           key: 'noteTitle',
           minWidth: '8%',
         },
         {
           title: '花销类型',
           key: 'noteType',
-          minWidth: '8%',
+          minWidth: '7%',
           size: 'small',
           component: {
             name: 'el-select',
             options: this.NoteType,
             disabled: true
           },
+        },
+        {
+          title: '地址',
+          key: 'noteAddress',
+          minWidth: '6%',
         },
         {
           title: '金额(元)',
@@ -82,7 +102,7 @@ export default {
         {
           title: '备注',
           key: 'noteRemark',
-          minWidth: '30%',
+          minWidth: '22%',
           component: {
             name: 'el-input',
             size: 'small',
@@ -138,11 +158,12 @@ export default {
             emit: 'update-emit'
           },
         ],
-        minWidth: '10%',
+        minWidth: '8%',
       },
       options: {
         maxHeight: '500',
         height: '500px'
+        // style:'center'
       },
       resultData: [],
       updateData: {},
@@ -151,28 +172,26 @@ export default {
   },
   methods: {
     add() {
-      this.dialogShow = true
+      this.dialogShow = true;
+      // this.userName=this.userName;
     },
     edit({index,row}) {
-      debugger
       row;
       // this.$refs.d2Crud[index].custom.component.disabled=false;
       let columns = this.columns
       columns[1].component.disabled = false
-      columns[2].component.disabled = false
       columns[3].component.disabled = false
+      columns[4].component.disabled = false
       let button = this.rowHandle.custom
       button[0].show = false
       button[1].show = true
     },
     handleEdit(row){
-      debugger;
       row;
     },
     update(row) {
       // let button = this.rowHandle.custom
       // button[1].disabled = true;
-      debugger;
       if(this.updateData.id){
           this.$api.updateNote(this.updateData).then(re=>{
             if(re.success){
@@ -198,8 +217,8 @@ export default {
       button[1].show = false
       let row = this.columns
       row[1].component.disabled = true
-      row[2].component.disabled = true
       row[3].component.disabled = true
+      row[4].component.disabled = true
     },
     remove() {
         let length = this.selectionData.length;
@@ -240,9 +259,17 @@ export default {
       this.params.pageSize = this.pagination.pageSize
       // 后端请求数据
       this.$api.queryPageNotes(this.params).then(res => {
+
         this.resultData = res.records
         this.pagination.total = res.total
         isSearch = true
+        // this.$export.excel({
+        //   title: '花销明细',
+        //   columns: exportColumns,
+        //   data: res.records
+        // }).then(() => {
+        //   this.$message.success({ message: '导出成功', center: true });
+        // });
       }).catch(err => {
         this.$message.error({message: '请求失败', center: true})
         // console.log(err)
@@ -250,7 +277,6 @@ export default {
 
     },
     handleSelectionChange(selection) {//多选框事件
-      debugger;
       const ids = selection.map(re => {
         return re.idStr
       })

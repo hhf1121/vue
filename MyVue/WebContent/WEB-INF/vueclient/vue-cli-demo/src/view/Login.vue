@@ -60,11 +60,15 @@ export default {
                     this.$message.error({message: '密码或账号错误', center: true})
                   } else {
                     this.$message.success({message: '登录成功', center: true})
-                    // 成功之后，路由到数据列表,传参id查询此用户类型的数据
+                    // 成功之后:
+                    // 1.菜单展示用户信息
+                    //用以下方式，将用户信息传递 user:res.data
+                    // 2.路由到数据列表,传参id查询此用户类型的数据
                     this.$router.push(
                       {
                         name: 'menu', params: {
-                          id: res.data.yes
+                          id: res.data.yes,
+                          user:res.data
                         }
                       })
                   }
