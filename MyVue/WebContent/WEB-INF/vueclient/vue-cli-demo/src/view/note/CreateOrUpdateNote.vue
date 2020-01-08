@@ -1,5 +1,6 @@
 <template>
-  <el-dialog :title="title" :visible="dialogShow" width="600px" style="text-align: center"
+  <el-dialog :title="title" :visible="dialogShow" width="600px" :modal="false"
+             :close-on-click-modal="false"
              @close="cancelForm('ruleForm')">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
       <el-button type="danger" class="myclass" icon="el-icon-refresh-right" size="mini" circle
