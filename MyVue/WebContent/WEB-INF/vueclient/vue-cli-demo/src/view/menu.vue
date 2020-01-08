@@ -96,6 +96,7 @@ export default {
   },
   mounted(){
     this.handleSelect(1,1);
+    // this.$route.params.user=this.$USER;
     if (this.$route.params.user) {
       this.user = this.$route.params.user;
       this.userid=this.user.id+'';

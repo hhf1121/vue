@@ -7,6 +7,7 @@ import Down from '@/view/Down'
 import MyData from '@/view/TableData'
 import D2Table from '@/view/D2Table'
 import menu from '@/view/menu'
+import User from '@/view/currentUser/currentUser'
 import ChinaMap from '@/view/ChinaMap/map'
 
 Vue.use(Router)
@@ -36,6 +37,11 @@ export default new Router({
       path: '/menu',
       name: 'menu',
       component: menu
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: User
     },
     {
       path: '/Down',

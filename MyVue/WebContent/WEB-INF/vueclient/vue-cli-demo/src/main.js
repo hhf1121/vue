@@ -12,8 +12,10 @@ import axios from 'axios'
 import {server} from './providers/http-service'
 
 import {NoteType} from './database/notetype'
+import {User} from './view/currentUser/currentUser'
 
 Vue.prototype.NoteType = NoteType
+Vue.prototype.$USER = User
 
 //定义全局变量
 Vue.prototype.$api=server;

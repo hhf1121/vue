@@ -78,6 +78,7 @@ export default {
           key: 'noteType',
           minWidth: '7%',
           size: 'small',
+          sortable: true,//排序
           component: {
             name: 'el-select',
             options: this.NoteType,
@@ -87,6 +88,7 @@ export default {
         {
           title: '地址',
           key: 'noteAddress',
+          showOverflowTooltip:true,//内容过长,鼠标显示
           minWidth: '6%',
         },
         {
