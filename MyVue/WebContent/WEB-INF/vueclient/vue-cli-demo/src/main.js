@@ -32,7 +32,13 @@ Vue.use(VCharts)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  data: function(){
+    return {
+      USER: {},
+    }
+  },
+  render: h => h(App),
   router,
   components: { App },
   template: '<App/>'
-})
+}).$mount('#app');

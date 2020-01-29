@@ -63,6 +63,9 @@ export default {
                     // 成功之后:
                     // 1.菜单展示用户信息
                     //用以下方式，将用户信息传递 user:res.data
+                    this.$root.USER = res.data;
+                    // 保存：session
+                    sessionStorage.setItem('user', JSON.stringify(res.data));
                     // 2.路由到数据列表,传参id查询此用户类型的数据
                     this.$router.push(
                       {

@@ -8,7 +8,7 @@ import MyData from '@/view/TableData'
 import D2Table from '@/view/D2Table'
 import menu from '@/view/menu'
 import User from '@/view/currentUser/currentUser'
-import ChinaMap from '@/view/ChinaMap/map'
+// import ChinaMap from '@/view/ChinaMap/map'
 
 Vue.use(Router)
 
@@ -58,10 +58,10 @@ export default new Router({
       name: 'D2Table',
       component: D2Table
     },
-    {
-      path: '/ChinaMap',
-      name: 'ChinaMap',
-      component: ChinaMap
-    },
+    // {
+    //   path: '/ChinaMap',
+    //   name: 'ChinaMap',
+    //   component: ChinaMap
+    // },
   ]
 })
