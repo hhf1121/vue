@@ -16,6 +16,7 @@ import {User} from './view/currentUser/currentUser'
 
 Vue.prototype.NoteType = NoteType
 Vue.prototype.$USER = User
+const Base64 = require('js-base64').Base64
 
 //定义全局变量
 Vue.prototype.$api=server;
@@ -32,6 +33,7 @@ Vue.use(VCharts)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  Base64,
   data: function(){
     return {
       USER: {},

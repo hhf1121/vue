@@ -109,8 +109,6 @@ export default {
   },
   mounted(){
     this.handleSelect(1,1);
-    // this.$route.params.user=this.$USER;
-    debugger;
     const USER=JSON.parse(sessionStorage.getItem('user'));
     if(USER){
       this.$root.USER =USER;

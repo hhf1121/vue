@@ -3,6 +3,7 @@
     <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
       <el-button size="medium" type="success" icon="el-icon-circle-plus-outline" @click="add()">新增</el-button>
       <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
+      <el-button size="medium" type="warning" icon="el-icon-star-off" @click="view()">查看</el-button>
     </el-row>
     <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query"/>
     <d2-crud
@@ -31,7 +32,7 @@
       layout="total,-> ,prev, pager, next, sizes,jumper"
       :total="pagination.total">
     </el-pagination>
-    <create-or-update :dialogShow="dialogShow" :userName="userName" @freshData="isFresh()"/>
+    <create-or-update :dialogShow="dialogShow" :userName="userName" :title="isView" :ruleForm="dataForm" :isView="isViewFlag" v-if="dialogShow" @freshData="isFresh()"/>
   </div>
 </template>
 <script>
@@ -169,13 +170,32 @@ export default {
       },
       resultData: [],
       updateData: {},
-      selectionData:[]
+      selectionDataId:[],
+      selectionData:{},
+      isView:"",
+      isViewFlag:true,
+      dataForm:{}
     }
   },
   methods: {
     add() {
       this.dialogShow = true;
+      this.dataForm={};
+      this.isView="";
+      this.isViewFlag=true;
       // this.userName=this.userName;
+    },
+    //查看，回显
+    view(){
+      let length = this.selectionData.length;
+      if(length!=1){
+        this.$message.error({message: '请选择一条数据，进行操作', center: true})
+      }else{
+        this.dialogShow = true;
+        this.isView="查看";
+        this.isViewFlag=false;
+        this.dataForm=this.selectionData[0];
+      }
     },
     edit({index,row}) {
       row;
@@ -223,7 +243,7 @@ export default {
       row[4].component.disabled = true
     },
     remove() {
-        let length = this.selectionData.length;
+        let length = this.selectionDataId.length;
         if(length>0){
           this.$confirm('删除此数据, 是否继续?', '提示', {
             confirmButtonText: '确定',
@@ -233,7 +253,7 @@ export default {
             var deleteEntity={
               ids:[]
             };
-            deleteEntity.ids=this.selectionData;
+            deleteEntity.ids=this.selectionDataId;
             this.$api.deleteNote(deleteEntity).then(re=>{
                 if(re.success){
                   this.$message.success({message: '删除成功', center: true})
@@ -282,7 +302,8 @@ export default {
       const ids = selection.map(re => {
         return re.idStr
       })
-      this.selectionData = Object.freeze(ids)//保存选择的id
+      this.selectionDataId = Object.freeze(ids)//保存选择的id
+      this.selectionData = Object.freeze(selection)//保存对象
     },
     handleSizeChange(sizes) {
       if (!isSearch) {

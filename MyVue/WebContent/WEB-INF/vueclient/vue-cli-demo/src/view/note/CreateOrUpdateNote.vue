@@ -2,12 +2,20 @@
   <el-dialog :title="title" :visible="dialogShow" width="600px" :modal="false"
              :close-on-click-modal="false"
              @close="cancelForm('ruleForm')">
+    <!--展示选中图片的区域-->
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
-      <el-button type="danger" class="myclass" icon="el-icon-refresh-right" size="mini" circle
+      <el-button type="danger" class="myclass" icon="el-icon-refresh-right" size="mini" circle ref="isCall"
                  @click="resetForm('ruleForm')" @mouseover.native='isShow=true' @mouseout.native="isShow=false"
-                 style="position: absolute;left: 550px;top: 50px;width: 20px;height: 20px" :loading="myloading">
+                 style="position: absolute;left: 550px;top: 50px;width: 20px;height: 20px" :loading="myloading" v-if="isView">
         <div v-show="isShow" style="position: absolute;top: -12px;right:10px;color: royalblue">点击重置</div>
       </el-button>
+      <el-dialog :visible.sync="imgVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
+      <el-form-item label="照片" prop="imgCode">
+          <img  :src="ruleForm.imgCode" width="150px" height="150px" v-if="imgImgShow"  @click="bigImg">
+        <input @change='imageAdd'  type="file" ref="imageinput">
+      </el-form-item>
       <el-form-item label="标题" prop="noteTitle">
         <el-input v-model="ruleForm.noteTitle"></el-input>
       </el-form-item>
@@ -50,13 +58,14 @@
         <el-input type="textarea" v-model="ruleForm.noteRemark"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="submitForm('ruleForm')">创建</el-button>
-        <el-button type="primary" @click="cancelForm('ruleForm')">取消</el-button>
+        <el-button type="success" @click="submitForm('ruleForm')" v-if="isView">创建</el-button>
+        <el-button type="primary" @click="cancelForm('ruleForm')" v-if="isView">取消</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
 </template>
 <script>
+// import uploadImg from '@/view/note/uploadImg'
 export default {
   name: 'CreateOrUpdate',
   props: {
@@ -69,6 +78,12 @@ export default {
     userName:{
       type:String
     },
+    isView:{
+      type:Boolean,
+      default(){
+        return true
+      }
+    },
     ruleForm: {
       type: Object,
       default() {
@@ -78,7 +93,8 @@ export default {
           noteAddress: '',
           noteRemark: '',
           noteMoney: '',
-          userName:''
+          userName:'',
+          imgCode:''
         }
       }
     },
@@ -86,6 +102,9 @@ export default {
       type: Boolean
     }
   },
+  // components: {
+  //   uploadImg
+  // },
   data() {
     return {
       rules: {
@@ -108,11 +127,20 @@ export default {
       },
       myloading:false,
       isShow: false,
-      options: this.NoteType
+      options: this.NoteType,
+      imageUrl: '',
+      dialogVisible: false,
+      disabled: false,
+      imgShow:false,
+      imgVisible:false,
+      // showImgCode:'',
+      dialogImageUrl:'',
+      imgImgShow:false
     }
   },
   methods: {
     submitForm(formName) {
+      this.ruleForm;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.ruleForm);
@@ -130,22 +158,43 @@ export default {
         }
       })
     },
+    imageAdd(event){
+      var reader =new FileReader();//创建读取文件的方法
+      var img1=event.target.files[0];
+      reader.readAsDataURL(img1);//将文件已url的形式读入页面
+      // let that=this;
+      reader.onload=(e)=>{
+        this.imgImgShow=false;
+        this.ruleForm.imgCode= e.target.result; //把图片的二进制流付给表单ruleForm里面的imgCode
+        this.imgImgShow=true;
+      }
+    },
     cancelForm() {
       this.resetForm('ruleForm');
       this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
     },
     resetForm(formName) {
       this.myloading = true
+      this.ruleForm.imgCode='';
+      this.imgImgShow=false;
       this.$refs[formName].resetFields()
       setTimeout(() => {
         this.myloading = false
       }, 300)
+    },
+    bigImg(){
+      this.imgVisible=true;
+      this.dialogImageUrl=this.ruleForm.imgCode;
     }
   },
   mounted(){
     //初始页面时，查询数据
     this.$nextTick(function () {
       this.ruleForm.noteName=this.userName;
+      if(this.ruleForm.imgCode){
+        this.imgImgShow=true;
+        this.ruleForm.imgCode;
+      }
     });
 
   }
@@ -156,5 +205,28 @@ export default {
     position: absolute;
     right: 3px;
     top: 3px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>
