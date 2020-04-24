@@ -31,6 +31,7 @@
     <template slot="title">帮助中心</template>
       <el-menu-item index="6-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
       <el-menu-item index="6-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
+      <el-menu-item index="6-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
   </el-submenu>
   <el-submenu index="7" style="float: right">
     <template slot="title">你好：{{userName}}</template>
@@ -41,7 +42,7 @@
     <table-date v-show="isData"></table-date>
     <china-map v-if="isMap"></china-map>
    <!-- <my-home v-if="isHome"></my-home>-->
-    <note-index v-show="isNote" :userName="userName"></note-index>
+    <note-index ref="noteIndex" v-show="isNote" :userName="userName"></note-index>
     <user-info :userId="userid" v-if="isInfo"></user-info>
     <photo-info v-if="isPhoto"></photo-info>
   </div>
@@ -53,14 +54,14 @@ import MyHome from '@/components/MyHome'
 import NoteIndex from '@/view/note/index'
 import UserInfo from '@/view/note/userInfo'
 import PhotoInfo from '@/view/note/photoInfo'
-// import ChinaMap from '@/view/ChinaMap/map'
+import ChinaMap from '@/view/ChinaMap/map'
 export default {
   name: 'myMenu',
   components: {
     TableDate,
     MyHome,
     NoteIndex,
-    // ChinaMap,
+    ChinaMap,
     UserInfo,
     PhotoInfo
   },
@@ -96,6 +97,8 @@ export default {
         this.isInfo=false;
       }
       if(key=='3-1'){
+        //初始数据
+        this.$refs.noteIndex.isQueryInit();
         this.isNote=true;
       }else{
         this.isNote=false;

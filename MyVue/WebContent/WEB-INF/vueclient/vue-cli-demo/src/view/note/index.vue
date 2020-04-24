@@ -5,7 +5,8 @@
       <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
       <el-button size="medium" type="primary" icon="el-icon-star-off" @click="view()">查看</el-button>
     </el-row>
-    <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query"/>
+    <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query" ref="queryRef"/>
+    <div style="float: right;color: mediumpurple;padding-left: 5px">总金额：{{countPrice | numberFilter(2)}}</div>
     <d2-crud
       ref="d2Crud"
       :columns="columns"
@@ -321,11 +322,26 @@ export default {
     },
     handleCellDataChange({rowIndex, key, value, row}) {//行内数据变化时
       this.updateData = row
+    },
+    isQueryInit(){
+      this.$refs.queryRef.initData();
     }
   },
   filters: {// 过滤器
     formatDate: function (cellValue) {
       return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
+    },
+    numberFilter:function (data,n) {//过滤器、n传参。fixed四舍五入，保留n位小数
+      return '￥'+data.toFixed(n);
+    }
+  },
+  computed:{//计算属性
+    countPrice:function () {
+      var n=0;
+      this.resultData.forEach(function (item, index) {
+        n+=item.noteMoney;
+      });
+      return n;
     }
   },
   mounted() {

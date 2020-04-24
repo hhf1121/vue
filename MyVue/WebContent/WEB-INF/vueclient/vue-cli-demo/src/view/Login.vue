@@ -9,8 +9,8 @@
         <el-input type="password" v-model="ruleForm.pass"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -85,9 +85,22 @@ export default {
         }
       })
     },
+    keyupForm(e){
+      if(e.keyCode == 13){//回车键
+        this.submitForm('ruleForm');
+      }
+
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields()
     }
+  },
+  mounted() {
+    //绑定回车事件、调用keyupForm
+    window.addEventListener('keydown',this.keyupForm);
+  },
+  destroyed(){//销毁
+    window.removeEventListener('keydown',this.keyupForm,false);
   }
 }
 </script>
