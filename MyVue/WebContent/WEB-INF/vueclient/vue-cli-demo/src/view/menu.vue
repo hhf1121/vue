@@ -20,7 +20,11 @@
       <el-menu-item index="2-3-2">期待2.</el-menu-item>
     </el-submenu>
   </el-submenu>
-  <el-menu-item index="3">账单管理</el-menu-item>
+  <el-submenu  index="3">
+    <template slot="title">账单管理</template>
+    <el-menu-item index="3-1"  :span="12">账单主页</el-menu-item>
+    <el-menu-item index="3-2"  :span="12">账单流图</el-menu-item>
+  </el-submenu >
   <el-menu-item index="4">账单趋势</el-menu-item>
   <el-menu-item index="5" disabled>暂不开放</el-menu-item>
   <el-submenu index="6">
@@ -39,6 +43,7 @@
    <!-- <my-home v-if="isHome"></my-home>-->
     <note-index v-show="isNote" :userName="userName"></note-index>
     <user-info :userId="userid" v-if="isInfo"></user-info>
+    <photo-info v-if="isPhoto"></photo-info>
   </div>
 
 </template>
@@ -47,6 +52,7 @@ import TableDate from '@/view/TableData'
 import MyHome from '@/components/MyHome'
 import NoteIndex from '@/view/note/index'
 import UserInfo from '@/view/note/userInfo'
+import PhotoInfo from '@/view/note/photoInfo'
 // import ChinaMap from '@/view/ChinaMap/map'
 export default {
   name: 'myMenu',
@@ -55,7 +61,8 @@ export default {
     MyHome,
     NoteIndex,
     // ChinaMap,
-    UserInfo
+    UserInfo,
+    PhotoInfo
   },
   data() {
     return {
@@ -64,6 +71,7 @@ export default {
       isNote:false,
       isMap:false,
       isInfo:false,
+      isPhoto:false,
       userid:'',
       userName:'',
       activeIndex: '1',
@@ -87,10 +95,15 @@ export default {
       }else{
         this.isInfo=false;
       }
-      if(key=='3'){
+      if(key=='3-1'){
         this.isNote=true;
       }else{
         this.isNote=false;
+      }
+      if(key=='3-2'){
+        this.isPhoto=true;
+      }else{
+        this.isPhoto=false;
       }
     },
     reset(){
@@ -129,9 +142,10 @@ export default {
 </script>
 
 <style scoped>
-.el-menu-demo{
 
-}
+  .el-menu-demo{
+
+  }
   .myUser{
     /*display: inline-block;*/
     font-size: 12px;

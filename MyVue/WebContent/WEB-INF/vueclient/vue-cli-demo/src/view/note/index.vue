@@ -3,7 +3,7 @@
     <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
       <el-button size="medium" type="success" icon="el-icon-circle-plus-outline" @click="add()">新增</el-button>
       <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
-      <el-button size="medium" type="warning" icon="el-icon-star-off" @click="view()">查看</el-button>
+      <el-button size="medium" type="primary" icon="el-icon-star-off" @click="view()">查看</el-button>
     </el-row>
     <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query"/>
     <d2-crud

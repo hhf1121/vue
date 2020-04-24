@@ -30,6 +30,24 @@ Vue.use(ElementUI)// 在所有的vue文件中，都可使用
 Vue.use(D2Crud)
 Vue.use(VCharts)
 
+//高亮directive
+Vue.directive('highlight', function (el, binding, vnode) {
+  //创建span
+  // const spanDom = document.createElement('span');
+  // spanDom.innerHTML = binding.value;
+  // spanDom.style.color = '#ff6600';
+  //获取span
+  const elSpan = el.querySelector('span');
+  //获取text文本
+  const text = elSpan.innerText;
+  //替换文本
+  const newText=text.replace(binding.value, "<span style='color: red'>"+binding.value+"</span>");
+  //改变span的html
+  elSpan.innerHTML = newText;
+  //添加span标签
+  el.appendChild(elSpan)
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
