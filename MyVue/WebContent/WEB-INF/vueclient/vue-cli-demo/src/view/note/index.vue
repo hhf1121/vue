@@ -295,7 +295,7 @@ export default {
         // });
       }).catch(err => {
         debugger;
-        this.$message.error({message: '请求失败1', center: true})
+        this.$message.error({message: '请求失败', center: true})
         // console.log(err)
       })
 

@@ -73,6 +73,16 @@
           var init = echarts.init(document.getElementById("chart2"));
           //路由赋值
           const initdata=this.$route.query.initData;
+          if(!initdata.time){
+            console.log("地图数据获取失败");
+            this.$router.push(
+              {
+                name: 'menu', params: {
+                  sign: 'map',
+                }
+              })
+            return;
+          }
           var data=initdata.data;
           //赋值标题
           option.title.text='各地疫情详细数据---'+initdata.time;

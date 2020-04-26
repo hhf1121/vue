@@ -152,4 +152,5 @@ export const server = {
   createNote: paramObj => post('/api/note/createNote', paramObj),
   getCurrentUser: paramObj => get('/api/springBoot/getCurrentUser', paramObj),
   downUser: paramObj => get('/api/springBoot/downUser', paramObj),
+  getAllNote: paramObj => get('/api/note/getAll', paramObj),
 }

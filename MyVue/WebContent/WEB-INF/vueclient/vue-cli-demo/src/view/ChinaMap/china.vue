@@ -135,7 +135,16 @@
           var init= echarts.init(document.getElementById("chart"));
             //路由赋值
           const initdata=this.$route.query.initData;
-          
+            if(!initdata.time){
+              console.log("地图数据获取失败");
+              this.$router.push(
+                {
+                  name: 'menu', params: {
+                    sign: 'map',
+                    }
+                })
+              return;
+            }
             option.title.text="vue模拟疫情地图-"+initdata.time;
             var data=initdata.data;
             option.series[0].data=[];

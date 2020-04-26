@@ -45,6 +45,7 @@
     <note-index ref="noteIndex" v-show="isNote" :userName="userName"></note-index>
     <user-info :userId="userid" v-if="isInfo"></user-info>
     <photo-info v-if="isPhoto"></photo-info>
+    <tendency-map v-if="isTendency"></tendency-map>
   </div>
 
 </template>
@@ -54,6 +55,7 @@ import MyHome from '@/components/MyHome'
 import NoteIndex from '@/view/note/index'
 import UserInfo from '@/view/note/userInfo'
 import PhotoInfo from '@/view/note/photoInfo'
+import tendencyMap from '@/view/note/tendencyMap'
 import ChinaMap from '@/view/ChinaMap/map'
 export default {
   name: 'myMenu',
@@ -63,7 +65,8 @@ export default {
     NoteIndex,
     ChinaMap,
     UserInfo,
-    PhotoInfo
+    PhotoInfo,
+    tendencyMap
   },
   data() {
     return {
@@ -73,6 +76,7 @@ export default {
       isMap:false,
       isInfo:false,
       isPhoto:false,
+      isTendency:false,
       userid:'',
       userName:'',
       activeIndex: '1',
@@ -108,6 +112,11 @@ export default {
       }else{
         this.isPhoto=false;
       }
+      if(key=='4'){
+        this.isTendency=true;
+      }else{
+        this.isTendency=false;
+      }
     },
     reset(){
       const USER=JSON.parse(sessionStorage.getItem('user'));
@@ -140,6 +149,9 @@ export default {
         {
           name: 'Login', params: {}
         })
+    }
+    if(this.$route.params.sign=='map'){
+      this.handleSelect('2-1',1);
     }
   }
 }
