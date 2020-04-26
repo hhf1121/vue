@@ -12,7 +12,7 @@
   <el-menu-item index="1">用户列表</el-menu-item>
   <el-submenu index="2">
     <template slot="title">我的家园</template>
-    <el-menu-item index="2-1"  :span="12">MyHome</el-menu-item>
+    <el-menu-item index="2-1"  :span="12">实时疫情</el-menu-item>
     <el-menu-item index="2-2"  :span="12">个人中心</el-menu-item>
     <el-submenu index="2-3">
       <template slot="title">敬请期待...</template>
@@ -114,6 +114,7 @@ export default {
       if(USER){
         this.$root.USER =USER;
         sessionStorage.removeItem("user");
+        this.$api.downUser();
         this.$router.push(
           {
             name: 'Login', params: {}

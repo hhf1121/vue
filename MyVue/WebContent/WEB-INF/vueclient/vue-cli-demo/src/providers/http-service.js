@@ -1,4 +1,5 @@
 import axios from 'axios'
+import rootVm from '../main.js'
 
 axios.defaults.timeout = 5000
 axios.defaults.baseURL = '' //填写域名//http request 拦截器
@@ -12,7 +13,9 @@ axios.interceptors.request.use(config => {
   error => {
     return Promise.reject(err)
   }
-)//响应拦截器即异常处理
+)
+
+//响应拦截器即异常处理
 axios.interceptors.response.use(response => {
   return response
 }, err => {
@@ -22,7 +25,10 @@ axios.interceptors.response.use(response => {
         console.log('错误请求')
         break
       case 401:
+        debugger
         console.log('未授权，请重新登录')
+        rootVm.$message.error({message: '未登录，请重新登录', center: true})
+        rootVm.$router.push({path:'/'})
         break
       case 403:
         console.log('拒绝访问')
@@ -145,4 +151,5 @@ export const server = {
   deleteNote: paramObj => post('/api/note/deleteNotes', paramObj),
   createNote: paramObj => post('/api/note/createNote', paramObj),
   getCurrentUser: paramObj => get('/api/springBoot/getCurrentUser', paramObj),
+  downUser: paramObj => get('/api/springBoot/downUser', paramObj),
 }

@@ -13,6 +13,7 @@ import {server} from './providers/http-service'
 
 import {NoteType} from './database/notetype'
 import {User} from './view/currentUser/currentUser'
+import VueJsonp from 'vue-jsonp'
 
 Vue.prototype.NoteType = NoteType
 Vue.prototype.$USER = User
@@ -29,6 +30,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)// 在所有的vue文件中，都可使用
 Vue.use(D2Crud)
 Vue.use(VCharts)
+Vue.use(VueJsonp)
+
 
 //高亮directive
 Vue.directive('highlight', function (el, binding, vnode) {
@@ -49,7 +52,7 @@ Vue.directive('highlight', function (el, binding, vnode) {
 })
 
 /* eslint-disable no-new */
-new Vue({
+let rootVm=new Vue({
   el: '#app',
   Base64,
   data: function(){
@@ -62,3 +65,5 @@ new Vue({
   components: { App },
   template: '<App/>'
 }).$mount('#app');
+//导入rootVm、供axios使用。实现未登录跳转。
+export default rootVm

@@ -294,7 +294,8 @@ export default {
         //   this.$message.success({ message: '导出成功', center: true });
         // });
       }).catch(err => {
-        this.$message.error({message: '请求失败', center: true})
+        debugger;
+        this.$message.error({message: '请求失败1', center: true})
         // console.log(err)
       })
 

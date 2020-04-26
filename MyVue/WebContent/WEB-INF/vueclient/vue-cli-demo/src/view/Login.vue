@@ -3,10 +3,10 @@
     <h3>用户登录</h3>
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="demo-ruleForm">
       <el-form-item label="账号" prop="username">
-        <el-input type="text" v-model="ruleForm.username"></el-input>
+        <el-input type="text" v-model="ruleForm.username"  style="width: 350px"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="ruleForm.pass"></el-input>
+        <el-input type="password" v-model="ruleForm.pass" style="width: 350px"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
