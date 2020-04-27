@@ -63,21 +63,51 @@
         type: 'line',
         smooth: true,
         color: 'red'
-      }
+      }/*,
+      {
+        name:'当日总额',
+        data: [1,2,3,4,5],
+        type: 'line',
+        smooth: true,
+        color: '#b2074c'
+      }*/
     ]
   };
     export default {
         name: "tendencyMap",
       data(){
+          //回调函数validateTime，中的this指的是它本身，并非vue对象。此处用_that替代
+          let _that=this;
+        let validateTime = (rule, value, callback) => {
+          let now = _that.ruleForm.nowData;
+          if (value === undefined || value === '' || value ===null) {
+            callback(new Error('请选择起始时间'));
+          }else if(value>=now ){
+            callback(new Error('起始日期必须在当前日期之前'));
+          }else{
+            //去后端校验
+            _that.$api.getAllNote({"from":_that.ruleForm.queryData,"now":_that.ruleForm.nowData}).then(re=>{
+              if(!re.success){
+                callback(new Error(re.error+""));
+              }else{
+                callback();
+              }
+            }).catch(err=>{
+              callback(new Error('请求后端异常'));
+            })
+          }
+        };
           return{
             rules: {//提交校验
               queryData: [
-                {required: true, message: '请输入起始时间', trigger: 'blur'}
+                {required: true, message: '请输入起始时间', trigger: 'blur'},
+                {validator : validateTime, type:'date',  trigger: 'blur' }
               ]
             },
             pickerOptions: {
               disabledDate(time) {
-                return time.getTime() > Date.now();
+                // return time.getTime() > Date.now();
+                return false;
               },
               shortcuts: [{
                 text: '昨天',
@@ -133,16 +163,13 @@
           let data=[];
           this.$api.getAllNote({"from":this.ruleForm.queryData,"now":this.ruleForm.nowData}).then(re=>{
             if(!re.success){
-              this.$message.error({message: re.error+"", center: true});
+              // this.$message.error({message: re.error+"", center: true});
               return;
             }
             data=re.data;
             //noteType 、noteMoney、timeStr
             //拼装数据：每个类型一组。（展现：某项类型，花费的全部金额、都一个日期list）
             //1.赋值x：日期
-            let s=new Set();
-            let a=[1,2,3,4523,1,2,3];
-            let ss=[...s];
             option.xAxis.data=data.map(e=>{
               return e.timeStr;
             })
@@ -180,6 +207,11 @@
                   return e.lxcount;
                 })
               }
+              //总金额
+              // {name:'', data: [],type: 'line', smooth: true, color:'#b2149f'}
+              // option.series.push({
+              //   name:'当日总额', data: [],type: 'line', smooth: true, color:'#b2149f'
+              // });
             }
             // 使用刚指定的配置项和数据显示图表。
             init.setOption(option);

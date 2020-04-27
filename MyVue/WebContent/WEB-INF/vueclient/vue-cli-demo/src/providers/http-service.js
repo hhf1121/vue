@@ -153,4 +153,5 @@ export const server = {
   getCurrentUser: paramObj => get('/api/springBoot/getCurrentUser', paramObj),
   downUser: paramObj => get('/api/springBoot/downUser', paramObj),
   getAllNote: paramObj => get('/api/note/getAll', paramObj),
+  getVerifyCode: paramObj => get('/api/springBoot/verifyCode', paramObj),//验证码
 }

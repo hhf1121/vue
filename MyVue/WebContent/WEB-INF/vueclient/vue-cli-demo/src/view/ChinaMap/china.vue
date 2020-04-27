@@ -34,7 +34,6 @@
       //   return "地区:"+e.name+"<br/>"+"确诊:"+e.value+"<br/>"+"新增:"+e.conadd+"<br/>"+"死亡:"+e.deathNum;
       // }
       formatter: function(e){
-        ;
         var res = "地区:"+e.name+"<br/>"
         //定义一个变量来保存series数据系列
         var myseries=option.series;
@@ -98,8 +97,7 @@
       }
       ],
     visualMap:{//视觉地图
-      //分段型
-      type:'piecewise',
+      type:'piecewise', //分段型
       show:true,
       pieces:[
         {min:10000},//不指定max、表示无限大
@@ -122,6 +120,7 @@
       itemWidth:10,
       itemHeight:10
     }
+
   };
   export default {
         name: "china",

@@ -4,7 +4,7 @@
              @close="cancelForm('ruleForm')">
     <!--展示选中图片的区域-->
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
-      <el-button type="danger" class="myclass" icon="el-icon-refresh-right" size="mini" circle ref="isCall"
+      <el-button type="danger" icon="el-icon-refresh-right" size="mini" circle ref="isCall"
                  @click="resetForm('ruleForm')" @mouseover.native='isShow=true' @mouseout.native="isShow=false"
                  style="position: absolute;left: 550px;top: 50px;width: 20px;height: 20px" :loading="myloading" v-if="isView">
         <div v-show="isShow" style="position: absolute;top: -12px;right:10px;color: royalblue">点击重置</div>
