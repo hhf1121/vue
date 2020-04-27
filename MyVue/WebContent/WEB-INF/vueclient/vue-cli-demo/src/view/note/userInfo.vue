@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto" disabled>
+  <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" disabled>
     <el-form-item label="账号" prop="userName">
       <el-input v-model="userData.userName"></el-input>
     </el-form-item>

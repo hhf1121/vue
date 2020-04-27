@@ -1,23 +1,23 @@
 <template>
-  <div style="padding-top: 50px">
-    <h3>用户登录</h3>
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="demo-ruleForm">
-      <el-form-item label="账号" prop="username">
-        <el-input type="text" v-model="ruleForm.username"  style="width: 350px" @blur="getVerifyCode"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="ruleForm.pass" style="width: 350px"></el-input>
-      </el-form-item>
-      <el-form-item label="验证码" prop="verifycode" label-width="60px" >
-        <el-input clearable type="text" v-model="ruleForm.verifycode" style="float: left;position:relative;left:15px;width: 180px;font-size: 6px" placeholder="请输入图中的运算结果"></el-input>
-        <img :src="imgSrc" style="width: 150px;height: 36px" alt="验证码" title="验证码只能使用一次" width="150px" v-show="isShowImg">
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  <div class="mybody">
+      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="loginstyle">
+          <h4 style="margin-top: -20px">用户登录</h4>
+        <el-form-item label="账号" prop="username">
+          <el-input type="text" v-model="ruleForm.username"  style="width: 220px;float: left" @blur="getVerifyCode"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm.pass" style="width: 220px;float: left"></el-input>
+        </el-form-item>
+        <el-form-item label="验证码" prop="verifycode" label-width="55px" >
+          <el-input clearable type="text" v-model="ruleForm.verifycode" style="float:left;margin-left:-5px;position:relative;width:150px" placeholder="请输入图中结果"></el-input>
+          <img :src="imgSrc" alt="验证码" title="验证码只能使用一次" style="margin-left: -30px" width="60px" height="35px" v-show="isShowImg">
+        </el-form-item>
+        <el-form-item >
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
 </template>
 
 <script>
@@ -77,6 +77,7 @@ export default {
                   this.$message.error({message: res.error+"", center: true})
                 }else if (res.data == null) { // 密码或账号错误
                     this.$message.error({message: '密码或账号错误', center: true})
+                    this.getVerifyCode();//重新获取验证码
                   } else {
                     this.$message.success({message: '登录成功', center: true})
                     // 成功之后:
@@ -140,10 +141,22 @@ export default {
 </script>
 
 <style scoped>
-  .demo-ruleForm {
-    background-color: #92dfff;
+  .mybody{
+    background:url(../../static/background-xj.jpg);
+    width:100%;
+    height:100%;
+    position:fixed;
+    background-size:100% 100%;
+  }
+  .loginstyle{
+    position: absolute;
+    top:30%;
+    left: 30%;
+    width: 300px;
+    height: 280px;
+    border-radius: 15px;
+    background-color: rgba(98, 137, 255, 0.5);
     padding-top: 30px;
-    width: 450px;
     border: 1px rgba(1, 5, 4, 0.15) solid;
     margin: 0 auto
   }

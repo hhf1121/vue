@@ -58,8 +58,9 @@
         <el-input type="textarea" v-model="ruleForm.noteRemark"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" @click="submitForm('ruleForm')" v-if="isView">创建</el-button>
-        <el-button type="primary" @click="cancelForm('ruleForm')" v-if="isView">取消</el-button>
+        <el-button type="success" @click="submitForm('ruleForm')" v-if="title!='编辑'&&isView">确定</el-button>
+        <el-button type="success" @click="submitForm('ruleForm')" v-if="title=='编辑'">更新</el-button>
+        <el-button type="primary" @click="cancelForm('ruleForm')" v-if="isView||title=='编辑'">取消</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -140,18 +141,26 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.ruleForm;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.ruleForm);
-          this.$api.createNote(this.ruleForm).then(re => {
-            if(re.success){
-              this.$message.success({message: '新增成功', center: true});
-              this.$emit('freshData');
-            }
-          }).catch(er => {
-
-          })
+          if(this.ruleForm.id&&this.title=='编辑'){//更新
+            this.$api.updateNoteAll(this.ruleForm).then(re => {
+              if(re.success){
+                this.$message.success({message: '修改成功', center: true});
+                this.$emit('freshData');
+              }
+            }).catch(er => {
+            })
+          }else{
+            this.$api.createNote(this.ruleForm).then(re => {
+              if(re.success){
+                this.$message.success({message: '新增成功', center: true});
+                this.$emit('freshData');
+              }
+            }).catch(er => {
+            })
+          }
         } else {
           console.log('error submit!!')
           return false

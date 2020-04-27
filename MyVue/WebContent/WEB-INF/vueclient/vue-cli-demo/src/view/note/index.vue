@@ -2,8 +2,11 @@
   <div>
     <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
       <el-button size="medium" type="success" icon="el-icon-circle-plus-outline" @click="add()">新增</el-button>
-      <el-button size="medium" type="warning" icon="el-icon-delete" @click="remove()">删除</el-button>
+      <el-button size="medium" type="danger" icon="el-icon-delete" @click="remove()">删除</el-button>
+    </el-row>
+    <el-row style="padding-top: 15px;text-align: left;padding-left: 10px">
       <el-button size="medium" type="primary" icon="el-icon-star-off" @click="view()">查看</el-button>
+      <el-button size="medium" type="warning" icon="el-icon-edit" @click="editData()">编辑</el-button>
     </el-row>
     <query style="text-align: right;padding-right: 10px" :queryData.sync="formModel" @queryFresh="query" ref="queryRef"/>
     <div style="float: right;color: mediumpurple;padding-left: 5px">总金额：{{countPrice | numberFilter(2)}}</div>
@@ -150,10 +153,11 @@ export default {
       rowHandle: {
         custom: [
           {
-            text: '编辑',
+            text: '速编',
             type: 'warning',
             size: 'small',
-            emit: 'edit-emit'
+            emit: 'edit-emit',
+            fontSize:'5',
           },
           {
             text: '保存',
@@ -198,10 +202,23 @@ export default {
         this.dataForm=this.selectionData[0];
       }
     },
+    editData(){
+      let length = this.selectionData.length;
+      if(length!=1){
+        this.$message.error({message: '请选择一条数据，进行操作', center: true})
+      }else{
+        this.dialogShow = true;
+        this.isView="编辑";
+        this.dataForm=this.selectionData[0];
+      }
+    },
     edit({index,row}) {
       row;
-      // this.$refs.d2Crud[index].custom.component.disabled=false;
-      let columns = this.columns
+      var resultDatum = this.resultData[index];
+      let columns= this.columns;//列list
+      // columns.forEach(e=>{
+      //   console.log(e.__ob__.dep.subs[0].vm.resultData);
+      // })
       columns[1].component.disabled = false
       columns[3].component.disabled = false
       columns[4].component.disabled = false
@@ -265,9 +282,11 @@ export default {
             }).catch(err=>{
               this.$message.error({message: '请求失败', center: true})
             })
-          }).catch(()=>{})
+          }).catch(()=>{
+            this.$message({type: 'info', message: '已取消删除',center:true})
+          })
         }else{
-          this.$message({type: 'info', message: '已取消删除',center:true})
+          this.$message.error({message: '请选择一条数据，进行操作', center: true})
         }
     },
     isFresh() {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <h3>菜单首页</h3>
 <el-menu
   :default-active="activeIndex"
@@ -158,13 +158,16 @@ export default {
 </script>
 
 <style scoped>
-
-  .el-menu-demo{
-
-  }
   .myUser{
     /*display: inline-block;*/
     font-size: 12px;
     width: 5em;
+  }
+  .mybody{
+    background:url(../../static/background-xj.jpg);
+    width:100%;
+    height:100%;
+    position:fixed;
+    background-size:100% 100%;
   }
 </style>
