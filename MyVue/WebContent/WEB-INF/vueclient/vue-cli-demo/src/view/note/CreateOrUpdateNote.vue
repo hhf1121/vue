@@ -26,10 +26,12 @@
       </el-form-item>
       <el-form-item label="地址" prop="noteAddress">
         <el-cascader filterable style="width: 400px;float: left"
+                     :before-filter="beforFilter"
                      :options="addressOptions"
+                     v-highlight="inputData"
                      v-model="noteAddressArray" >
           <template slot-scope="{ node, data }">
-            <span>{{ data.label }}</span>
+            <span >{{ data.label }}</span>
             <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
           </template>
         </el-cascader>
@@ -123,12 +125,12 @@ export default {
       imgImgShow:false,
       noteAddressArray:[],
       addressOptions:[],
+      inputData:'',
       districtParams:'1,2,3'
     }
   },
   methods: {
     submitForm(formName) {
-      debugger
       let noteAddressArray = this.noteAddressArray;
       if(noteAddressArray){//存下最后一个code编码
         this.ruleForm.noteAddress=this.noteAddressArray[noteAddressArray.length-1];
@@ -198,6 +200,19 @@ export default {
       }).catch(err=>{
         this.$message.error({message: '获取地址信息失败', center: true});
       })
+    },
+    // queryMethod:function(node, keyword){
+    //   this.queryParam=keyword;
+    //   this.addressOptions.map(e=>{
+    //     return e.label==keyword;
+    //   })
+    // },
+    beforFilter(value){
+      if(value!=''){
+        // setTimeout(function () {
+        //   this.inputData=value;
+        // },1000)
+      }
     }
   },
   mounted(){
@@ -211,7 +226,6 @@ export default {
     });
     this.getSelectDistrictByLevel();
     //编辑、回显地址
-    debugger
     if(this.ruleForm.noteAddress){//410000,410100,410181
       let addressCode = this.ruleForm.noteAddress;
       var province=addressCode.substr(0,2)+"0000";

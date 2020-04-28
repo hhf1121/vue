@@ -35,6 +35,8 @@ Vue.use(VueJsonp)
 
 //高亮directive
 Vue.directive('highlight', function (el, binding, vnode) {
+  console.log(el)
+  console.log(binding.value)
   //创建span
   // const spanDom = document.createElement('span');
   // spanDom.innerHTML = binding.value;
