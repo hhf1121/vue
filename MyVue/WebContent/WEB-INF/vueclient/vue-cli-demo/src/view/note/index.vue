@@ -92,7 +92,12 @@ export default {
         },
         {
           title: '地址',
-          key: 'noteAddress',
+          key: 'noteAddressName',
+          /*component: {//级联选择器el-cascader
+            name: 'el-cascader',
+            size: 'small',
+            disabled: false
+          },*/
           showOverflowTooltip:true,//内容过长,鼠标显示
           minWidth: '6%',
         },
@@ -239,6 +244,7 @@ export default {
               this.updateData.id=undefined;
               this.resetDisable();
               this.query();
+              this.isQueryInit();
             }else{
               this.$message.error({message: '更新失败', center: true})
             }
@@ -276,6 +282,7 @@ export default {
                 if(re.success){
                   this.$message.success({message: '删除成功', center: true})
                   this.query();
+                  this.isQueryInit();
                 }else{
                   this.$message.error({message: '删除失败', center: true})
                 }
@@ -291,7 +298,8 @@ export default {
     },
     isFresh() {
       this.dialogShow = false
-      this.query()
+      this.query();
+      this.isQueryInit();
     },
     query() {
       this.resetDisable();
@@ -304,6 +312,9 @@ export default {
 
         this.resultData = res.records
         this.pagination.total = res.total
+        if(this.pagination.total<=this.pagination.pageSize){
+          this.pagination.currentPage=1;
+        }
         isSearch = true
         // this.$export.excel({
         //   title: '花销明细',
@@ -313,9 +324,7 @@ export default {
         //   this.$message.success({ message: '导出成功', center: true });
         // });
       }).catch(err => {
-        debugger;
         this.$message.error({message: '请求失败', center: true})
-        // console.log(err)
       })
 
     },

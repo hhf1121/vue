@@ -25,32 +25,16 @@
         </el-select>
       </el-form-item>
       <el-form-item label="地址" prop="noteAddress">
-        <el-input v-model="ruleForm.noteAddress"></el-input>
+        <el-cascader filterable style="width: 400px;float: left"
+                     :options="addressOptions"
+                     v-model="noteAddressArray" >
+          <template slot-scope="{ node, data }">
+            <span>{{ data.label }}</span>
+            <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+          </template>
+        </el-cascader>
+        <!--<el-input v-model="ruleForm.noteAddress"></el-input>-->
       </el-form-item>
-      <!--<el-form-item label="活动时间" required>
-		<el-col :span="10">
-		  <el-form-item prop="date1">
-			<el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-		  </el-form-item>
-		</el-col>
-		<el-col class="line" :span="2">——</el-col>
-		<el-col :span="10">
-		  <el-form-item prop="date2">
-			<el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-		  </el-form-item>
-		</el-col>
-	  </el-form-item>-->
-      <!--<el-form-item label="即时配送" prop="delivery">
-		<el-switch v-model="ruleForm.delivery"  style="float: left;margin-top: 10px;"></el-switch>
-	  </el-form-item>
-	  <el-form-item label="活动性质" prop="type">
-		<el-checkbox-group v-model="ruleForm.type" style="border: 1px grey solid">
-		  <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-		  <el-checkbox label="地推活动" name="type"></el-checkbox>
-		  <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-		  <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-		</el-checkbox-group>
-	  </el-form-item>-->
       <el-form-item label="花费金额" prop="noteMoney">
         <el-input-number v-model="ruleForm.noteMoney" style="width: 200px;float: left"></el-input-number>
       </el-form-item>
@@ -136,11 +120,19 @@ export default {
       imgVisible:false,
       // showImgCode:'',
       dialogImageUrl:'',
-      imgImgShow:false
+      imgImgShow:false,
+      noteAddressArray:[],
+      addressOptions:[],
+      districtParams:'1,2,3'
     }
   },
   methods: {
     submitForm(formName) {
+      debugger
+      let noteAddressArray = this.noteAddressArray;
+      if(noteAddressArray){//存下最后一个code编码
+        this.ruleForm.noteAddress=this.noteAddressArray[noteAddressArray.length-1];
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.ruleForm);
@@ -186,6 +178,7 @@ export default {
       this.myloading = true
       this.ruleForm.imgCode='';
       this.imgImgShow=false;
+      this.noteAddressArray='';
       this.$refs[formName].resetFields()
       setTimeout(() => {
         this.myloading = false
@@ -194,6 +187,17 @@ export default {
     bigImg(){
       this.imgVisible=true;
       this.dialogImageUrl=this.ruleForm.imgCode;
+    },
+    getSelectDistrictByLevel(){
+      this.$api.getSelectDistrictByLevel({"level":this.districtParams}).then(re=>{
+        if(!re.success){
+          this.$message.error({message: re.error, center: true});
+          return;
+        }
+        this.addressOptions=re.data;
+      }).catch(err=>{
+        this.$message.error({message: '获取地址信息失败', center: true});
+      })
     }
   },
   mounted(){
@@ -205,7 +209,16 @@ export default {
         this.ruleForm.imgCode;
       }
     });
-
+    this.getSelectDistrictByLevel();
+    //编辑、回显地址
+    debugger
+    if(this.ruleForm.noteAddress){//410000,410100,410181
+      let addressCode = this.ruleForm.noteAddress;
+      var province=addressCode.substr(0,2)+"0000";
+      var city=addressCode.substr(0,4)+"00";
+      var zone=addressCode;
+      this.noteAddressArray=[province,city,zone];
+    }
   }
 }
 </script>

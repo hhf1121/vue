@@ -9,7 +9,7 @@
           <el-input type="password" v-model="ruleForm.pass" style="width: 220px;float: left"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="verifycode" label-width="55px" >
-          <el-input clearable type="text" v-model="ruleForm.verifycode" style="float:left;margin-left:-5px;position:relative;width:150px" placeholder="请输入图中结果"></el-input>
+          <el-input clearable type="text" v-model="ruleForm.verifycode" style="float:left;margin-left:-5px;position:relative;width:150px" placeholder="请输入运算结果"></el-input>
           <img :src="imgSrc" alt="验证码" title="验证码只能使用一次" style="margin-left: -30px" width="60px" height="35px" v-show="isShowImg">
         </el-form-item>
         <el-form-item >
