@@ -28,7 +28,6 @@
         <el-cascader filterable style="width: 400px;float: left"
                      :before-filter="beforFilter"
                      :options="addressOptions"
-                     v-highlight="inputData"
                      v-model="noteAddressArray" >
           <template slot-scope="{ node, data }">
             <span >{{ data.label }}</span>

@@ -42,7 +42,6 @@
     },
     methods: {
       handleRemove(file) {
-        debugger
         this.fileList.remove()
         console.log(file);
       },

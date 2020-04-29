@@ -22,6 +22,7 @@
     "js-base64": "^2.5.2",
     "v-charts": "^1.19.0",
     "vue": "^2.5.2",
+    "vue-carousel-3d": "^0.2.0",
     "vue-jsonp": "^0.1.8",
     "vue-router": "^3.0.1"
   },

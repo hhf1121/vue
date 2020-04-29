@@ -1,76 +1,85 @@
 <template>
-    <div>
-      <div class="" v-for="(d,i) in lists" :key="i">
-        <div v-show="n==i">{{d.noteTitle}}</div>
-        <img :src="d.imgCode" style="text-align: center;margin: 0 auto;" :alt="d.createrTime"  :width="d.width" :height="d.height" v-if="n==i" @click="showImage(d)">
-      </div>
-      <div class="banner-circle">
-        <ul style="display: inline">
-          <li  v-for="(v,i) in lists" :key="i" :class='n==i?"selected":""' style="" >未实现</li>
-        </ul>
-      </div>
-      <el-dialog :visible.sync="imgVisible" style="width: 100%;height: 100%">
-        <img :src="dialogImageUrl" :alt="dialogImageAlt">
+  <div >
+      <el-dialog :visible.sync="imgVisible">
+        <img width="100%" :src="dialogImageUrl" :title="dialogImageTitie">
       </el-dialog>
-    </div>
+      <carousel-3d  :autoplay="true" >
+        　　<slide v-for="(item, i) in bannerList" :key="i" :index="i" >
+        　　　　<template slot-scope="{ index, isCurrent, leftIndex, rightIndex}" class="cursor:pointer;">
+        　　　　　　<img :data-index="index"
+                   :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >=0)}"
+                   :src="item.imgCode" @click="showImage(item)" :title="item.noteTitle">
+        　　　</template>
+        　　</slide>
+      </carousel-3d>
+  </div>
 </template>
 
 <script>
+  //3D轮播组件
+  import { Carousel3d, Slide } from 'vue-carousel-3d'
 export default {
   name: 'photoInfo',
-  // props:{
-  //   show:{
-  //     type:Boolean,
-  //     default(){
-  //       return false
-  //     }
-  //   }
-  // },
+  components: {
+    Carousel3d,
+    Slide
+  },
   data() {
     return {
-      n:0,
-      lists:[],
-      task:null,
+      bannerList:[],
       imgVisible:false,
       dialogImageUrl:'',
-      dialogImageAlt:''
+      dialogImageTitie:'',
+      isAutoplay:false
     }
   },
   methods: {
-    turnsPhoto(){//开始轮播
-     this.task= setInterval(this.timer,2000);
-    },
-    timer(){//轮播方法
-      this.n++;
-      if(this.n==this.lists.length){
-        this.n=0;
-      }
-    },
+    // turnsPhoto(){//开始轮播
+    //  this.task= setInterval(this.timer,2000);
+    // },
+    // timer(){//轮播方法
+    //   this.mark++;
+    //   if(this.mark==this.lists.length){
+    //     this.mark=0;
+    //   }
+    // },
     showImage(data){
       this.imgVisible=true;
       this.dialogImageUrl=data.imgCode;
-      this.dialogImageAlt=data.noteTitle;
+      this.dialogImageTitie=data.noteRemark;
+    },
+    autoLoadImg(){
+      this.loadingImg();
+    },
+    loadingImg(){
+      this.$api.queryNotesWithPhoto().then(re=>{
+        this.bannerList=re;
+        this.isAutoplay=true;
+      }).catch(err => {
+        this.$message.error({message: '请求错误', center: true})
+      })
     }
   },
-  mounted() {
-    this.$api.queryNotesWithPhoto().then(re=>{
-      const newList=re.map(data => {
-            data.width='500'
-            data.height='520'
-        return data;
-      })
-      this.lists=newList;
-      this.turnsPhoto();
-    }).catch(err => {
-      this.$message.error({message: '请求错误', center: true})
-    })
-  },
-  destroyed(){
-    clearInterval(this.task);
+  created() {
+   this.loadingImg();
   }
 }
 </script>
 
 <style scoped>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
 
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
 </style>

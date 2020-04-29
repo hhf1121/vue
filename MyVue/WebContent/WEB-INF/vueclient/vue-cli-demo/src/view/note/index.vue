@@ -354,6 +354,7 @@ export default {
     },
     isQueryInit(){
       this.$refs.queryRef.initData();
+      this.query();
     }
   },
   filters: {// 过滤器
