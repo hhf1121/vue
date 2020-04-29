@@ -39,7 +39,9 @@
     methods: {
       submit(){//第二种方式、手动提交、用axios提交
         let fd = new FormData();
-        fd.append('file',this.isfile);//传文件
+        if(this.isfile){
+          fd.append('file',this.isfile);//传文件
+        }
         fd.append('passWord',this.userData.passWord);//传其他参数
         fd.append('address',this.userData.address);//传其他参数
         fd.append('id',this.userData.id);//传其他参数
@@ -62,7 +64,6 @@
         })
       },
       onchangeImg(file,list) {
-        debugger
         //获取file对象
         this.isfile=file.raw;
         console.log(file.raw);
@@ -100,9 +101,9 @@
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
+        this.isfile={};
       },
       handlePictureCardPreview(file) {
-        debugger
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       }

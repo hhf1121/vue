@@ -4,7 +4,8 @@
     <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px" v-if="!isupdate">取消</el-button>
     <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" >
       <el-form-item :disabled="isupdate">
-        <upload-img :userData="userData"  ref="imgUp" @flushData="isupdate=true"/>
+        <upload-img :userData="userData"  ref="imgUp" @flushData="isupdate=true" v-if="lmgurl.length==0"/>
+        <img :src="lmgurl" alt="头像" title="头像" style="margin-left: -30px;border: 1px #5b5b5b dashed;border-radius: 5px" width="150px" height="150px" v-if="lmgurl.length>0" >
       </el-form-item>
       <el-form-item label="账号" prop="userName">
         <el-input v-model="userData.userName" disabled></el-input>
@@ -53,12 +54,31 @@ export default {
     return {
       userData: {},
       isupdate:true,
-      options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}]
+      options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
+      lmgurl:''
     }
   },
   methods: {
     updateForm() {//修改
-      this.$refs.imgUp.submit();
+      if(this.lmgurl.length>0){
+        let User={
+          "passWord":this.userData.passWord,
+          "address":this.userData.address,
+          "id":this.userData.id,
+        }
+        this.$api.updateNoImg(User).then(re=>{
+          if(re.success){
+            this.$message.success({message: '修改成功', center: true})
+            this.isupdate=true;
+          }else {
+            this.$message.error({message: '修改失败', center: true})
+          }
+        }).catch(err=>{
+          this.$message.error({message: '服务器异常', center: true})
+        })
+      }else{
+        this.$refs.imgUp.submit();
+      }
     }
   },
   filters:{
@@ -73,6 +93,10 @@ export default {
   this.$api.getCurrentUser({'id':this.userId}).then(re=>{
     if(re.id==this.userId){
       this.userData=re;
+      let path=re.picPath;
+      if(path){
+        this.lmgurl="data:image/png;base64,"+re.picPath;
+      }
     }else{
       this.$message.error({message: '用户信息获取失败，请重新登录', center: true})
     }

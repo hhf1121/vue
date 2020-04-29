@@ -25,7 +25,6 @@ axios.interceptors.response.use(response => {
         console.log('错误请求')
         break
       case 401:
-        debugger
         console.log('未授权，请重新登录')
         rootVm.$message.error({message: '未登录，请重新登录', center: true})
         rootVm.$router.push({path:'/'})
@@ -157,4 +156,5 @@ export const server = {
   getVerifyCode: paramObj => get('/api/springBoot/verifyCode', paramObj),//验证码
   getSelectDistrictByLevel: paramObj => get('/api/base/getSelectDistrictByLevel', paramObj),//验证码
   loadingPhoto: paramObj => post('/api/springBoot/loadingPhoto', paramObj),//验证码
+  updateNoImg: paramObj => post('/api/springBoot/updateNoImg', paramObj),//验证码
 }
