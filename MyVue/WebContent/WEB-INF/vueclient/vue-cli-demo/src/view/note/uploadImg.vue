@@ -15,6 +15,7 @@
       :on-remove="handleRemove">
       <i class="el-icon-plus"></i>
     </el-upload>
+    <span style="color: red">只能上传一张图片</span>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
@@ -64,6 +65,7 @@
         })
       },
       onchangeImg(file,list) {
+        if(list)
         //获取file对象
         this.isfile=file.raw;
         console.log(file.raw);
