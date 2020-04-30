@@ -92,11 +92,29 @@ export default {
   //   uploadImg
   // },
   data() {
+    //校验函数
+    let _that=this;
+    let validateTitle = (rule, value, callback) => {
+      if (value) {
+        _that.ruleForm.noteTitle=value;
+        //去后端校验
+        _that.$api.checkTitle({"noteTitle":_that.ruleForm.noteTitle,"id":_that.ruleForm.id}).then(re=>{
+          if(!re.success){
+            callback(new Error(re.error+""));
+          }else{
+            callback();
+          }
+        }).catch(err=>{
+          callback(new Error('请求后端异常'));
+        })
+      }
+    };
     return {
       rules: {
         noteTitle: [
           {required: true, message: '请输入标题名称', trigger: 'blur'},
-          {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'},
+          {validator : validateTitle, type:'string',  trigger: 'blur' }
         ],
         noteType: [
           {required: true, message: '请选择花销类型', trigger: 'change'}

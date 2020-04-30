@@ -156,5 +156,6 @@ export const server = {
   getVerifyCode: paramObj => get('/api/springBoot/verifyCode', paramObj),//验证码
   getSelectDistrictByLevel: paramObj => get('/api/base/getSelectDistrictByLevel', paramObj),//验证码
   loadingPhoto: paramObj => post('/api/springBoot/loadingPhoto', paramObj),//验证码
-  updateNoImg: paramObj => post('/api/springBoot/updateNoImg', paramObj),//验证码
+  updateNoImg: paramObj => post('/api/springBoot/updateNoImg', paramObj),//更新用户
+  checkTitle: paramObj => get('/api/note/checkTitle', paramObj),//校验标题唯一
 }
