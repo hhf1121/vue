@@ -13,7 +13,6 @@
   <el-submenu index="2">
     <template slot="title">我的家园</template>
     <el-menu-item index="2-1"  :span="12">实时疫情</el-menu-item>
-    <el-menu-item index="2-2"  :span="12">个人中心</el-menu-item>
     <el-submenu index="2-3">
       <template slot="title">敬请期待...</template>
       <el-menu-item index="2-3-1">期待1.</el-menu-item>
@@ -35,10 +34,11 @@
   </el-submenu>
   <el-submenu index="7" style="float: right">
     <template slot="title">你好：{{userName}}
-      <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" >
+      <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" v-if="lmgurl.length>100">
     </template>
    <!-- <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>-->
-    <el-menu-item index="7-2" class="myUser" v-on:click="reset">切换用户</el-menu-item>
+    <el-menu-item index="7-1"  :span="12">个人中心</el-menu-item>
+    <el-menu-item index="7-2" class="myUser" v-on:click="reset">退出</el-menu-item>
   </el-submenu>
 </el-menu>
     <table-date v-show="isData"></table-date>
@@ -98,7 +98,7 @@ export default {
       }else{
         this.isMap=false;
       }
-      if(key=='2-2'){
+      if(key=='7-1'){
         this.isInfo=true;
       }else{
         this.isInfo=false;

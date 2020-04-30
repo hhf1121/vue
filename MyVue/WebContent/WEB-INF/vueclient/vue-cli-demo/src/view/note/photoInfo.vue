@@ -3,15 +3,19 @@
       <el-dialog :visible.sync="imgVisible">
         <img width="100%" :src="dialogImageUrl" :title="dialogImageTitie">
       </el-dialog>
-      <carousel-3d  :autoplay="true" >
+      <carousel-3d  :autoplay="true">
         　　<slide v-for="(item, i) in bannerList" :key="i" :index="i" >
         　　　　<template slot-scope="{ index, isCurrent, leftIndex, rightIndex}" class="cursor:pointer;">
-        　　　　　　<img :data-index="index"
+        　　　　　　<img :data-index="index"  @mouseover='dialogVisible=true' @mouseout="dialogVisible=false"
                    :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >=0)}"
-                   :src="item.imgCode" @click="showImage(item)" :title="item.noteTitle">
+                   :src="item.imgCode" @dblclick="showImage(item)" :title="item.noteTitle">
         　　　</template>
         　　</slide>
       </carousel-3d>
+      <p style="margin-top: 100px;" v-show="dialogVisible">
+        <span style="color: #66b1ff">双击图片,查看详情</span><br>
+        <span style="color: #fa733c">单击左键不放,可左右拖动图片</span>
+      </p>
   </div>
 </template>
 
@@ -30,7 +34,8 @@ export default {
       imgVisible:false,
       dialogImageUrl:'',
       dialogImageTitie:'',
-      isAutoplay:false
+      isAutoplay:false,
+      dialogVisible:false
     }
   },
   methods: {
