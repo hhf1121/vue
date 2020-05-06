@@ -143,7 +143,7 @@ export default {
       noteAddressArray:[],
       addressOptions:[],
       inputData:'',
-      districtParams:'1,2,3'
+      districtParams:'1,2,3'//行政等级
     }
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px" v-if="isupdate">修改</el-button>
-    <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px" v-if="!isupdate">取消</el-button>
+    <el-button @click="isupdate=!isupdate,flush()" style="float: right;margin-right: 100px" v-if="!isupdate">取消</el-button>
     <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" >
       <el-form-item :disabled="isupdate">
         <upload-img :userData="userData"  ref="imgUp" @flushData="isupdate=true" v-if="lmgurl.length==0"/>
@@ -79,6 +79,24 @@ export default {
       }else{
         this.$refs.imgUp.submit();
       }
+    },
+    flush(){
+      this.getCurrentUser();
+    },
+    getCurrentUser(){
+      this.$api.getCurrentUser({'id':this.userId}).then(re=>{
+        if(re.id==this.userId){
+          this.userData=re;
+          let path=re.picPath;
+          if(path){
+            this.lmgurl="data:image/png;base64,"+re.picPath;
+          }
+        }else{
+          this.$message.error({message: '用户信息获取失败，请重新登录', center: true})
+        }
+      }).catch(er=>{
+        this.$message.error({message: '服务器异常', center: true})
+      })
     }
   },
   filters:{
@@ -90,19 +108,7 @@ export default {
     }
   },
   mounted() {
-  this.$api.getCurrentUser({'id':this.userId}).then(re=>{
-    if(re.id==this.userId){
-      this.userData=re;
-      let path=re.picPath;
-      if(path){
-        this.lmgurl="data:image/png;base64,"+re.picPath;
-      }
-    }else{
-      this.$message.error({message: '用户信息获取失败，请重新登录', center: true})
-    }
-  }).catch(er=>{
-    this.$message.error({message: '服务器异常', center: true})
-  })
+    this.getCurrentUser();
   }
 }
 </script>
