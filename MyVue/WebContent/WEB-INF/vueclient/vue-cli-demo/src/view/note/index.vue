@@ -123,7 +123,7 @@ export default {
         },
         {
           title: '用户',
-          key: 'noteName',
+          key: 'creater',
           minWidth: '6%',
         },
         {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px" v-if="isupdate">修改</el-button>
-    <el-button @click="isupdate=!isupdate,flush()" style="float: right;margin-right: 100px" v-if="!isupdate">取消</el-button>
+    <el-button @click="isupdate=!isupdate;flush()" style="float: right;margin-right: 100px" v-if="!isupdate">取消</el-button>
     <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" >
       <el-form-item :disabled="isupdate">
         <upload-img :userData="userData"  ref="imgUp" @flushData="isupdate=true" v-if="lmgurl.length==0"/>

@@ -235,7 +235,7 @@ export default {
   mounted(){
     //初始页面时，查询数据
     this.$nextTick(function () {
-      this.ruleForm.noteName=this.userName;
+      this.ruleForm.noteName=this.userName;//noteName冗余当前userName
       if(this.ruleForm.imgCode){
         this.imgImgShow=true;
         this.ruleForm.imgCode;
