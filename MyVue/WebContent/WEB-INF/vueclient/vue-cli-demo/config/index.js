@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {//解决跨域（需要重启vue项目）
       '/api': {//http://localhost:8082/user/queryVIP?yes=1
-        target: 'http://localhost:8082/', //设置你调用的接口域名和端口号别忘了加http
+        target: 'http://192.168.202.53:8082/', //设置你调用的接口域名和端口号别忘了加http
         changeOrigin: true,//是否跨域
         pathRewrite: {
           '^/api': ''   //需要rewrite重写的,
@@ -27,8 +27,8 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    host: '192.168.202.53', // can be overwritten by process.env.HOST
+    port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
