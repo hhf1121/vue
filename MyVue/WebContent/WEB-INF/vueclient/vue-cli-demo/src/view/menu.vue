@@ -32,9 +32,9 @@
       <el-menu-item index="6-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
       <el-menu-item index="6-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
   </el-submenu>
-  <el-submenu index="7" style="float: right">
-    <template slot="title">你好：{{userName}}
-      <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" v-if="lmgurl.length>100">
+  <el-submenu index="7" style="float: right;width: 200px">
+    <template slot="title" >你好：{{userName}}
+      <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" v-if="lmgurl.length>0">
     </template>
    <!-- <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>-->
     <el-menu-item index="7-1"  :span="12">个人中心</el-menu-item>
@@ -147,7 +147,8 @@ export default {
       this.user = this.$root.USER;
       this.userid=this.$root.USER.id+'';
       this.userName=this.$root.USER.name;
-      this.lmgurl="data:image/png;base64,"+this.$root.USER.picPath;
+      // this.lmgurl="data:image/png;base64,"+this.$root.USER.picPath;
+      this.lmgurl=this.$root.USER.picPath;
     }else{
       this.$message.error({message: '获取不到用户信息，请重新登录', center: true})
       this.$router.push(

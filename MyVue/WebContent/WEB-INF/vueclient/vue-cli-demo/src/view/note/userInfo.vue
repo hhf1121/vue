@@ -89,7 +89,8 @@ export default {
           this.userData=re;
           let path=re.picPath;
           if(path){
-            this.lmgurl="data:image/png;base64,"+re.picPath;
+            // this.lmgurl="data:image/png;base64,"+re.picPath;
+            this.lmgurl=re.picPath;
           }
         }else{
           this.$message.error({message: '用户信息获取失败，请重新登录', center: true})

@@ -166,7 +166,6 @@ export default {
         }).catch(err => {
           this.$message.error({message: '删除失败', center: true})
         })
-        this.$message({type: 'success', message: '删除成功!'})
       }).catch(() => {
         this.$message({type: 'info', message: '已取消删除'})
       })
