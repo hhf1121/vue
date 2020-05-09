@@ -87,10 +87,11 @@ export default {
       this.$api.getCurrentUser({'id':this.userId}).then(re=>{
         if(re.id==this.userId){
           this.userData=re;
-          let path=re.picPath;
-          if(path){
+          if(re.picPath){
             // this.lmgurl="data:image/png;base64,"+re.picPath;
             this.lmgurl=re.picPath;
+          }else if(re.cachePhoto){
+            this.lmgurl="data:image/png;base64,"+re.cachePhoto;
           }
         }else{
           this.$message.error({message: '用户信息获取失败，请重新登录', center: true})

@@ -6,15 +6,28 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px">
       <el-button type="danger" icon="el-icon-refresh-right" size="mini" circle ref="isCall"
                  @click="resetForm('ruleForm')" @mouseover.native='isShow=true' @mouseout.native="isShow=false"
-                 style="position: absolute;left: 550px;top: 50px;width: 20px;height: 20px" :loading="myloading" v-if="isView">
+                 style="position: absolute;left: 550px;top: 50px;width: 20px;height: 20px" :loading="myloading" v-if="isView&&title!='编辑'">
         <div v-show="isShow" style="position: absolute;top: -12px;right:10px;color: royalblue">点击重置</div>
       </el-button>
-      <el-dialog :visible.sync="imgVisible">
+      <el-dialog :visible.sync="imgVisible" :modal="false">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
       <el-form-item label="照片" prop="imgCode">
-          <img  :src="ruleForm.imgCode" width="150px" height="150px" v-if="imgImgShow"  @click="bigImg">
-        <input @change='imageAdd'  type="file" ref="imageinput">
+        <el-upload
+          class="upload-demo"
+          action="/api/springBoot/vue/loadingFile"
+          accept="image/jpeg,image/png"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          :file-list="fileList"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2M</div>
+        </el-upload>
+         <!-- <img  :src="ruleForm.imgCode" width="150px" height="150px" v-if="imgImgShow"  @click="bigImg">
+        <input @change='imageAdd'  type="file" ref="imageinput">-->
       </el-form-item>
       <el-form-item label="标题" prop="noteTitle">
         <el-input v-model="ruleForm.noteTitle"></el-input>
@@ -26,7 +39,6 @@
       </el-form-item>
       <el-form-item label="地址" prop="noteAddress">
         <el-cascader filterable style="width: 400px;float: left"
-                     :before-filter="beforFilter"
                      :options="addressOptions"
                      v-model="noteAddressArray" >
           <template slot-scope="{ node, data }">
@@ -80,7 +92,8 @@ export default {
           noteRemark: '',
           noteMoney: '',
           userName:'',
-          imgCode:''
+          imgCode:'',
+          imgVos:[]
         }
       }
     },
@@ -139,10 +152,11 @@ export default {
       imgVisible:false,
       // showImgCode:'',
       dialogImageUrl:'',
-      imgImgShow:false,
+      // imgImgShow:false,
       noteAddressArray:[],
       addressOptions:[],
       inputData:'',
+      fileList:[],
       districtParams:'1,2,3'//行政等级
     }
   },
@@ -178,17 +192,17 @@ export default {
         }
       })
     },
-    imageAdd(event){
-      var reader =new FileReader();//创建读取文件的方法
-      var img1=event.target.files[0];
-      reader.readAsDataURL(img1);//将文件已url的形式读入页面
-      // let that=this;
-      reader.onload=(e)=>{
-        this.imgImgShow=false;
-        this.ruleForm.imgCode= e.target.result; //把图片的二进制流付给表单ruleForm里面的imgCode
-        this.imgImgShow=true;
-      }
-    },
+    // imageAdd(event){
+    //   var reader =new FileReader();//创建读取文件的方法
+    //   var img1=event.target.files[0];
+    //   reader.readAsDataURL(img1);//将文件已url的形式读入页面
+    //   // let that=this;
+    //   reader.onload=(e)=>{
+    //     this.imgImgShow=false;
+    //     this.ruleForm.imgCode= e.target.result; //把图片的二进制流付给表单ruleForm里面的imgCode
+    //     this.imgImgShow=true;
+    //   }
+    // },
     cancelForm() {
       this.resetForm('ruleForm');
       this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
@@ -196,17 +210,18 @@ export default {
     resetForm(formName) {
       this.myloading = true
       this.ruleForm.imgCode='';
-      this.imgImgShow=false;
+      // this.imgImgShow=false;
       this.noteAddressArray='';
+      this.fileList=[];
       this.$refs[formName].resetFields()
       setTimeout(() => {
         this.myloading = false
       }, 300)
     },
-    bigImg(){
-      this.imgVisible=true;
-      this.dialogImageUrl=this.ruleForm.imgCode;
-    },
+    // bigImg(){
+    //   this.imgVisible=true;
+    //   this.dialogImageUrl=this.ruleForm.imgCode;
+    // },
     getSelectDistrictByLevel(){
       this.$api.getSelectDistrictByLevel({"level":this.districtParams}).then(re=>{
         if(!re.success){
@@ -218,27 +233,44 @@ export default {
         this.$message.error({message: '获取地址信息失败', center: true});
       })
     },
-    // queryMethod:function(node, keyword){
-    //   this.queryParam=keyword;
-    //   this.addressOptions.map(e=>{
-    //     return e.label==keyword;
-    //   })
-    // },
-    beforFilter(value){
-      if(value!=''){
-        // setTimeout(function () {
-        //   this.inputData=value;
-        // },1000)
+    handleRemove(file, fileList) {//点击删除的时候
+      let urls=fileList.map(e=>{
+        return e.response?e.response.data:e.url;
+      })
+      //文件list
+      if(urls){
+        this.ruleForm.imgCode='';
+        for(var i=0;i<urls.length;i++){
+          this.ruleForm.imgCode+=urls[i]+";";
+        }
       }
+    },
+    handlePreview(file) {//点击的时候
+      this.imgVisible=true;
+      this.dialogImageUrl=file.url;
+    },
+    handleAvatarSuccess(res, file) {
+      if(!this.ruleForm.imgCode||this.ruleForm.imgCode.length==0){
+        this.ruleForm.imgCode=res.data+";";
+      }else{
+        this.ruleForm.imgCode=this.ruleForm.imgCode+res.data+";";
+      }
+    },
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error('上传文件大小不能超过 2MB!');
+      }
+      return  isLt2M;
     }
   },
   mounted(){
     //初始页面时，查询数据
     this.$nextTick(function () {
       this.ruleForm.noteName=this.userName;//noteName冗余当前userName
-      if(this.ruleForm.imgCode){
-        this.imgImgShow=true;
-        this.ruleForm.imgCode;
+      if(this.ruleForm.imgVos&&this.ruleForm.imgVos.length>0){
+        // this.imgImgShow=true;
+        this.fileList=this.ruleForm.imgVos;
       }
     });
     this.getSelectDistrictByLevel();

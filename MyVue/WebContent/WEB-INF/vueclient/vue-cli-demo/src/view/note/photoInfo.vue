@@ -6,9 +6,11 @@
       <carousel-3d  :autoplay="true">
         　　<slide v-for="(item, i) in bannerList" :key="i" :index="i" >
         　　　　<template slot-scope="{ index, isCurrent, leftIndex, rightIndex}" class="cursor:pointer;">
-        　　　　　　<img :data-index="index"  @mouseover='dialogVisible=true' @mouseout="dialogVisible=false"
-                   :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >=0)}"
-                   :src="item.imgCode" @dblclick="showImage(item)" :title="item.noteTitle">
+                　　<div v-for="vo in item.imgVos" style="height: 100px">
+                      <img :data-index="index"  @mouseover='dialogVisible=true' @mouseout="dialogVisible=false"
+                           :class="{ current: isCurrent, onLeft: (leftIndex >= 0), onRight: (rightIndex >=0)}"
+                           :src="vo.url" @dblclick="showImage(vo)" :title="item.noteTitle">
+                    </div>
         　　　</template>
         　　</slide>
       </carousel-3d>
@@ -50,7 +52,7 @@ export default {
     // },
     showImage(data){
       this.imgVisible=true;
-      this.dialogImageUrl=data.imgCode;
+      this.dialogImageUrl=data.url;
       this.dialogImageTitie=data.noteRemark;
     },
     autoLoadImg(){
@@ -58,6 +60,7 @@ export default {
     },
     loadingImg(){
       this.$api.queryNotesWithPhoto().then(re=>{
+        debugger
         this.bannerList=re;
         this.isAutoplay=true;
       }).catch(err => {

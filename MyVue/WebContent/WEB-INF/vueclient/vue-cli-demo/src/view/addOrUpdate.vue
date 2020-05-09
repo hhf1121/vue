@@ -4,7 +4,7 @@
         <el-form-item label="头像" prop="photoImg">
         <el-upload
           class="avatar-uploader"
-          action="/api/springBoot/vue/loadingUserImg"
+          action="/api/springBoot/vue/loadingFile"
           :show-file-list="false"
           accept="image/jpeg,image/png"
           :on-success="handleAvatarSuccess"

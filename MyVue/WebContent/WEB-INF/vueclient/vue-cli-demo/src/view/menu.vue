@@ -143,12 +143,13 @@ export default {
     if(USER){
       this.$root.USER =USER;
     }
+    debugger
     if (this.$root.USER.id) {
       this.user = this.$root.USER;
       this.userid=this.$root.USER.id+'';
       this.userName=this.$root.USER.name;
       // this.lmgurl="data:image/png;base64,"+this.$root.USER.picPath;
-      this.lmgurl=this.$root.USER.picPath;
+      this.lmgurl=this.$root.USER.picPath?this.$root.USER.picPath:"";
     }else{
       this.$message.error({message: '获取不到用户信息，请重新登录', center: true})
       this.$router.push(
