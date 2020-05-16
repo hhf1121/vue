@@ -66,7 +66,7 @@
         </el-table-column>
       </el-table>
     </div>
-      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"></add-or-update>
+      <add-or-update v-if="addOrUpdateVisible" :addformVisable="addOrUpdateVisible" ref="addOrUpdate" @freshData="getListData"></add-or-update>
   <el-pagination
                  @size-change="handleSizeChange"
                  @current-change="paginationCurrentChange"
@@ -134,6 +134,7 @@ export default {
       this.$refs[myForm].resetFields();
     },
     getListData () { // 刷新
+      this.addOrUpdateVisible=false;
       this.getData()
     },
     insertDate () { // 新增

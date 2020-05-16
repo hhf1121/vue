@@ -1,5 +1,6 @@
 <template>
-    <el-dialog :title="title" :visible.sync="addformVisable" width="400px" style="text-align: center;border-radius:20px;box-shadow: #66b1ff">
+    <el-dialog :title="title" :visible="addformVisable" width="400px" style="text-align: center;border-radius:20px;box-shadow: #66b1ff"
+               :close-on-click-modal="true"  @close="cancel('ruleForm')">
       <el-form :model="addForm" label-width="80px" :rules="rules" ref="addForm" style="width: 300px">
         <el-form-item label="头像" prop="photoImg">
         <el-upload
@@ -46,6 +47,11 @@
 <script>
 export default {
   name: 'addOrUpdate',
+  props:{
+    addformVisable: {
+      type: Boolean
+    }
+  },
   data() {
     //校验函数
     let _that=this;
@@ -68,7 +74,7 @@ export default {
       },
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       isview: true,
-      addformVisable: false,
+      // addformVisable: false,
       imageUrl:'',
       title: '',
       rules: {
@@ -104,7 +110,7 @@ export default {
             this.$api.updateUser(entity).then(res => {
                 if (res.data != null) {
                   this.$message.success({message: '更新成功', center: true})
-                  this.addformVisable = false
+                  // this.addformVisable = false
                   this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
                 } else {
                   this.$message.error({message: '更新失败', center: true})
@@ -120,7 +126,7 @@ export default {
             this.$api.createUser(entity).then(res => {
                 if (res.data != null) {
                   this.$message.success({message: '新增成功', center: true})
-                  this.addformVisable = false
+                  // this.addformVisable = false
                   this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
                 } else {
                   this.$message.error({message: '新增失败', center: true})
@@ -144,18 +150,18 @@ export default {
         this.addForm = data;
         this.imageUrl=this.addForm.picPath;
       }
-      this.addformVisable = true
+      // this.addformVisable = true
       this.isview = true
     },
     initView: function (data) {
       this.title = '查看'
       this.addForm = data;
       this.imageUrl=this.addForm.picPath;
-      this.addformVisable = true
+      // this.addformVisable = true
       this.isview = false
     },
     cancel: function () {
-      this.addformVisable = false
+      this.$refs['addForm'].resetFields()
       this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
     },
     handleAvatarSuccess(res, file) {
