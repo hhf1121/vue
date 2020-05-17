@@ -8,14 +8,43 @@
 
 
 <script type="text/javascript">
+    //JS预编译的时候，会扫描所有的声明，比如用到变量a的时候；将a提到最前面->var a；var a=function(){}.其中函数优于变量
+
 function f() {
   console.log(a);      // 当前的a变量是下面变量a声明提升后，默认值undefined
    var a = 10;
   console.log(a);      // a=>10
 }
 var a = 99;            // 全局变量a
-f();                   // f是函数，虽然定义在调用的后面，但是函数声明会提升到作用域的顶部。 
+f();                   // f是函数，虽然定义在调用的后面，但是函数声明会提升到作用域的顶部。
 console.log(a);        // a=>99,  此时是全局变量的a
+console.log("----------函数y-------------")
+var y=[];
+    for (let i=0;i<5;i++){
+        y[i]=function () {
+            console.log(i);
+        }
+    }
+    y[2]();//执行函数y[i]   for 用var声明，打印5.           for用let声明，打印2
+    // console.log("在for外面，调用i:"+i);//用var声明，可在for外面，调用i。  用let不行：Uncaught ReferenceError: i is not defined
+console.log("------------window属性-------------")
+    window.b=1;
+     b=2;
+    console.log(window.b);//b=2修改了window的b。  es5的一个缺点，变量上升。
+
+//块级作用域
+{
+    {
+        let d=1;
+        // console.log(e);//外层调不到内存
+        {
+            let e=0;
+            console.log(d)//内层可以调到外层
+        }
+    }
+}
+
+
 </script>
 </body>
 </html>
