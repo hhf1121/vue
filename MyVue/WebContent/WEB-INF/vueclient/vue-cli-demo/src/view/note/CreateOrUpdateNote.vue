@@ -126,7 +126,7 @@ export default {
       rules: {
         noteTitle: [
           {required: true, message: '请输入标题名称', trigger: 'blur'},
-          {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'},
+          {min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'},
           {validator : validateTitle, type:'string',  trigger: 'blur' }
         ],
         noteType: [
