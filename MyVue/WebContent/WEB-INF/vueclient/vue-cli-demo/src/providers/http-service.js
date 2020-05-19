@@ -138,7 +138,7 @@ export function post(url, data = {}) {
 }
 
 export const server = {
-  login: paramObj => get('/api/springBoot/vue/queryByVue', paramObj),
+  login: paramObj => get('/api/springBoot/vue/queryByVue', paramObj),//登录
   queryPage: paramObj => post('/api/springBoot/user/queryPage', paramObj),
   deleteById: paramObj => get('api/springBoot/vue/deleteByVue', paramObj),
   createUser: paramObj => post('/api/springBoot/vue/insertDataByVue', paramObj),

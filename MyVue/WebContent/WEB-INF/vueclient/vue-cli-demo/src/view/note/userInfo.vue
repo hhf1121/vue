@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px" v-if="isupdate">修改</el-button>
-    <el-button @click="isupdate=!isupdate;flush()" style="float: right;margin-right: 100px" v-if="!isupdate">取消</el-button>
+    <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="isupdate">修改</el-button>
+    <el-button @click="isupdate=!isupdate;flush()" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="!isupdate">取消</el-button>
     <el-form style="margin: 10px auto 0 auto;">
-      <el-form-item style="width: 800px;margin: auto">
+      <el-form-item style="width: 600px;margin: auto">
         <h5 v-if="userData.yes==1" style="color: red">普通用户没有菜单操作权限，请<el-button size="mini" @click="sendInfo=true">联系</el-button>管理员</h5>
         <div v-if="sendInfo" style="display: inline" >
           <el-input type="textarea" v-model="msg" ></el-input>
