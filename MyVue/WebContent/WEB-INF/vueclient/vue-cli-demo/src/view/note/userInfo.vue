@@ -119,6 +119,7 @@ export default {
       this.$api.sendAdmin({"userId":this.userId,"msg":this.msg}).then(re=>{
         if(re.success){
           this.$message.success({message: '发送信息成功', center: true})
+          this.msg='';
           this.sendInfo=false;
         }else{
           this.$message.error({message: '发送信息失败', center: true})

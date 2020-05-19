@@ -60,7 +60,6 @@ export default {
     },
     loadingImg(){
       this.$api.queryNotesWithPhoto().then(re=>{
-        debugger
         this.bannerList=re;
         this.isAutoplay=true;
       }).catch(err => {

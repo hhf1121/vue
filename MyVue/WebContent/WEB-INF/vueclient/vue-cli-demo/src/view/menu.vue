@@ -38,7 +38,8 @@
     </template>
    <!-- <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>-->
     <el-menu-item index="7-1"  :span="12">个人中心</el-menu-item>
-    <el-menu-item index="7-2" class="myUser" v-on:click="reset">退出</el-menu-item>
+    <el-menu-item index="7-2"  :span="12">消息中心（<span :style="msgCount==0?'':'color: red'">{{msgCount}}</span>）</el-menu-item>
+    <el-menu-item index="7-3"   v-on:click="reset">退出</el-menu-item>
   </el-submenu>
 </el-menu>
     <table-date v-show="isData&&user.yes!=1"></table-date>
@@ -48,17 +49,27 @@
     <user-info :userId="userid" v-if="isInfo"></user-info>
     <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
+    <user-msg v-if="isMsg&&user.yes!=1"></user-msg>
+   <!-- <el-drawer
+      title="消息提醒"
+      :visible.sync="drawer"
+      :direction="direction"
+      :close-on-press-escape="true"
+      :modal="false">
+    </el-drawer>-->
   </div>
 
 </template>
 <script>
 import TableDate from '@/view/TableData'
+import UserMsg from '@/view/UserMsg'
 import MyHome from '@/components/MyHome'
 import NoteIndex from '@/view/note/index'
 import UserInfo from '@/view/note/userInfo'
 import PhotoInfo from '@/view/note/photoInfo'
 import tendencyMap from '@/view/note/tendencyMap'
 import ChinaMap from '@/view/ChinaMap/map'
+let initCount=0;
 export default {
   name: 'myMenu',
   components: {
@@ -68,10 +79,13 @@ export default {
     ChinaMap,
     UserInfo,
     PhotoInfo,
-    tendencyMap
+    tendencyMap,
+    UserMsg
   },
   data() {
     return {
+      drawer: false,
+      direction: 'rtl',
       isData:false,
       isHome:false,
       isNote:false,
@@ -79,11 +93,14 @@ export default {
       isInfo:false,
       isPhoto:false,
       isTendency:false,
+      isMsg:false,
       userid:'',
       userName:'',
       activeIndex: '1',
       user:this.$root.USER,
-      lmgurl:''
+      lmgurl:'',
+      timetask:null,
+      infoCount:0
     };
   },
   methods: {
@@ -102,6 +119,11 @@ export default {
         this.isInfo=true;
       }else{
         this.isInfo=false;
+      }
+      if(key=='7-2'){
+        this.isMsg=true;
+      }else{
+        this.isMsg=false;
       }
       if(key=='3-1'){
         //初始数据
@@ -135,6 +157,16 @@ export default {
       }else{
         this.$message.error({message: '未登录', center: true})
       }
+    },
+    getMsgCount(){
+      // let _that=this;
+      this.$api.getMsgCount().then(res => {
+        if(res.success){
+          this.infoCount=res.data;
+        }
+      }).catch(er=>{
+        this.$message.error({message: '获取信息失败', center: true})
+      })
     }
   },
   mounted(){
@@ -160,16 +192,28 @@ export default {
     if(this.$route.params.sign=='map'){
       this.handleSelect('2-1',1);
     }
-  }
+    //开启定时任务
+    this.timetask=setInterval(()=>this.getMsgCount(),6000);
+  },
+  destroyed(){
+    //退出的时候，销毁定时任务
+    clearInterval(this.timetask);
+  },
+  computed:{//计算属性
+    msgCount:function () {
+      if(initCount!=0){
+        this.$message.success({message: '收到新消息，请注意查看'})
+      }
+      initCount+=1;
+      // this.drawer=true;
+      return this.infoCount;
+    }
+  },
 }
 </script>
 
 <style scoped>
-  .myUser{
-    /*display: inline-block;*/
-    font-size: 12px;
-    width: 5em;
-  }
+
   .mybody{
     background:url(../../static/background-xj.jpg);
     width:100%;
@@ -177,4 +221,5 @@ export default {
     position:fixed;
     background-size:100% 100%;
   }
+
 </style>
