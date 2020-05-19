@@ -61,6 +61,11 @@ export default new Router({
       component: D2Table
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () =>import('@/view/registerUser')
+    },
+    {
       path: '/ChinaMap',
       name: 'ChinaMap',
       component: ChinaMap,

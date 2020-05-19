@@ -41,13 +41,13 @@
     <el-menu-item index="7-2" class="myUser" v-on:click="reset">退出</el-menu-item>
   </el-submenu>
 </el-menu>
-    <table-date v-show="isData"></table-date>
-    <china-map v-if="isMap"></china-map>
+    <table-date v-show="isData&&user.yes!=1"></table-date>
+    <china-map v-if="isMap&&user.yes!=1"></china-map>
    <!-- <my-home v-if="isHome"></my-home>-->
-    <note-index ref="noteIndex" v-show="isNote" :userName="userName"></note-index>
+    <note-index ref="noteIndex" v-show="isNote&&user.yes!=1" :userName="userName"></note-index>
     <user-info :userId="userid" v-if="isInfo"></user-info>
-    <photo-info v-if="isPhoto"></photo-info>
-    <tendency-map v-if="isTendency"></tendency-map>
+    <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
+    <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
   </div>
 
 </template>
@@ -143,10 +143,10 @@ export default {
     if(USER){
       this.$root.USER =USER;
     }
-    debugger
     if (this.$root.USER.id) {
       this.user = this.$root.USER;
       this.userid=this.$root.USER.id+'';
+      console.log("当前登录人的类型："+this.user.yes);
       this.userName=this.$root.USER.name;
       // this.lmgurl="data:image/png;base64,"+this.$root.USER.picPath;
       this.lmgurl=this.$root.USER.picPath?this.$root.USER.picPath:"";

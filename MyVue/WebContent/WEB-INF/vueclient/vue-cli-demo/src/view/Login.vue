@@ -12,7 +12,10 @@
           <el-input clearable type="text" v-model="ruleForm.verifycode" style="float:left;margin-left:-5px;position:relative;width:150px" placeholder="请输入运算结果"></el-input>
           <img :src="imgSrc" alt="验证码" title="验证码只能使用一次" style="margin-left: -30px" width="60px" height="35px" v-show="isShowImg">
         </el-form-item>
-        <el-form-item >
+        <el-form-item style="float: left;position: relative;">
+          <router-link to="/register" style="float: left;z-index: 2;position: relative;">注册账号</router-link>
+        </el-form-item>
+        <el-form-item style="z-index: 1">
           <el-button @click="resetForm('ruleForm')">重置</el-button>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         </el-form-item>
@@ -75,6 +78,7 @@ export default {
           this.$api.login({"userName":this.ruleForm.username,"passWord":this.ruleForm.pass,"verifyCode":this.ruleForm.verifycode}).then(res => {
                 if(!res.success){
                   this.$message.error({message: res.error+"", center: true})
+                  this.getVerifyCode();//重新获取验证码
                 }else if (res.data == null) { // 密码或账号错误
                     this.$message.error({message: '密码或账号错误', center: true})
                     this.getVerifyCode();//重新获取验证码

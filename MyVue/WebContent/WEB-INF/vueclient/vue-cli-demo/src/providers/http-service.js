@@ -158,4 +158,7 @@ export const server = {
   loadingPhoto: paramObj => post('/api/springBoot/loadingPhoto', paramObj),//验证码
   updateNoImg: paramObj => post('/api/springBoot/updateNoImg', paramObj),//更新用户
   checkTitle: paramObj => get('/api/note/checkTitle', paramObj),//校验标题唯一
+  checkUserName: paramObj => get('/api/springBoot/checkUserName', paramObj),//注册时、校验用户名
+  registerUser: paramObj => post('/api/springBoot/registerUser', paramObj),//注册时、校验用户名
+  sendAdmin: paramObj => get('/api/springBoot/sendAdmin', paramObj),//普通用户申请权限
 }
