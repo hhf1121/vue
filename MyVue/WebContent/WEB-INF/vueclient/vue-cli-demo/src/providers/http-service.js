@@ -161,6 +161,8 @@ export const server = {
   checkUserName: paramObj => get('/api/springBoot/checkUserName', paramObj),//注册时、校验用户名
   registerUser: paramObj => post('/api/springBoot/registerUser', paramObj),//注册时、校验用户名
   sendAdmin: paramObj => get('/api/springBoot/sendAdmin', paramObj),//普通用户申请权限
-  getMsg: paramObj => get('/api/msg/getMsg', paramObj),//消息
+  getMsg: paramObj => post('/api/msg/getMsg', paramObj),//消息
   getMsgCount: paramObj => get('/api/msg/getMsgCount', paramObj),//消息
+  signRead: paramObj => post('/api/msg/signRead', paramObj),//标记已读
+  deleteMsgById: paramObj => post('/api/msg/deleteMsgById', paramObj),//标记已读
 }

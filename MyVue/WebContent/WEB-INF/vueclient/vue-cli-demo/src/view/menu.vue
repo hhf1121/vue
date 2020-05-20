@@ -49,7 +49,7 @@
     <user-info :userId="userid" v-if="isInfo"></user-info>
     <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
-    <user-msg v-if="isMsg&&user.yes!=1"></user-msg>
+    <user-msg v-if="isMsg&&user.yes!=1" :initCount="msgCount"></user-msg>
    <!-- <el-drawer
       title="消息提醒"
       :visible.sync="drawer"
@@ -202,7 +202,12 @@ export default {
   computed:{//计算属性
     msgCount:function () {
       if(initCount!=0){
-        this.$message.success({message: '收到新消息，请注意查看'})
+        this.$notify({
+          title: '提示',
+          message: '收到新消息，请注意查看',
+          duration: 0,
+          type: 'success'
+        });
       }
       initCount+=1;
       // this.drawer=true;

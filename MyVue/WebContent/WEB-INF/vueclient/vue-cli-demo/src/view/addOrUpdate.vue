@@ -36,7 +36,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-show="isAdmin">
           <el-button type="success" @click="save('addForm')" style="text-align: center" v-if="isview">保存</el-button>
           <el-button type="success" @click="cancel" style="text-align: center">取消</el-button>
         </el-form-item>
@@ -50,6 +50,9 @@ export default {
   props:{
     addformVisable: {
       type: Boolean
+    },
+    userId:{
+      type:Number
     }
   },
   data() {
@@ -77,6 +80,7 @@ export default {
       // addformVisable: false,
       imageUrl:'',
       title: '',
+      isAdmin:true,
       rules: {
         photoImg:[
           {validator : validateImg, type:'string',  trigger: 'blur' }
@@ -134,7 +138,6 @@ export default {
                 // console.log(res)
               }).catch(err => {
                 this.$message.error({message: '请求服务器失败', center: true})
-                console.log(err)
               })
           }
         }
@@ -179,6 +182,20 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return  isLt2M;
+    }
+  },
+  mounted(){
+    if(this.userId){
+      this.$api.getCurrentUser({"id":this.userId}).then(re=>{
+        this.addForm=re;
+        this.imageUrl=this.addForm.picPath;
+        const USER=JSON.parse(sessionStorage.getItem('user'));
+        if(USER.yes!=3){//不是管理员
+          this.isAdmin=false
+        }
+      }).catch(er=>{
+        this.$message.error({message: '请求服务器失败', center: true})
+      })
     }
   }
 }
