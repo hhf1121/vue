@@ -122,6 +122,7 @@ export default {
       }
       if(key=='7-2'){
         this.isMsg=true;
+        this.initCount=0;
       }else{
         this.isMsg=false;
       }
@@ -202,11 +203,12 @@ export default {
   computed:{//计算属性
     msgCount:function () {
       if(initCount!=0){
-        this.$notify({
+        this.$notify.success({
           title: '提示',
           message: '收到新消息，请注意查看',
-          duration: 0,
-          type: 'success'
+          duration: 5000,
+          type: 'success',
+          showClose: false
         });
       }
       initCount+=1;

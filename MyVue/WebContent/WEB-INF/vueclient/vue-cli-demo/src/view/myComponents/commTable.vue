@@ -23,7 +23,7 @@
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button type="text" v-if="title=='shoujian'" @click="sendMsg(scope.row)" size="small">回复</el-button>
+            <el-button type="text" v-if="title!='fajian'" @click="sendMsg(scope.row)" size="small">回复</el-button>
             <el-button type="text" @click="deleteData(scope.row)" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -208,7 +208,36 @@
         }
       },
       sendMsg(data){
-        this.$message.error({message: '点击回复信息', center: true});
+        this.$prompt('请输入信息', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValidator:function (e) {
+            if(!e)return false
+            if(e&&e.length>0){
+              return true;
+            }
+            return false
+          },
+          inputErrorMessage: '请输入回复信息'
+        }).then(({ value }) => {
+          let param={};
+          param.fromId= data.toId;
+          param.toId = data.fromId;
+          param.id = data.id;
+          param.msg = value;
+          this.$api.sendMsg(param).then(re=>{
+            if(re.success){
+              this.$message.success({message: '消息发送成功', center: true});
+            }
+          }).catch(er=>{
+            this.$message.error({message: '发送失败、请重试', center: true});
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消回复'
+          });
+        });
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;

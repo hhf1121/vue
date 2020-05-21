@@ -165,4 +165,5 @@ export const server = {
   getMsgCount: paramObj => get('/api/msg/getMsgCount', paramObj),//消息
   signRead: paramObj => post('/api/msg/signRead', paramObj),//标记已读
   deleteMsgById: paramObj => post('/api/msg/deleteMsgById', paramObj),//标记已读
+  sendMsg: paramObj => post('/api/msg/sendMsg', paramObj),//用户互发信息
 }
