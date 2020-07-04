@@ -86,18 +86,17 @@
       },
       methods:{
       getData(){
-        this.baseMsg.pageIndex=this.pagination.currentPage;;
+        this.baseMsg.pageIndex=this.pagination.currentPage;
         this.baseMsg.pageSize=this.pagination.pageSize;
-        if(this.title=='shoujian'){//收件
-          this.baseMsg.type="1";
-          this.baseMsg.status=1;
-        }
-        if(this.title=='fajian'){//发件
-          this.baseMsg.type="2";
-        }
         if(this.title=='weidu'){//未读
           this.baseMsg.type="1";
           this.baseMsg.status=0;
+        }
+        if(this.title=='shoujian'){//收件
+          this.baseMsg.type="1";
+          // this.baseMsg.status=1;
+        }else if(this.title=='fajian'){//发件
+          this.baseMsg.type="2";
         }
         this.$api.getMsg(this.baseMsg).then(re=>{
           this.fromData=re.records;
@@ -132,9 +131,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(res => {
-            this.baseMsg.ids=this.multipleSelection.map(o=>{
-              return o.id;
-            })
+            this.baseMsg=this.multipleSelection;
             this.$api.signRead(this.baseMsg).then(res => {
               this.$message.success({message: '操作成功', center: true})
               this.getData()
@@ -175,10 +172,9 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.baseMsg.ids=this.multipleSelection.map(o=>{
-                return o.id;
-              })
-              this.$api.deleteMsgById(this.baseMsg).then(res => {
+              debugger;
+              this.baseMsg=this.multipleSelection;
+              this.$api.deleteMsgs(this.baseMsg).then(res => {
                 this.$message.success({message: '删除成功', center: true})
                 this.getData()
               }).catch(err => {
@@ -194,9 +190,9 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.baseMsg.ids=[];
-            this.baseMsg.ids.push(data.id)
-            this.$api.deleteMsgById(this.baseMsg).then(res => {
+            debugger
+            this.baseMsg=data;
+            this.$api.deleteMsgs(this.baseMsg).then(res => {
               this.$message.success({message: '删除成功', center: true})
               this.getData()
             }).catch(err => {
@@ -208,6 +204,7 @@
         }
       },
       sendMsg(data){
+        const USER=JSON.parse(sessionStorage.getItem('user'));
         this.$prompt('请输入信息', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -220,11 +217,12 @@
           },
           inputErrorMessage: '请输入回复信息'
         }).then(({ value }) => {
+          //1.用户互发信息(通过mq，转储到mysql，定时轮询db)
           let param={};
           param.fromId= data.toId;
           param.toId = data.fromId;
-          param.id = data.id;
           param.msg = value;
+          param.userName=USER.userName;
           this.$api.sendMsg(param).then(re=>{
             if(re.success){
               this.$message.success({message: '消息发送成功', center: true});
@@ -232,11 +230,19 @@
           }).catch(er=>{
             this.$message.error({message: '发送失败、请重试', center: true});
           })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消回复'
-          });
+          //2.用户互发信息(通过websocket,不保存数据)
+        //   this.$api.sendMsgByWebSocket(param).then(re=>{
+        //       if(re.success){
+        //         this.$message.success({message: '消息发送成功', center: true});
+        //       }
+        //     }).catch(er=>{
+        //       this.$message.error({message: '发送失败、请重试', center: true});
+        //     })
+        // }).catch(() => {
+        //   this.$message({
+        //     type: 'info',
+        //     message: '取消回复'
+        //   });
         });
       },
       handleSelectionChange(val) {

@@ -68,7 +68,8 @@ export default {
         verifycode: [
           {validator: validateverifycode, trigger: 'blur'}
         ]
-      }
+      },
+      websocket:null
     }
   },
   methods: {

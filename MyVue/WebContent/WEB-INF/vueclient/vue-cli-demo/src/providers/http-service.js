@@ -164,6 +164,8 @@ export const server = {
   getMsg: paramObj => post('/api/msg/getMsg', paramObj),//消息
   getMsgCount: paramObj => get('/api/msg/getMsgCount', paramObj),//消息
   signRead: paramObj => post('/api/msg/signRead', paramObj),//标记已读
-  deleteMsgById: paramObj => post('/api/msg/deleteMsgById', paramObj),//标记已读
-  sendMsg: paramObj => post('/api/msg/sendMsg', paramObj),//用户互发信息
+  deleteMsgs: paramObj => post('/api/msg/deleteMsgs', paramObj),//标记已读
+  sendMsg: paramObj => post('/api/msg/sendMsg', paramObj),//用户互发信息(通过mq，转储到mysql，定时轮询db)
+  sendMsgByWebSocket: paramObj => post('/api/msg/sendOneWebSocket', paramObj),//用户互发信息(通过websocket)
+  sendMsgsByWebSocket: paramObj => post('/api/msg/sendAllWebSocket', paramObj),//用户互发信息(通过websocket)
 }

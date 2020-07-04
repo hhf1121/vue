@@ -36,9 +36,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-show="isAdmin">
-          <el-button type="success" @click="save('addForm')" style="text-align: center" v-if="isview">保存</el-button>
-          <el-button type="success" @click="cancel" style="text-align: center">取消</el-button>
+        <el-form-item >
+          <el-button type="success" @click="save('addForm')" style="text-align: center" v-if="isview" :disabled="!isAdmin">保存</el-button>
+          <el-button type="success" @click="cancel" style="text-align: center" :disabled="!isAdmin">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>

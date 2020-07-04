@@ -112,11 +112,12 @@ export default {
       })
     },
     sendAdmin(){
+      const USER=JSON.parse(sessionStorage.getItem('user'));
       if(!this.msg){
         this.$message.error({message: '请输入留言信息', center: true})
         return;
       }
-      this.$api.sendAdmin({"userId":this.userId,"msg":this.msg}).then(re=>{
+      this.$api.sendAdmin({"userId":this.userId,"msg":this.msg,"userName":USER.userName}).then(re=>{
         if(re.success){
           this.$message.success({message: '发送信息成功', center: true})
           this.msg='';
