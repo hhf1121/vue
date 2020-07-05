@@ -45,6 +45,7 @@
 </template>
 
 <script>
+  let CURRENT={};
 export default {
   name: 'addOrUpdate',
   props:{
@@ -114,6 +115,20 @@ export default {
             this.$api.updateUser(entity).then(res => {
                 if (res.data != null) {
                   this.$message.success({message: '更新成功', center: true})
+                  if(this.userId){//在聊天窗口操作的
+                    let param={};
+                    param.fromId = parseInt(CURRENT.id);
+                    param.toId = entity.id;
+                    param.msg = "管理员修改了你的基本信息";
+                    param.userName=CURRENT.userName;
+                    this.$api.sendMsg(param).then(re=>{
+                      if(re.success){
+                        this.$message.success({message: '已通知此用户', center: true});
+                      }
+                    }).catch(er=>{
+                      this.$message.error({message: '发送失败、请重试', center: true});
+                    })
+                  }
                   // this.addformVisable = false
                   this.$emit('freshData') // 调用父组件，的freshData事件，实现数据刷新
                 } else {
@@ -185,12 +200,13 @@ export default {
     }
   },
   mounted(){
+    debugger
+    CURRENT=JSON.parse(sessionStorage.getItem('user'));
     if(this.userId){
       this.$api.getCurrentUser({"id":this.userId}).then(re=>{
         this.addForm=re;
         this.imageUrl=this.addForm.picPath;
-        const USER=JSON.parse(sessionStorage.getItem('user'));
-        if(USER.yes!=3){//不是管理员
+        if(CURRENT.yes!=3){//不是管理员
           this.isAdmin=false
         }
       }).catch(er=>{

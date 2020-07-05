@@ -131,8 +131,9 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(res => {
-            this.baseMsg=this.multipleSelection;
-            this.$api.signRead(this.baseMsg).then(res => {
+            let param={};
+            param.baseMsgList=this.multipleSelection;
+            this.$api.signRead(param).then(res => {
               this.$message.success({message: '操作成功', center: true})
               this.getData()
             }).catch(err => {
@@ -172,9 +173,9 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              debugger;
-              this.baseMsg=this.multipleSelection;
-              this.$api.deleteMsgs(this.baseMsg).then(res => {
+              let param={};
+              param.baseMsgList=this.multipleSelection;
+              this.$api.deleteMsgs(param).then(res => {
                 this.$message.success({message: '删除成功', center: true})
                 this.getData()
               }).catch(err => {
@@ -190,9 +191,9 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            debugger
-            this.baseMsg=data;
-            this.$api.deleteMsgs(this.baseMsg).then(res => {
+            let param={};
+            param.baseMsgList.push(data);
+            this.$api.deleteMsgs(param).then(res => {
               this.$message.success({message: '删除成功', center: true})
               this.getData()
             }).catch(err => {
