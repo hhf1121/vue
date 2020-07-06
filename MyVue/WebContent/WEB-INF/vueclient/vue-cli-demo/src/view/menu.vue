@@ -50,6 +50,7 @@
     <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
     <user-msg v-if="isMsg" :initCount="msgCount"></user-msg>
+    <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
    <!-- <el-drawer
       title="消息提醒"
       :visible.sync="drawer"
@@ -69,6 +70,7 @@ import UserInfo from '@/view/note/userInfo'
 import PhotoInfo from '@/view/note/photoInfo'
 import tendencyMap from '@/view/note/tendencyMap'
 import ChinaMap from '@/view/ChinaMap/map'
+import MsgActive from '@/view/myComponents/MsgActive'
 export default {
   name: 'myMenu',
   components: {
@@ -79,7 +81,8 @@ export default {
     UserInfo,
     PhotoInfo,
     tendencyMap,
-    UserMsg
+    UserMsg,
+    MsgActive
   },
   data() {
     return {
@@ -100,7 +103,8 @@ export default {
       lmgurl:'',
       timetask:null,
       infoCount:0,
-      websocket:null
+      websocket:null,
+      msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg.mp3'
     };
   },
   methods: {
@@ -254,11 +258,14 @@ export default {
       if(this.infoCount>0){
         this.$notify.success({
           title: '提示',
-          message: '收到新消息，请注意查看',
+          message: '您有未读消息'+this.infoCount+'条，请注意查看',
           duration: 5000,
           type: 'success',
           showClose: false
         });
+        this.$nextTick(()=> {//提示音
+          this.$refs.msgVoice.sing();
+        })
       }
       return this.infoCount;
     }
