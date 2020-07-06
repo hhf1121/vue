@@ -47,6 +47,7 @@
         },
         methods:{
           handleClick(tab, event) {
+            debugger
             let param={};
             if(tab.label=='收件箱'){
               param.type=this.sendTitle;
@@ -67,16 +68,21 @@
               this.isWeidu=true;
             }
             this.$refs.comm.getData();
+          },
+          initData(){
+            debugger
+            if(this.initCount==0){
+              this.activeName='first'
+              this.isShoujian=true;
+            }else{
+              this.activeName='third'
+              this.isWeidu=true;
+            }
+            this.$refs.comm.getData();
           }
         },
         mounted(){
-          if(this.initCount==0){
-            this.activeName='first'
-            this.isShoujian=true;
-          }else{
-            this.activeName='third'
-            this.isWeidu=true;
-          }
+
         }
     }
 </script>

@@ -49,7 +49,7 @@
     <user-info :userId="userid" v-if="isInfo"></user-info>
     <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
-    <user-msg v-if="isMsg" :initCount="msgCount"></user-msg>
+    <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
     <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
    <!-- <el-drawer
       title="消息提醒"
@@ -126,6 +126,7 @@ export default {
       }
       if(key=='7-2'){
         this.isMsg=true;
+        this.$refs.refUserMsg.initData();
       }else{
         this.isMsg=false;
       }
