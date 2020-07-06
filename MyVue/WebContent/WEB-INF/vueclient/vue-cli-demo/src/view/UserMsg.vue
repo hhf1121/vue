@@ -2,13 +2,13 @@
     <div>
       <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 800px;text-align: center;margin: 0 auto">
         <el-tab-pane label="收件箱" name="first">
-          <comm-table :columsArray="columsSendList" :title="sendTitle" ref="comm" v-if="isShoujian"/>
+          <comm-table :columsArray="columsSendList" :title="sendTitle" ref="comm" v-show="isShoujian"/>
         </el-tab-pane>
         <el-tab-pane label="发件箱" name="second">
-          <comm-table :columsArray="columsToList" :title="toTitle" ref="comm"v-if="isFajian" />
+          <comm-table :columsArray="columsToList" :title="toTitle" ref="comm" v-show="isFajian" />
         </el-tab-pane>
         <el-tab-pane label="未读消息" name="third">
-          <comm-table :columsArray="columsUnReadList" :title="unReadTitle" ref="comm" v-if="isWeidu"/>
+          <comm-table :columsArray="columsUnReadList" :title="unReadTitle" ref="comm" v-show="isWeidu"/>
         </el-tab-pane>
         <el-tab-pane label="请点击标签页、进行切换..."  disabled></el-tab-pane>
       </el-tabs>
@@ -47,7 +47,6 @@
         },
         methods:{
           handleClick(tab, event) {
-            debugger
             let param={};
             if(tab.label=='收件箱'){
               param.type=this.sendTitle;
@@ -70,7 +69,6 @@
             this.$refs.comm.getData();
           },
           initData(){
-            debugger
             if(this.initCount==0){
               this.activeName='first'
               this.isShoujian=true;
