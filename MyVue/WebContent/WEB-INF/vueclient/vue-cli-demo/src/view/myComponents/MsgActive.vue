@@ -1,6 +1,6 @@
 <template>
   <div class="listen">
-    <audio id="audio" autoplay muted>
+    <audio id="audio" muted>
       <source :src="msgUrl" type="audio/mp3">
     </audio>
   </div>

@@ -192,6 +192,7 @@
             type: 'warning'
           }).then(() => {
             let param={};
+            param.baseMsgList=[];
             param.baseMsgList.push(data);
             this.$api.deleteMsgs(param).then(res => {
               this.$message.success({message: '删除成功', center: true})
