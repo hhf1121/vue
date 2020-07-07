@@ -2,13 +2,13 @@
     <div>
       <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 800px;text-align: center;margin: 0 auto">
         <el-tab-pane label="收件箱" name="first">
-          <comm-table :columsArray="columsSendList" :title="sendTitle" ref="comm" v-show="isShoujian"/>
+          <comm-table :columsArray="columsSendList" :title="sendTitle" ref="commShoujian" v-show="isShoujian"/>
         </el-tab-pane>
         <el-tab-pane label="发件箱" name="second">
-          <comm-table :columsArray="columsToList" :title="toTitle" ref="comm" v-show="isFajian" />
+          <comm-table :columsArray="columsToList" :title="toTitle" ref="commFajian" v-show="isFajian" />
         </el-tab-pane>
         <el-tab-pane label="未读消息" name="third">
-          <comm-table :columsArray="columsUnReadList" :title="unReadTitle" ref="comm" v-show="isWeidu"/>
+          <comm-table :columsArray="columsUnReadList" :title="unReadTitle" ref="commWeidu" v-show="isWeidu"/>
         </el-tab-pane>
         <el-tab-pane label="请点击标签页、进行切换..."  disabled></el-tab-pane>
       </el-tabs>
@@ -53,30 +53,33 @@
               this.isShoujian=true;
               this.isFajian=false;
               this.isWeidu=false;
+              this.$refs.commShoujian.getData(param.type);
             }
             if(tab.label=='发件箱'){
               param.type=this.toTitle;
               this.isShoujian=false;
               this.isFajian=true;
               this.isWeidu=false;
+              this.$refs.commFajian.getData(param.type);
             }
             if(tab.label=='未读消息'){
               param.type=this.unReadTitle;
               this.isShoujian=false;
               this.isFajian=false;
               this.isWeidu=true;
+              this.$refs.commWeidu.getData(param.type);
             }
-            this.$refs.comm.getData();
           },
           initData(){
             if(this.initCount==0){
               this.activeName='first'
               this.isShoujian=true;
+              this.$refs.commShoujian.getData('shoujian');
             }else{
               this.activeName='third'
               this.isWeidu=true;
+              this.$refs.commWeidu.getData('weidu');
             }
-            this.$refs.comm.getData();
           }
         },
         mounted(){

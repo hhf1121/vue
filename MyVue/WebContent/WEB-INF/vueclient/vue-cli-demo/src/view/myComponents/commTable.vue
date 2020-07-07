@@ -65,10 +65,10 @@
       props:{
           columsArray: {
             type: Array
-          },
+          }/*,
           title:{
             type:String
-          }
+          }*/
         },
       data(){
           return{
@@ -81,11 +81,13 @@
             titleType:'',
             isUpdate:false,
             currentId:0,
-            userId:0
+            userId:0,
+            title:''
           }
       },
       methods:{
-      getData(){
+      getData(title){
+        this.title=title;
         this.baseMsg.pageIndex=this.pagination.currentPage;
         this.baseMsg.pageSize=this.pagination.pageSize;
         if(this.title=='weidu'){//未读
@@ -94,9 +96,10 @@
         }
         if(this.title=='shoujian'){//收件
           this.baseMsg.type="1";
-          // this.baseMsg.status=1;
+          this.baseMsg.status=null;
         }else if(this.title=='fajian'){//发件
           this.baseMsg.type="2";
+          this.baseMsg.status=null;
         }
         this.$api.getMsg(this.baseMsg).then(re=>{
           this.fromData=re.records;
@@ -111,11 +114,11 @@
       },
       handleSizeChange(sizes) {
         this.pagination.pageSize = sizes;
-        this.getData();
+        this.getData(this.title);
       },
       paginationCurrentChange(currentPage) {
         this.pagination.currentPage = currentPage;
-        this.getData();
+        this.getData(this.title);
       },
       formatDate: function (cellValue) {
         var value = cellValue.lastTime
@@ -135,7 +138,7 @@
             param.baseMsgList=this.multipleSelection;
             this.$api.signRead(param).then(res => {
               this.$message.success({message: '操作成功', center: true})
-              this.getData()
+              this.getData(this.title)
             }).catch(err => {
               this.$message.error({message: '操作失败', center: true})
             })
@@ -177,7 +180,7 @@
               param.baseMsgList=this.multipleSelection;
               this.$api.deleteMsgs(param).then(res => {
                 this.$message.success({message: '删除成功', center: true})
-                this.getData()
+                this.getData(this.title)
               }).catch(err => {
                 this.$message.error({message: '删除失败', center: true})
               })
@@ -196,7 +199,7 @@
             param.baseMsgList.push(data);
             this.$api.deleteMsgs(param).then(res => {
               this.$message.success({message: '删除成功', center: true})
-              this.getData()
+              this.getData(this.title)
             }).catch(err => {
               this.$message.error({message: '删除失败', center: true})
             })
@@ -252,7 +255,7 @@
       }
       },
       mounted(){
-        this.getData();
+        this.getData(this.title);
       }
     }
 </script>

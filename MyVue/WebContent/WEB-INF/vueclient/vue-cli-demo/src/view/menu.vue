@@ -104,7 +104,7 @@ export default {
       timetask:null,
       infoCount:0,
       websocket:null,
-      msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg.mp3'
+      msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg0.mp3'
     };
   },
   methods: {
