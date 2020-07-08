@@ -22,9 +22,10 @@
   <el-submenu  index="3">
     <template slot="title">账单管理</template>
     <el-menu-item index="3-1"  :span="12">账单主页</el-menu-item>
-    <el-menu-item index="3-2"  :span="12">账单流图</el-menu-item>
+    <el-menu-item index="3-2"  :span="12">账图浏览</el-menu-item>
+    <el-menu-item index="3-3"  :span="12">账单统计</el-menu-item>
   </el-submenu >
-  <el-menu-item index="4">账单趋势</el-menu-item>
+  <el-menu-item index="4">基础配置</el-menu-item>
   <el-menu-item index="5" disabled>暂不开放</el-menu-item>
   <el-submenu index="6">
     <template slot="title">帮助中心</template>
@@ -51,6 +52,7 @@
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
     <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
     <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
+    <base-config v-show="isConfig"></base-config>
    <!-- <el-drawer
       title="消息提醒"
       :visible.sync="drawer"
@@ -71,6 +73,7 @@ import PhotoInfo from '@/view/note/photoInfo'
 import tendencyMap from '@/view/note/tendencyMap'
 import ChinaMap from '@/view/ChinaMap/map'
 import MsgActive from '@/view/myComponents/MsgActive'
+import BaseConfig from '@/view/baseConfig/BaseConfig'
 export default {
   name: 'myMenu',
   components: {
@@ -82,7 +85,8 @@ export default {
     PhotoInfo,
     tendencyMap,
     UserMsg,
-    MsgActive
+    MsgActive,
+    BaseConfig
   },
   data() {
     return {
@@ -95,6 +99,7 @@ export default {
       isInfo:false,
       isPhoto:false,
       isTendency:false,
+      isConfig:false,
       isMsg:false,
       userid:'',
       userName:'',
@@ -142,10 +147,15 @@ export default {
       }else{
         this.isPhoto=false;
       }
-      if(key=='4'){
+      if(key=='3-3'){
         this.isTendency=true;
       }else{
         this.isTendency=false;
+      }
+      if(key=='4'){
+        this.isConfig=true;
+      }else{
+        this.isConfig=false;
       }
     },
     reset(){
