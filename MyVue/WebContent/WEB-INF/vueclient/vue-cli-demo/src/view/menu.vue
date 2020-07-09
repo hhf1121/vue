@@ -52,7 +52,7 @@
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
     <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
     <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
-    <base-config v-show="isConfig"></base-config>
+    <base-config v-if="isConfig"></base-config>
    <!-- <el-drawer
       title="消息提醒"
       :visible.sync="drawer"

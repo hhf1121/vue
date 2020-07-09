@@ -1,8 +1,8 @@
 <template>
   <div style="width: 800px;display: inline-block;align:center">
     <div style="float: left;position: relative;align:center">
-      <el-input v-model="input" placeholder="请输入新增项"></el-input>
-      <el-button type="success" icon="el-icon-check" circle style="position: absolute;top: 0px;margin-left: 5px"  @click="addList(input)"></el-button>
+      <el-input v-model="input" placeholder="请输入新增项" style="width: 180px"></el-input>
+      <el-button type="success"  circle style="position: absolute;top: 0px;margin-left: 5px"  @click="addList(input)">＋</el-button>
     </div>
     <br>
     <br>
