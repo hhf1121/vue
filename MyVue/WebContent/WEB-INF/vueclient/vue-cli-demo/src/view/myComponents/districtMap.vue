@@ -2,6 +2,8 @@
   <el-tree
     :data="addressOptions"
     node-key="id"
+    lazy
+    :load="loadNode"
     @node-drag-start="handleDragStart"
     @node-drag-enter="handleDragEnter"
     @node-drag-leave="handleDragLeave"
@@ -15,6 +17,7 @@
 </template>
 
 <script>
+  const flag=false;
   export default {
       name: "districtMap",
       data() {
@@ -24,7 +27,7 @@
             children: 'children',
             label: 'label'
           },
-          districtParams:'1,2'//行政等级
+          districtParams:'1'//行政等级
         };
       },
       methods: {
@@ -39,33 +42,48 @@
             this.$message.error({message: '获取地址信息失败', center: true});
           })
         },
-        handleDragStart(node, ev) {
-          console.log('drag start', node);
+        handleDragStart(node, ev) {},
+        handleDragEnter(draggingNode, dropNode, ev) {},
+        handleDragLeave(draggingNode, dropNode, ev) {},
+        handleDragOver(draggingNode, dropNode, ev) {},
+        handleDragEnd(draggingNode, dropNode, dropType, ev) {//拖拽结束时（可能未成功）触发的事件
+          debugger
+          if('inner'===dropType){
+            this.$message.error({message: '不允许操作', center: true});
+            return;
+          }
+          draggingNode
+          dropNode
+          dropType
+          ev
         },
-        handleDragEnter(draggingNode, dropNode, ev) {
-          console.log('tree drag enter: ', dropNode.label);
-        },
-        handleDragLeave(draggingNode, dropNode, ev) {
-          console.log('tree drag leave: ', dropNode.label);
-        },
-        handleDragOver(draggingNode, dropNode, ev) {
-          console.log('tree drag over: ', dropNode.label);
-        },
-        handleDragEnd(draggingNode, dropNode, dropType, ev) {
-          console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-        },
-        handleDrop(draggingNode, dropNode, dropType, ev) {
-          console.log('tree drop: ', dropNode.label, dropType);
-        },
+        handleDrop(draggingNode, dropNode, dropType, ev) {},
         allowDrop(draggingNode, dropNode, type) {
-          if (dropNode.data.label === '二级 3-1') {
-            return type !== 'inner';
-          } else {
+          debugger
+          if(draggingNode.data.level!=dropNode.data.level){
+            this.$message.error({message: '不允许操作', center: true});
             return true;
           }
         },
         allowDrag(draggingNode) {
           return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+        },
+        loadNode(node, resolve) {
+          if(this.addressOptions.length!=0){
+            if(node.data.level!=4){
+
+            }
+            this.$api.getDistrictByCode({"code":node.data.value}).then(re=>{
+              if(!re.success){
+                this.$message.error({message: re.error, center: true});
+                resolve();
+                return;
+              }
+              resolve(re.data);
+            }).catch(err=>{
+              this.$message.error({message: '获取地址信息失败', center: true});
+            })
+          }
         }
       },
       mounted(){

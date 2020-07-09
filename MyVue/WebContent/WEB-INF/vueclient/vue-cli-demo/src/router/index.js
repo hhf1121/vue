@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import MyHome from '@/components/MyHome'
 import Login from '@/view/Login'
-import Down from '@/view/Down'
 import MyData from '@/view/TableData'
 import D2Table from '@/view/D2Table'
 import menu from '@/view/menu'
@@ -44,11 +43,6 @@ export default new Router({
       path: '/user',
       name: 'user',
       component: User
-    },
-    {
-      path: '/Down',
-      name: 'Down',
-      component: Down
     },
     {
       path: '/MyData',

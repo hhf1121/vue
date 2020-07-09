@@ -25,9 +25,9 @@
         <el-submenu index="2">
           <template slot="title">
             <i class="el-icon-setting"></i>
-            <span slot="title">花销类型</span>
+            <span slot="title">字典配置</span>
           </template>
-            <el-menu-item index="2-1" @click="addTab('花销类型配置')"><div style="margin-right: -80px">类型配置</div></el-menu-item>
+            <el-menu-item index="2-1" @click="addTab('花销类型配置')"><div style="margin-right: -80px">花销类型</div></el-menu-item>
         </el-submenu>
         <!--<el-submenu>-->
           <el-menu-item index="4" disabled>
@@ -53,10 +53,10 @@
 
 <script>
 import districtMap from '@/view/myComponents/districtMap'
-import D2Table from "@/view/D2Table";
+import ConfigEdit from "@/view/ConfigEdit";
     export default {
         name: "BaseConfig",
-        components:{D2Table, districtMap},
+        components:{ConfigEdit, districtMap},
         data() {
           return {
             editableTabsValue: '',
@@ -94,7 +94,7 @@ import D2Table from "@/view/D2Table";
               componentName="districtMap";
             }
             if(targetName=="花销类型配置"){
-              componentName="D2Table";
+              componentName="ConfigEdit";
             }
             this.editableTabs.push({
               title: targetName,
@@ -134,21 +134,4 @@ import D2Table from "@/view/D2Table";
   min-height:600px;
   max-height:800px;
 }
-  .el-aside{
-    display: block;
-    top:0;
-    left:0;
-    height:800px;
-    position: absolute;
-    overflow-y: scroll;
-  }
-.demo-block.demo-menu .el-menu-vertical-demo:not(.el-menu--collapse) {
-  FONT-WEIGHT: 500;
-  width: 240px;
-  min-height: 400px;
-}
-  .el-tabs el-tabs--card el-tabs--top{
-    position: absolute;
-    top: 0px;
-  }
 </style>

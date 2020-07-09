@@ -62,7 +62,8 @@ export default {
   data(){
     return{
       detail:false,
-      options:this.NoteType,
+      // options:this.NoteType,//读取前端静态文件notetype.js
+      options:[],// 改为后端配置，调用接口
       selectloading:false,
       selectoptions:[],
       initdata:[],
@@ -97,7 +98,22 @@ export default {
         this.initdata=er;
       }).catch(err=>{
         this.selectloading=false;
-        this.$message.error({message: '请求错误', center: true})
+        this.$message.error({message: '标题数据，请求错误', center: true})
+      })
+      //数据字典
+      this.$api.getDataByConfigCode({"configCode":'cost_type'}).then(er=>{
+        if(er.success){
+          if(er.data.length>0){
+            this.options=er.data.map(o=>{
+              var object={};
+              object.label=o.typeLabel;
+              object.value=o.typeValue;
+              return object;
+            });
+          }
+        }
+      }).catch(err=>{
+        this.$message.error({message: '字典：[cost_type]请求错误', center: true})
       })
     }
   },

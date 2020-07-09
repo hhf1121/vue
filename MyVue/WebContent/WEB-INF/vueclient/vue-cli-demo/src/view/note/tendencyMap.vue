@@ -157,9 +157,25 @@
           })
         },
         init(){
+          debugger
           var init = echarts.init(document.getElementById("chart2"));
           //路由赋值
           let noteStr=this.NoteType;//label、value：名称、值
+          //数据字典
+          this.$api.getDataByConfigCode({"configCode":'cost_type'}).then(er=>{
+            if(er.success){
+              if(er.data.length>0){
+                  noteStr=er.data.map(o=>{
+                  var object={};
+                  object.label=o.typeLabel;
+                  object.value=o.typeValue;
+                  return object;
+                });
+              }
+            }
+          }).catch(err=>{
+            this.$message.error({message: '字典：[cost_type]请求错误', center: true})
+          })
           let data=[];
           this.$api.getAllNote({"from":this.ruleForm.queryData,"now":this.ruleForm.nowData}).then(re=>{
             if(!re.success){
@@ -172,11 +188,11 @@
             //1.赋值x：日期
             option.xAxis.data=data.map(e=>{
               return e.timeStr;
-            })
+            });
             //2.赋值类型
             option.legend.data=noteStr.map(e=>{
               return e.label;
-            })
+            });
             for (var i=0;i<option.series.length;i++){
               for (let j = 0; j < noteStr.length; j++) {
                 if(i==j){

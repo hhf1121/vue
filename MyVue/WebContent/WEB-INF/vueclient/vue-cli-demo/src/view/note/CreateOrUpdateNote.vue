@@ -144,7 +144,8 @@ export default {
       },
       myloading:false,
       isShow: false,
-      options: this.NoteType,
+      // options: this.NoteType,
+      options: [],
       imageUrl: '',
       dialogVisible: false,
       disabled: false,
@@ -272,6 +273,21 @@ export default {
         // this.imgImgShow=true;
         this.fileList=this.ruleForm.imgVos;
       }
+    });
+    //数据字典
+    this.$api.getDataByConfigCode({"configCode":'cost_type'}).then(er=>{
+      if(er.success){
+        if(er.data.length>0){
+          this.options=er.data.map(o=>{
+            var object={};
+            object.label=o.typeLabel;
+            object.value=o.typeValue;
+            return object;
+          });
+        }
+      }
+    }).catch(err=>{
+      this.$message.error({message: '字典：[cost_type]请求错误', center: true})
     });
     this.getSelectDistrictByLevel();
     //编辑、回显地址

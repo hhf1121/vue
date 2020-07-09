@@ -154,7 +154,8 @@ export const server = {
   downUser: paramObj => get('/api/springBoot/downUser', paramObj),
   getAllNote: paramObj => get('/api/note/getAll', paramObj),
   getVerifyCode: paramObj => get('/api/springBoot/verifyCode', paramObj),//验证码
-  getSelectDistrictByLevel: paramObj => get('/api/base/getSelectDistrictByLevel', paramObj),//验证码
+  getSelectDistrictByLevel: paramObj => get('/api/base/getSelectDistrictByLevel', paramObj),//查询行政信息
+  getDistrictByCode: paramObj => get('/api/base/getDistrictByCode', paramObj),//根据父级查询一级子级的行政信息
   loadingPhoto: paramObj => post('/api/springBoot/loadingPhoto', paramObj),//验证码
   updateNoImg: paramObj => post('/api/springBoot/updateNoImg', paramObj),//更新用户
   checkTitle: paramObj => get('/api/note/checkTitle', paramObj),//校验标题唯一
@@ -168,4 +169,6 @@ export const server = {
   sendMsg: paramObj => post('/api/msg/sendMsg', paramObj),//用户互发信息(通过mq，未读转储到redis，标记后储存mysql)
   //sendMsgByWebSocket: paramObj => post('/api/msg/sendOneWebSocket', paramObj),//用户互发信息(通过websocket)
   sendMsgsByWebSocket: paramObj => post('/api/msg/sendAllWebSocket', paramObj),//用户互发信息(通过websocket)
+  getDataByConfigCode: paramObj => get('/api/baseConfig/getDataByConfigCode', paramObj),//读取数据字典-基础配置
+  saveConfig: paramObj => post('/api/baseConfig/saveConfig', paramObj),//基础配置，保存
 }
