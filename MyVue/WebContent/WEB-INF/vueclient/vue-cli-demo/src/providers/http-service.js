@@ -25,8 +25,8 @@ axios.interceptors.response.use(response => {
         console.log('错误请求')
         break
       case 401:
-        console.log('未授权，请重新登录')
-        rootVm.$message.error({message: '未登录，请重新登录', center: true})
+        // console.log('未授权，请重新登录')
+        // rootVm.$message.error({message: '未登录，请重新登录', center: true})
         rootVm.$router.push({path:'/'})
         break
       case 403:
@@ -151,6 +151,7 @@ export const server = {
   deleteNote: paramObj => post('/api/note/deleteNotes', paramObj),
   createNote: paramObj => post('/api/note/createNote', paramObj),
   getCurrentUser: paramObj => get('/api/springBoot/getCurrentUser', paramObj),
+  currentIsLogin: paramObj => get('/api/springBoot/currentIsLogin', paramObj),
   downUser: paramObj => get('/api/springBoot/downUser', paramObj),
   getAllNote: paramObj => get('/api/note/getAll', paramObj),
   getVerifyCode: paramObj => get('/api/springBoot/verifyCode', paramObj),//验证码

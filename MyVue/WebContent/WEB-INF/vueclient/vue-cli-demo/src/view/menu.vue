@@ -245,11 +245,27 @@ export default {
       //开启webSocket
       this.openWebSocket();
     }else{
-      this.$message.error({message: '获取不到用户信息，请重新登录', center: true})
-      this.$router.push(
-        {
-          name: 'Login', params: {}
-        })
+      //请求后端，验证cookie：将user信息写回sessionStorage中
+      this.$api.currentIsLogin().then(res=>{
+        if(res.success){
+          // 保存：session
+          sessionStorage.setItem('user', JSON.stringify(res.data));
+          this.$root.USER = res.data;
+          this.userName=this.$root.USER.name;
+          this.lmgurl=this.$root.USER.picPath?this.$root.USER.picPath:"";
+        }else{
+          this.$router.push(
+            {
+              name: 'Login', params: {}
+            })
+        }
+      }).catch(err=>{
+        this.$message.error({message: '获取不到用户信息，请重新登录', center: true})
+        this.$router.push(
+          {
+            name: 'Login', params: {}
+          })
+      })
     }
     if(this.$route.params.sign=='map'){
       this.handleSelect('2-1',1);
@@ -257,10 +273,18 @@ export default {
     //开启定时任务
     // this.timetask=setInterval(()=>this.getMsgCount(),6000);
   },
-  // destroyed(){
-  //   //退出的时候，销毁定时任务
-  //   clearInterval(this.timetask);
-  // },
+  destroyed(){
+    //退出的时候，删除cookie信息
+    // var cookies = document.cookie.split(";");
+    // for (var i = 0; i < cookies.length; i++) {
+    //   var cookie = cookies[i];
+    //   var eqPos = cookie.indexOf("myToken");
+    //   if(eqPos!=-1){
+    //     document.cookie.
+    //   }
+    // }
+    // window.addEventListener('beforeunload', e => this.beforeunloadFn(e));
+  },
   beforeDestroy () {
     this.onbeforeunload()
   },
