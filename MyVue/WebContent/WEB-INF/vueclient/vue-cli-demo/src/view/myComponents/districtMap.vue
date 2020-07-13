@@ -1,22 +1,32 @@
 <template>
-  <el-tree
-    :data="addressOptions"
-    node-key="id"
-    lazy
-    :load="loadNode"
-    @node-drag-start="handleDragStart"
-    @node-drag-enter="handleDragEnter"
-    @node-drag-leave="handleDragLeave"
-    @node-drag-over="handleDragOver"
-    @node-drag-end="handleDragEnd"
-    @node-drop="handleDrop"
-    draggable
-    :allow-drop="allowDrop"
-    :allow-drag="allowDrag">
-  </el-tree>
+  <div>
+    <el-input
+      style="width: 200px"
+      placeholder="输入关键字进行过滤"
+      v-model="filterText">
+    </el-input>
+    <el-tree
+      draggable
+      :data="addressOptions"
+      node-key="id"
+      ref="tree"
+      lazy
+      :load="loadNode"
+      :filter-node-method="filterNode"
+      @node-drag-start="handleDragStart"
+      @node-drag-enter="handleDragEnter"
+      @node-drag-leave="handleDragLeave"
+      @node-drag-over="handleDragOver"
+      @node-drag-end="handleDragEnd"
+      @node-drop="handleDrop"
+      :allow-drop="allowDrop"
+      :allow-drag="allowDrag">
+    </el-tree>
+  </div>
 </template>
 
 <script>
+  let thiscode='';
   const flag=false;
   export default {
       name: "districtMap",
@@ -27,10 +37,20 @@
             children: 'children',
             label: 'label'
           },
-          districtParams:'1'//行政等级
+          districtParams:'1',//行政等级
+          filterText:''
         };
       },
       methods: {
+        filterNode(value, data) {
+          if (!value)
+            return true;
+          if(data.label.indexOf(value)!=-1){
+            thiscode=data.value;
+          }
+          return data.label.indexOf(value) !== -1||
+            (thiscode&&data.parentCode==thiscode);
+        },
         getDataDistrict(){
           this.$api.getSelectDistrictByLevel({"level":this.districtParams}).then(re=>{
             if(!re.success){
@@ -47,32 +67,13 @@
         handleDragLeave(draggingNode, dropNode, ev) {},
         handleDragOver(draggingNode, dropNode, ev) {},
         handleDragEnd(draggingNode, dropNode, dropType, ev) {//拖拽结束时（可能未成功）触发的事件
-          debugger
-          if('inner'===dropType){
-            this.$message.error({message: '不允许操作', center: true});
-            return;
-          }
-          draggingNode
-          dropNode
-          dropType
-          ev
         },
         handleDrop(draggingNode, dropNode, dropType, ev) {},
-        allowDrop(draggingNode, dropNode, type) {
-          debugger
-          if(draggingNode.data.level!=dropNode.data.level){
-            this.$message.error({message: '不允许操作', center: true});
-            return true;
-          }
-        },
-        allowDrag(draggingNode) {
-          return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
-        },
+        allowDrop(draggingNode, dropNode, type) {},
+        allowDrag(draggingNode) {},
         loadNode(node, resolve) {
           if(this.addressOptions.length!=0){
-            if(node.data.level!=4){
-
-            }
+            if(node.data.level!=4){}
             this.$api.getDistrictByCode({"code":node.data.value}).then(re=>{
               if(!re.success){
                 this.$message.error({message: re.error, center: true});
@@ -84,6 +85,11 @@
               this.$message.error({message: '获取地址信息失败', center: true});
             })
           }
+        }
+      },
+      watch: {
+        filterText(val) {
+          this.$refs.tree.filter(val);
         }
       },
       mounted(){
