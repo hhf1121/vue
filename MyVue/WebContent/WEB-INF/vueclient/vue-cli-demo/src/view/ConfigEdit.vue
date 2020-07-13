@@ -5,6 +5,9 @@
       <el-color-picker v-model="showColor" style="float: right"></el-color-picker>
       <el-button type="success"  circle style="position: absolute;top: 0px;margin-left: 45px"  @click="addList(input)">＋</el-button>
     </div>
+    <div>
+      <el-button type="primary"  style="position: absolute;float: right" @click="freshConfig">刷新</el-button>
+    </div>
     <br>
     <br>
     <br>
@@ -94,6 +97,9 @@
         }).catch(err=>{
           this.$message.error({message: '请求错误', center: true})
         })
+      },
+      freshConfig(){
+        this.init();
       },
       init(){
         //数据字典
