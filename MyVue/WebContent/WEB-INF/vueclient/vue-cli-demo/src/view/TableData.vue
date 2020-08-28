@@ -7,9 +7,10 @@
       </el-row>
     </el-form>
     <el-form :inline="true" ref="myForm" :model="params" label-width="80px" style="float: right;padding-top: 50px">
-    <el-form-item label="创建时间" prop="createDate">
+    <el-form-item label="创建日期" prop="createDate">
     <el-date-picker style="float:left;width: 200px;"
                     v-model="params.createDate"
+                    value-format="yyyy-MM-dd"
                     type="date"
                     placeholder="选择日期">
     </el-date-picker>
