@@ -243,4 +243,7 @@ export default {
     border: #8c939d 1px dashed;
     border-radius: 5px;
   }
+  /deep/ .el-dialog__header {
+    background: #F2F2F2;
+  }
 </style>

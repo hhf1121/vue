@@ -13,6 +13,8 @@
       :loading="selectloading">
       <el-option
         v-for="item in selectoptions"
+        :checked="titleChecked"
+        @click="titleChecked=!titleChecked"
         v-highlight="queryDate"
         :key="item.idStr"
         :label="item.noteTitle"
@@ -31,7 +33,7 @@
     <el-input v-model="queryData.noteRemark" placeholder="输入备注关键字"></el-input>
   </el-form-item>
   <el-form-item  label="花销类型" prop="noteType">
-    <el-select clearable  v-model="queryData.noteType" placeholder="选择类型" >
+    <el-select clearable  v-model="queryData.noteType" @click="typeChecked=!typeChecked" :checked="typeChecked" placeholder="选择类型" >
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" ></el-option>
     </el-select>
   </el-form-item>
@@ -67,7 +69,9 @@ export default {
       selectloading:false,
       selectoptions:[],
       initdata:[],
-      queryDate: ''
+      queryDate: '',
+      titleChecked:false,
+      typeChecked:false
     }
   },
   methods:{

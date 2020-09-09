@@ -52,6 +52,7 @@
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
     <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
     <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
+    <Weather v-if="isConfig">dasda</Weather>
     <base-config v-if="isConfig"></base-config>
    <!-- <el-drawer
       title="消息提醒"
@@ -74,6 +75,7 @@ import tendencyMap from '@/view/note/tendencyMap'
 import ChinaMap from '@/view/ChinaMap/map'
 import MsgActive from '@/view/myComponents/MsgActive'
 import BaseConfig from '@/view/baseConfig/BaseConfig'
+import Weather from '@/components/Weather'
 export default {
   name: 'myMenu',
   components: {
@@ -86,7 +88,8 @@ export default {
     tendencyMap,
     UserMsg,
     MsgActive,
-    BaseConfig
+    BaseConfig,
+    Weather
   },
   data() {
     return {
