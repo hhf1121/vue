@@ -10,9 +10,10 @@
     <el-form-item label="创建日期" prop="createDate">
     <el-date-picker style="float:left;width: 200px;"
                     v-model="params.createDate"
-                    value-format="yyyy-MM-dd"
                     type="date"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     placeholder="选择日期">
+      <!--value-format="yyyy-MM-dd"-->
     </el-date-picker>
     </el-form-item>
     <el-form-item label="用户类型" prop="yes">
