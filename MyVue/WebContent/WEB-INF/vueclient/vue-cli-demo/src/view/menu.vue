@@ -1,5 +1,10 @@
 <template>
   <div class="">
+  <Weather style="position:absolute;z-index: 9999;top: 0px"></Weather>
+    <el-row style="background-color: #b4bccc;color: dodgerblue;position:absolute;top:120px;right:10px;border: #66b1ff 1px solid;border-radius: 5px;box-shadow: 2px 2px 5px #888888;">
+      {{ defaultDate|formatDate}}
+    </el-row>
+    <br>
     <h3>菜单首页</h3>
 <el-menu
   :default-active="activeIndex"
@@ -52,7 +57,6 @@
     <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
     <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
     <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
-    <Weather v-if="isConfig">dasda</Weather>
     <base-config v-if="isConfig"></base-config>
    <!-- <el-drawer
       title="消息提醒"
@@ -76,6 +80,7 @@ import ChinaMap from '@/view/ChinaMap/map'
 import MsgActive from '@/view/myComponents/MsgActive'
 import BaseConfig from '@/view/baseConfig/BaseConfig'
 import Weather from '@/components/Weather'
+import dayjs from 'dayjs'
 export default {
   name: 'myMenu',
   components: {
@@ -112,7 +117,8 @@ export default {
       timetask:null,
       infoCount:0,
       websocket:null,
-      msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg0.mp3'
+      msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg0.mp3',
+      defaultDate: new Date(),
     };
   },
   methods: {
@@ -232,7 +238,15 @@ export default {
       this.websocket.close()
     }
   },
+  filters: {// 过滤器
+    formatDate: function (cellValue) {
+      return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
+    }
+  },
   mounted(){
+    setInterval(() => {
+      this.defaultDate = new Date() // 动态时间
+    }, 1000)
     this.handleSelect(1,1);
     const USER=JSON.parse(sessionStorage.getItem('user'));
     if(USER){

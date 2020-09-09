@@ -2,9 +2,9 @@
   <div>
     <el-form style="padding-top: 10px;padding-left:10px">
       <el-button  type="primary" icon="el-icon-circle-plus-outline" style="float: left;" round  @click="insertDate">新增</el-button>
-      <el-row style="float: right;color: dodgerblue">
+    <!--  <el-row style="float: right;color: dodgerblue">
         {{ defaultDate|formatDate}}
-      </el-row>
+      </el-row>-->
     </el-form>
     <el-form :inline="true" ref="myForm" :model="params" label-width="80px" style="float: right;padding-top: 50px">
     <el-form-item label="创建日期" prop="createDate">
@@ -102,7 +102,6 @@ export default {
       },
       dropdown: [],
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
-      defaultDate: new Date(),
       addOrUpdateVisible: false,
       pagination: {currentPage: 1, pageSize: 5},
       queryData:{}
