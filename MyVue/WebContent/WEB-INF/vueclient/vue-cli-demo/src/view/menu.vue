@@ -1,9 +1,11 @@
 <template>
   <div class="">
-  <Weather style="position:absolute;z-index: 9999;top: 0px"></Weather>
-    <el-row style="background-color: #b4bccc;color: dodgerblue;position:absolute;top:120px;right:10px;border: #66b1ff 1px solid;border-radius: 5px;box-shadow: 2px 2px 5px #888888;">
+  <Weather style="position:absolute;top: 0px;right: 10px">
+  </Weather>
+    <el-row style="color: dodgerblue;position:absolute;top:10px;right:150px;">
       {{ defaultDate|formatDate}}
     </el-row>
+    <Clock style="position:absolute;top: 0px;left: 10px;height: 126px;width: 126px"></Clock>
     <br>
     <h3>菜单首页</h3>
 <el-menu
@@ -81,9 +83,11 @@ import MsgActive from '@/view/myComponents/MsgActive'
 import BaseConfig from '@/view/baseConfig/BaseConfig'
 import Weather from '@/components/Weather'
 import dayjs from 'dayjs'
+import Clock from 'vue-clock2'
 export default {
   name: 'myMenu',
   components: {
+    Clock,
     TableDate,
     MyHome,
     NoteIndex,
@@ -118,7 +122,7 @@ export default {
       infoCount:0,
       websocket:null,
       msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg0.mp3',
-      defaultDate: new Date(),
+      defaultDate: new Date()
     };
   },
   methods: {
@@ -240,13 +244,13 @@ export default {
   },
   filters: {// 过滤器
     formatDate: function (cellValue) {
-      return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : null
+      return null != cellValue ? dayjs(cellValue).format('YYYY-MM-DD') : null
     }
   },
   mounted(){
-    setInterval(() => {
-      this.defaultDate = new Date() // 动态时间
-    }, 1000)
+    // setInterval(() => {
+    //   this.defaultDate = new Date() // 动态时间
+    // }, 1000)
     this.handleSelect(1,1);
     const USER=JSON.parse(sessionStorage.getItem('user'));
     if(USER){
