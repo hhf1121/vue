@@ -324,7 +324,6 @@ export default {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
     },
     setOnmessageMessage (event) {
-      debugger
       this.infoCount=parseInt(event.data==undefined?"0":event.data);
       // 根据服务器推送的消息做自己的业务处理
       // this.$message.success('服务端返回：' + event.data)
