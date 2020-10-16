@@ -1,74 +1,93 @@
 <template>
-  <div class="">
-  <Weather style="position:absolute;top: 0px;right: 10px">
-  </Weather>
-    <el-row style="color: dodgerblue;position:absolute;top:10px;right:150px;">
-      {{ defaultDate|formatDate}}
-    </el-row>
-    <Clock style="position:absolute;top: 0px;left: 10px;height: 126px;width: 126px"></Clock>
-    <br>
-    <h3>菜单首页</h3>
-<el-menu
-  :default-active="activeIndex"
-  class="el-menu-demo"
-  mode="horizontal"
-  @select="handleSelect"
-  background-color="#409EFF"
-  text-color="#fff"
-  active-text-color="#ffd04b">
-  <el-menu-item index="1">用户列表</el-menu-item>
-  <el-submenu index="2">
-    <template slot="title">我的家园</template>
-    <el-menu-item index="2-1"  :span="12">实时疫情</el-menu-item>
-    <el-submenu index="2-3">
-      <template slot="title">敬请期待...</template>
-      <el-menu-item index="2-3-1">期待1.</el-menu-item>
-      <el-menu-item index="2-3-2">期待2.</el-menu-item>
-    </el-submenu>
-  </el-submenu>
-  <el-submenu  index="3">
-    <template slot="title">账单管理</template>
-    <el-menu-item index="3-1"  :span="12">账单主页</el-menu-item>
-    <el-menu-item index="3-2"  :span="12">账图浏览</el-menu-item>
-    <el-menu-item index="3-3"  :span="12">账单统计</el-menu-item>
-  </el-submenu >
-  <el-menu-item index="4">基础配置</el-menu-item>
-  <el-menu-item index="5" disabled>暂不开放</el-menu-item>
-  <el-submenu index="6">
-    <template slot="title">帮助中心</template>
-      <el-menu-item index="6-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
-      <el-menu-item index="6-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
-      <el-menu-item index="6-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
-  </el-submenu>
-  <el-submenu index="7" style="float: right;width: 200px">
-    <template slot="title" >你好：{{userName}}
-      <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" v-if="lmgurl.length>0">
-    </template>
-   <!-- <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>-->
-    <el-menu-item index="7-1"  :span="12">个人中心</el-menu-item>
-    <el-menu-item index="7-2"  :span="12">消息中心（<span :style="msgCount==0?'':'color: red'">{{msgCount}}</span>）</el-menu-item>
-    <el-menu-item index="7-3"   v-on:click="reset">退出</el-menu-item>
-  </el-submenu>
-</el-menu>
-    <table-date v-show="isData&&user.yes!=1"></table-date>
-    <china-map v-if="isMap&&user.yes!=1"></china-map>
-   <!-- <my-home v-if="isHome"></my-home>-->
-    <note-index ref="noteIndex" v-show="isNote&&user.yes!=1" :userName="userName"></note-index>
-    <user-info :userId="userid" v-if="isInfo"></user-info>
-    <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
-    <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
-    <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
-    <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
-    <base-config v-if="isConfig"></base-config>
-   <!-- <el-drawer
-      title="消息提醒"
-      :visible.sync="drawer"
-      :direction="direction"
-      :close-on-press-escape="true"
-      :modal="false">
-    </el-drawer>-->
+  <div style="">
+    <div style="">
+      <Weather style="position:absolute;top: 0px;right: 10px"></Weather>
+      <el-row style="color: dodgerblue;position:absolute;top:10px;right:150px;">
+        {{ defaultDate|formatDate}}
+      </el-row>
+      <Clock style="position:absolute;top: 0px;left: 10px;height: 126px;width: 126px;"></Clock>
+      <br>
+      <h3 style="position:absolute;width:100%;top:0px;color: #8cc5ff;font-family: '宋体';font-size: 26px">系统首页</h3>
+      <el-row >
+        <el-col >
+          <el-autocomplete
+            clearable
+            style="position:absolute;right:36%;width: 168px"
+            class="inline-input"
+            v-model="siteUser"
+            :fetch-suggestions="querySearch"
+            placeholder="搜索网站会员"
+            :trigger-on-focus="false"
+            @select="selectSiteUser"
+            @input="isChange"
+          ></el-autocomplete>
+          <el-button type="success" class="el-icon-chat-dot-square" @click="sendMsg" style="position:absolute;right:32%;width:68px;font-size: 12px" v-if="addOrUpdateVisible">聊天</el-button>
+        </el-col>
+      </el-row>
+    </div>
+    <div style="margin-top: 60px;">
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        @select="handleSelect"
+        background-color="#409EFF"
+        text-color="#fff"
+        active-text-color="#ffd04b">
+        <el-menu-item index="1">用户列表</el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">我的家园</template>
+          <el-menu-item index="2-1"  :span="12">实时疫情</el-menu-item>
+          <el-submenu index="2-3">
+            <template slot="title">敬请期待...</template>
+            <el-menu-item index="2-3-1">期待1.</el-menu-item>
+            <el-menu-item index="2-3-2">期待2.</el-menu-item>
+          </el-submenu>
+        </el-submenu>
+        <el-submenu  index="3">
+          <template slot="title">账单管理</template>
+          <el-menu-item index="3-1"  :span="12">账单主页</el-menu-item>
+          <el-menu-item index="3-2"  :span="12">账图浏览</el-menu-item>
+          <el-menu-item index="3-3"  :span="12">账单统计</el-menu-item>
+        </el-submenu >
+        <el-menu-item index="4">基础配置</el-menu-item>
+        <el-menu-item index="5" disabled>暂不开放</el-menu-item>
+        <el-submenu index="6">
+          <template slot="title">帮助中心</template>
+          <el-menu-item index="6-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
+          <el-menu-item index="6-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
+          <el-menu-item index="6-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
+        </el-submenu>
+        <el-submenu index="7" style="float: right;width: 200px">
+          <template slot="title" >你好：{{userName}}
+            <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" v-if="lmgurl.length>0">
+          </template>
+          <!-- <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>-->
+          <el-menu-item index="7-1"  :span="12">个人中心</el-menu-item>
+          <el-menu-item index="7-2"  :span="12">消息中心（<span :style="msgCount==0?'':'color: red'">{{msgCount}}</span>）</el-menu-item>
+          <el-menu-item index="7-3"   v-on:click="reset">退出</el-menu-item>
+        </el-submenu>
+      </el-menu>
+      <table-date v-show="isData&&user.yes!=1"></table-date>
+      <china-map v-if="isMap&&user.yes!=1"></china-map>
+      <!-- <my-home v-if="isHome"></my-home>-->
+      <note-index ref="noteIndex" v-show="isNote&&user.yes!=1" :userName="userName"></note-index>
+      <user-info :userId="userid" v-if="isInfo"></user-info>
+      <photo-info v-if="isPhoto&&user.yes!=1"></photo-info>
+      <tendency-map v-if="isTendency&&user.yes!=1"></tendency-map>
+      <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
+      <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
+      <base-config v-if="isConfig"></base-config>
+      <!--<add-or-update v-if="addOrUpdateVisible" :addformVisable="addOrUpdateVisible" ref="addOrUpdate" @freshData="closeInfo"></add-or-update>-->
+      <!-- <el-drawer
+         title="消息提醒"
+         :visible.sync="drawer"
+         :direction="direction"
+         :close-on-press-escape="true"
+         :modal="false">
+       </el-drawer>-->
+    </div>
   </div>
-
 </template>
 <script>
 import TableDate from '@/view/TableData'
@@ -84,9 +103,11 @@ import BaseConfig from '@/view/baseConfig/BaseConfig'
 import Weather from '@/components/Weather'
 import dayjs from 'dayjs'
 import Clock from 'vue-clock2'
+import addOrUpdate from '@/view/addOrUpdate'
 export default {
   name: 'myMenu',
   components: {
+    addOrUpdate,
     Clock,
     TableDate,
     MyHome,
@@ -122,10 +143,17 @@ export default {
       infoCount:0,
       websocket:null,
       msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg0.mp3',
-      defaultDate: new Date()
+      defaultDate: new Date(),
+      siteUser:null,
+      vipUser:null,
+      addOrUpdateVisible: false,
+      restaurants:[]
     };
   },
   methods: {
+    closeInfo(){
+      this.addOrUpdateVisible=false;
+    },
     handleSelect(key, keyPath) {
      if(key=="1"){
        this.isData=true;
@@ -170,6 +198,74 @@ export default {
       }else{
         this.isConfig=false;
       }
+    },
+    isChange(){
+      debugger
+      if(this.siteUser.length===0){
+        this.addOrUpdateVisible=false;
+      }
+    },
+    selectSiteUser(item){//选中的时候
+      console.log(item);
+      this.vipUser=item;
+      this.addOrUpdateVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs.addOrUpdate.initView(item)
+      // })
+    },
+    querySearch(queryString, cb){//搜索查询
+      if(!queryString||queryString.trim().length===0){
+        this.addOrUpdateVisible = false
+        return;
+      }
+      //查询系统里的用户
+      this.$api.queryVip().then(res=>{
+        if(res.success){
+          this.restaurants=res.data;
+        }else{
+          this.$message.error({message: '获取网站vip用户失败', center: true})
+        }
+      }).catch(err=>{
+        this.$message.error({message: '请求服务器异常', center: true})
+      });
+      var restaurants = this.restaurants;
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    sendMsg(){
+      const USER=JSON.parse(sessionStorage.getItem('user'));
+      this.$prompt('请输入信息', '对话【'+this.siteUser+'】', {
+        confirmButtonText: '发送',
+        cancelButtonText: '取消',
+        inputValidator:function (e) {
+          if(!e)return false
+          if(e&&e.length>0){
+            return true;
+          }
+          return false
+        },
+        inputErrorMessage: '请输入回复信息'
+      }).then(({ value }) => {
+        //1.用户互发信息(通过mq，转储到mysql，定时轮询db)
+        let param={};
+        param.fromId= USER.id;
+        param.toId = this.vipUser.id;
+        param.msg = value;
+        param.userName=USER.userName;
+        this.$api.sendMsg(param).then(re=>{
+          if(re.success){
+            this.$message.success({message: '消息发送成功', center: true});
+          }
+        }).catch(er=>{
+          this.$message.error({message: '发送失败、请重试', center: true});
+        })
+      });
     },
     reset(){
       const USER=JSON.parse(sessionStorage.getItem('user'));
@@ -228,6 +324,7 @@ export default {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
     },
     setOnmessageMessage (event) {
+      debugger
       this.infoCount=parseInt(event.data==undefined?"0":event.data);
       // 根据服务器推送的消息做自己的业务处理
       // this.$message.success('服务端返回：' + event.data)
@@ -288,6 +385,16 @@ export default {
           })
       })
     }
+    //查询系统里的用户
+    this.$api.queryVip().then(res=>{
+      if(res.success){
+        this.restaurants=res.data;
+      }else{
+        this.$message.error({message: '获取网站vip用户失败', center: true})
+      }
+    }).catch(err=>{
+      this.$message.error({message: '请求服务器异常', center: true})
+    })
     if(this.$route.params.sign=='map'){
       this.handleSelect('2-1',1);
     }
@@ -311,6 +418,7 @@ export default {
   },
   computed:{//计算属性
     msgCount:function () {
+      debugger
       if(this.infoCount>0){
         this.$notify.success({
           title: '提示',

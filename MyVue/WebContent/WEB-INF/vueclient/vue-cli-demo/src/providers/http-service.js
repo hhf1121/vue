@@ -172,4 +172,5 @@ export const server = {
   sendMsgsByWebSocket: paramObj => post('/api/msg/sendAllWebSocket', paramObj),//用户互发信息(通过websocket)
   getDataByConfigCode: paramObj => get('/api/baseConfig/getDataByConfigCode', paramObj),//读取数据字典-基础配置
   saveConfig: paramObj => post('/api/baseConfig/saveConfig', paramObj),//基础配置，保存
+  queryVip: paramObj => get('/api/springBoot/queryVip', paramObj),//查询vip
 }

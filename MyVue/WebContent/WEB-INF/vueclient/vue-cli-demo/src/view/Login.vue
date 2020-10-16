@@ -5,8 +5,8 @@
         <el-form-item label="账号" prop="username">
           <el-input type="text" v-model="ruleForm.username"  style="width: 220px;float: left" @blur="getVerifyCode"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
-          <el-input type="password" v-model="ruleForm.pass" style="width: 220px;float: left"></el-input>
+        <el-form-item label="密码" prop="pass" >
+          <el-input type="password" v-model="ruleForm.pass" style="width: 220px;float: left"  show-password></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="verifycode" label-width="55px" >
           <el-input clearable type="text" v-model="ruleForm.verifycode" style="float:left;margin-left:-5px;position:relative;width:150px" placeholder="请输入运算结果"></el-input>

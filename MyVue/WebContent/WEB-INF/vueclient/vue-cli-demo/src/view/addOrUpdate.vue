@@ -38,6 +38,7 @@
         </el-form-item>
         <el-form-item >
           <el-button type="success" @click="save('addForm')" style="text-align: center" v-if="isview" :disabled="!isAdmin">保存</el-button>
+          <!--<el-button type="success" @click="sendMsg" style="text-align: center" v-if="isMsg">聊天</el-button>-->
           <el-button type="success" @click="cancel" style="text-align: center" :disabled="!isAdmin">取消</el-button>
         </el-form-item>
       </el-form>
@@ -78,6 +79,7 @@ export default {
       },
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       isview: true,
+      isMsg: true,
       // addformVisable: false,
       imageUrl:'',
       title: '',
@@ -106,6 +108,35 @@ export default {
     }
   },
   methods: {
+    sendMsg(){
+      const USER=JSON.parse(sessionStorage.getItem('user'));
+      this.$prompt('请输入信息', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValidator:function (e) {
+          if(!e)return false
+          if(e&&e.length>0){
+            return true;
+          }
+          return false
+        },
+        inputErrorMessage: '请输入回复信息'
+      }).then(({ value }) => {
+          //1.用户互发信息(通过mq，转储到mysql，定时轮询db)
+          let param={};
+          param.fromId= USER.id;
+          param.toId = this.addForm.id;
+          param.msg = value;
+          param.userName=USER.userName;
+          this.$api.sendMsg(param).then(re=>{
+            if(re.success){
+              this.$message.success({message: '消息发送成功', center: true});
+            }
+          }).catch(er=>{
+            this.$message.error({message: '发送失败、请重试', center: true});
+          })
+      });
+    },
     save (addForm) {
       this.$refs[addForm].validate((valid) => {
         if (valid) {
@@ -172,11 +203,19 @@ export default {
       this.isview = true
     },
     initView: function (data) {
-      this.title = '查看'
-      this.addForm = data;
-      this.imageUrl=this.addForm.picPath;
-      // this.addformVisable = true
-      this.isview = false
+      if(data.flagMsg){
+        this.title = '用户信息'
+        this.addForm = data;
+        this.imageUrl=this.addForm.picPath;
+        this.isview = false
+        this.isMsg = true;
+      }else {
+        this.title = '查看'
+        this.addForm = data;
+        this.imageUrl=this.addForm.picPath;
+        // this.addformVisable = true
+        this.isview = false
+      }
     },
     cancel: function () {
       this.$refs['addForm'].resetFields()
