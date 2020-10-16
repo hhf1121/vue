@@ -200,7 +200,6 @@ export default {
       }
     },
     isChange(){
-      debugger
       if(this.siteUser.length===0){
         this.addOrUpdateVisible=false;
       }
@@ -417,7 +416,6 @@ export default {
   },
   computed:{//计算属性
     msgCount:function () {
-      debugger
       if(this.infoCount>0){
         this.$notify.success({
           title: '提示',

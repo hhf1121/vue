@@ -239,7 +239,6 @@ export default {
     }
   },
   mounted(){
-    debugger
     CURRENT=JSON.parse(sessionStorage.getItem('user'));
     if(this.userId){
       this.$api.getCurrentUser({"id":this.userId}).then(re=>{

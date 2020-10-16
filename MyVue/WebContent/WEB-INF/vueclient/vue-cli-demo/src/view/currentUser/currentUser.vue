@@ -7,7 +7,6 @@
 
 export default {
   create(){
-    // debugger;
     // if (this.$route.params.user) {
     //   user=this.$route.params.user;
     //   this.$router.push(
