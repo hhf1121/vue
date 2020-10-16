@@ -12,7 +12,7 @@
         <el-col >
           <el-autocomplete
             clearable
-            style="position:absolute;right:36%;width: 168px"
+            style="position:absolute;right:36%;width: 188px"
             class="inline-input"
             v-model="siteUser"
             :fetch-suggestions="querySearch"
@@ -239,7 +239,7 @@ export default {
     },
     sendMsg(){
       const USER=JSON.parse(sessionStorage.getItem('user'));
-      this.$prompt('请输入信息', '对话【'+this.siteUser+'】', {
+      this.$prompt('请输入信息', "对话【"+this.siteUser+this.vipUser.isOnLine+"】", {
         confirmButtonText: '发送',
         cancelButtonText: '取消',
         inputValidator:function (e) {
