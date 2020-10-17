@@ -205,9 +205,8 @@ export default {
       }
     },
     selectSiteUser(item){//选中的时候
-      console.log(item);
-      this.vipUser=item;
       this.addOrUpdateVisible = true
+      this.vipUser=item;
       // this.$nextTick(() => {
       //   this.$refs.addOrUpdate.initView(item)
       // })
@@ -221,16 +220,16 @@ export default {
       this.$api.queryVip().then(res=>{
         if(res.success){
           this.restaurants=res.data;
+          var restaurants = this.restaurants;
+          var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+          // 调用 callback 返回建议列表的数据
+          cb(results);
         }else{
           this.$message.error({message: '获取网站vip用户失败', center: true})
         }
       }).catch(err=>{
         this.$message.error({message: '请求服务器异常', center: true})
       });
-      var restaurants = this.restaurants;
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
     },
     createFilter(queryString) {
       return (restaurant) => {
