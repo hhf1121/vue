@@ -2,6 +2,7 @@
   <div>
     <el-form style="padding-top: 10px;padding-left:10px">
       <el-button  type="primary" icon="el-icon-circle-plus-outline" style="float: left;" round  @click="insertDate">新增</el-button>
+      <el-button  v-if="isAdmin==1" type="info" icon="el-icon-message" style="float: right;" round  @click="sendAll">发布系统消息</el-button>
     <!--  <el-row style="float: right;color: dodgerblue">
         {{ defaultDate|formatDate}}
       </el-row>-->
@@ -105,7 +106,8 @@ export default {
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       addOrUpdateVisible: false,
       pagination: {currentPage: 1, pageSize: 5},
-      queryData:{}
+      queryData:{},
+      isAdmin:0
     }
   },
   methods: {
@@ -143,6 +145,30 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init('')
       })
+    },
+    sendAll(){
+      this.$prompt('请输入信息', "【系统公告】", {
+        confirmButtonText: '发送',
+        cancelButtonText: '取消',
+        inputValidator:function (e) {
+          if(!e)return false
+          if(e&&e.length>0){
+            return true;
+          }
+          return false
+        },
+        inputErrorMessage: '请输入公告'
+      }).then(({ value }) => {
+        debugger
+        this.$api.sendAllWebSocket({"msg":'【系统公告】'+value}).then(re=>{
+          if(re.success){
+            this.$message.success({message: '公告发送成功', center: true});
+          }
+        }).catch(er=>{
+          this.$message.error({message: '发送失败、请重试', center: true});
+        })
+      });
+
     },
     viewData: function (data) { // 查看
       this.addOrUpdateVisible = true
@@ -207,6 +233,11 @@ export default {
       this.options.key = this.params.yes
       this.getData()
     }
+    const USER=JSON.parse(sessionStorage.getItem('user'));
+    if(USER){
+      this.isAdmin=USER.id;
+    }
+
   }
 }
 </script>

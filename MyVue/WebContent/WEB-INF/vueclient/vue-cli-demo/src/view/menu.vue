@@ -322,8 +322,33 @@ export default {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
     },
     setOnmessageMessage (event) {
-      this.infoCount=parseInt(event.data==undefined?"0":event.data);
+      debugger
       // 根据服务器推送的消息做自己的业务处理
+      let data=event.data;
+      if(!isNaN(data)){//是数字
+        this.infoCount=parseInt(data==undefined?"0":data);
+      }else if(data==='noticeMsgUser'){
+        this.$message.success('通知：当前聊天列表里,有用户信息被改');
+      }else if (data === 'downOrUp') {
+        this.$message.success({message: '通知全体：有用户下线', center: true})
+        //查询系统里的用户
+        this.$api.queryVip().then(res=>{
+          if(res.success){
+            this.restaurants=res.data;
+          }else{
+            this.$message.error({message: '获取网站vip用户失败', center: true})
+          }
+        }).catch(err=>{
+          this.$message.error({message: '请求服务器异常', center: true})
+        })
+      }else {
+        this.$notify({
+          title: '系统提示',
+          message: data,
+          position: 'bottom-right',
+          duration: 0
+        });
+      }
       // this.$message.success('服务端返回：' + event.data)
     },
     setOncloseMessage () {
