@@ -142,7 +142,7 @@ export default {
       timetask:null,
       infoCount:0,
       websocket:null,
-      msgInfo:'http://192.168.202.53:8082/resources/static/voice/msg0.mp3',
+      msgInfo:'http://learn.hhf.com/resources/static/voice/msg0.mp3',
       defaultDate: new Date(),
       siteUser:null,
       vipUser:null,
@@ -293,7 +293,7 @@ export default {
     openWebSocket(){
         // WebSocket
       if ('WebSocket' in window) {
-        this.websocket = new WebSocket('ws://localhost:8082/msgWebSocket/' + this.userid)
+        this.websocket = new WebSocket('ws://learn.hhf.com/msgWebSocket/' + this.userid)
         this.initWebSocket()
       } else {
         this.$message.error('当前浏览器 Not support websocket')
@@ -315,8 +315,14 @@ export default {
       // 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
       window.onbeforeunload = this.onbeforeunload
     },
-    setErrorMessage () {
+    setErrorMessage (data) {
       // this.$message.error('WebSocket连接发生错误   状态码：' + this.websocket.readyState)
+        this.$notify({
+          title: '系统提示',
+          message: '连接错误',
+          position: 'bottom-right',
+          duration: 0
+        });
     },
     setOnopenMessage () {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
@@ -348,10 +354,19 @@ export default {
           position: 'bottom-right',
           duration: 0
         });
+        this.$nextTick(()=> {//提示音
+          this.$refs.msgVoice.sing();
+        })
       }
       // this.$message.success('服务端返回：' + event.data)
     },
     setOncloseMessage () {
+      this.$notify({
+        title: '系统提示',
+        message: 'WebSocket连接关闭 状态码：' + this.websocket.readyState,
+        position: 'bottom-right',
+        duration: 0
+      });
       // this.$message.error('WebSocket连接关闭 状态码：' + this.websocket.readyState)
     },
     onbeforeunload () {
@@ -405,6 +420,7 @@ export default {
           {
             name: 'Login', params: {}
           })
+        return;
       })
     }
     //查询系统里的用户

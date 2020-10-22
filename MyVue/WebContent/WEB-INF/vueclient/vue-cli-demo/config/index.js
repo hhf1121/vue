@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {//解决跨域（需要重启vue项目）
       '/api': {//http://localhost:8082/user/queryVIP?yes=1
-        target: 'http://192.168.202.53:8082/', //设置你调用的接口域名和端口号别忘了加http
+        target: 'http://learn.hhf.com/', //设置你调用的接口域名和端口号别忘了加http
         changeOrigin: true,//是否跨域
         pathRewrite: {
           '^/api': ''   //需要rewrite重写的,
@@ -23,12 +23,20 @@ module.exports = {
         pathRewrite: {
           '^/myApi': ''   //需要rewrite重写的,
         }
-      }
+      }/*,
+      '/socket': {//http://localhost:8082/user/queryVIP?yes=1
+        target: 'http://local.sso.uc56.com/', //设置你调用的接口域名和端口号别忘了加http
+        changeOrigin: true,//是否跨域
+        ws: true, // 开启websocket代理  注意
+        pathRewrite: {
+          '^/socket': ''   //需要rewrite重写的,
+        }
+      }*/
     },
 
     // Various Dev Server settings
-    host: '192.168.202.53', //192.168.202.53 can be overwritten by process.env.HOST
-    port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    host: 'learn.hhf.com', //192.168.202.53 can be overwritten by process.env.HOST
+    port: 8001, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
