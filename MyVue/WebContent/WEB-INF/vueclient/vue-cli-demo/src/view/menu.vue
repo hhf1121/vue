@@ -147,7 +147,8 @@ export default {
       siteUser:null,
       vipUser:null,
       addOrUpdateVisible: false,
-      restaurants:[]
+      restaurants:[],
+      heartTimer:null
     };
   },
   methods: {
@@ -326,9 +327,21 @@ export default {
     },
     setOnopenMessage () {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
+      // 连接成功之后，开启心跳检测
+      // 定时发送心跳
+      // this.heartTimer = setInterval(() => {
+      //   this.heartbeat();
+      // }, 5000);
+    },
+    // 心跳包
+    heartbeat() {
+      const data = {
+        userId: this.$root.USER.id+'',
+        type: 'wsHeart'
+      };
+      this.websocket.send(JSON.stringify(data));
     },
     setOnmessageMessage (event) {
-      debugger
       // 根据服务器推送的消息做自己的业务处理
       let data=event.data;
       if(!isNaN(data)){//是数字
@@ -370,9 +383,8 @@ export default {
       // this.$message.error('WebSocket连接关闭 状态码：' + this.websocket.readyState)
     },
     onbeforeunload () {
-      this.closeWebSocket()
-    },
-    closeWebSocket () {
+      //清掉心跳定时器
+      clearInterval(this.heartTimer);
       this.websocket.close()
     }
   },
