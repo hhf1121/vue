@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socketIo</title>
+</head>
+<body>
+<input id="input" />
+<button onclick="sendMsg()">发送</button>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js'></script>
+<script src='http://apps.bdimg.com/libs/jquery/1.6.4/jquery.js'></script>
+<script>
+    const soc = io('http://localhost:9092');
+    //向指定的服务器建立连接，地址可以省略
+    //自定义msg事件，发送‘你好服务器’字符串向服务器
+    soc.on('mymessage',(data)=>{
+        //监听浏览器通过msg事件发送的信息
+        console.log(data);//你好浏览器
+    });
+    function sendMsg() {
+        soc.emit("mymessage",$('#input').val());
+    }
+</script>
+</body>
+</html>
