@@ -326,12 +326,12 @@ export default {
         });
     },
     setOnopenMessage () {
-      // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
+      this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
       // 连接成功之后，开启心跳检测
       // 定时发送心跳
-      // this.heartTimer = setInterval(() => {
-      //   this.heartbeat();
-      // }, 5000);
+      this.heartTimer = setInterval(() => {
+        this.heartbeat();
+      }, 5000);
     },
     // 心跳包
     heartbeat() {
