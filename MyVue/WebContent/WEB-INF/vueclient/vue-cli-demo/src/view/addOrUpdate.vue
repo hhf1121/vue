@@ -23,6 +23,13 @@
         <el-form-item label="名字" prop="name">
           <el-input v-model="addForm.name"></el-input>
         </el-form-item>
+        <el-form-item label="生日" prop="brithday" style="width: 300px">
+          <el-date-picker
+            v-model="addForm.brithday"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item label="地址" prop="address">
           <el-input v-model="addForm.address"></el-input>
         </el-form-item>
@@ -75,7 +82,8 @@ export default {
         pass: '',
         address: '',
         name: '',
-        picPath:''
+        picPath:'',
+        brithday:''
       },
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       isview: true,
@@ -103,6 +111,9 @@ export default {
         ],
         yes: [
           {required: true, message: '请选择用户类型', trigger: 'blur'}
+        ],
+        brithday: [
+          {required: true, message: '请选择生日', trigger: 'blur'},
         ]
       }
     }

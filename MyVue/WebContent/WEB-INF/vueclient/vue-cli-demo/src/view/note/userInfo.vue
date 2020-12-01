@@ -25,6 +25,14 @@
       <el-form-item label="名字" prop="name">
         <el-input v-model="userData.name" disabled></el-input>
       </el-form-item>
+      <el-form-item label="生日" prop="brithday">
+        <el-date-picker  disabled
+          style="width: 400px"
+          v-model="userData.brithday"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="地址" prop="address">
         <el-input v-model="userData.address" :disabled="isupdate"></el-input>
       </el-form-item>

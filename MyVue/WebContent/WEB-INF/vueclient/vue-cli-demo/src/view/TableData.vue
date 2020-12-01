@@ -43,19 +43,25 @@
           width="150">
         </el-table-column>
         <el-table-column
-          prop="createDate"
-          label="创建日期"
-          :formatter="formatDate"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="name"
           label="姓名"
           width="180">
         </el-table-column>
         <el-table-column
+          prop="brithday"
+          label="生日"
+          :formatter="formatDate"
+          width="180">
+        </el-table-column>
+        <el-table-column
           prop="address"
           label="地址"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="createDate"
+          label="创建日期"
+          :formatter="formatDateTime"
           width="180">
         </el-table-column>
         <el-table-column
@@ -198,10 +204,15 @@ export default {
         this.$message({type: 'info', message: '已取消删除'})
       })
     },
-    formatDate: function (cellValue) {
+    formatDateTime: function (cellValue) {
       var value = cellValue.createDate
       // console.log('-------------------formatDate')
       return null != value ? dayjs(value).format('YYYY-MM-DD HH:mm:ss') : null
+    },
+    formatDate: function (cellValue) {
+      var value = cellValue.brithday
+      // console.log('-------------------formatDate')
+      return null != value ? dayjs(value).format('YYYY-MM-DD') : null
     },
     paginationCurrentChange(currentPage) {
       if (!isSearch) {
