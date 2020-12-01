@@ -173,4 +173,5 @@ export const server = {
   getDataByConfigCode: paramObj => get('/api/baseConfig/getDataByConfigCode', paramObj),//读取数据字典-基础配置
   saveConfig: paramObj => post('/api/baseConfig/saveConfig', paramObj),//基础配置，保存
   queryVip: paramObj => get('/api/springBoot/queryVip', paramObj),//查询vip
+  getBrithdayImg: paramObj => get('/api/springBoot/getBrithdayImg', paramObj),//生成生日祝福的图片
 }

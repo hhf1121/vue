@@ -78,10 +78,10 @@
       <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
       <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
       <base-config v-if="isConfig"></base-config>
-      <el-dialog :visible="isBrithday" @close="isBrithday = false">
-        <brithday-show />
+      <el-dialog :visible="isBrithday" @close="isBrithday = false" title="生日卡片" width="1000px" height="500px">
+        <brithday-show :imgdata="brithdayImg" />
       </el-dialog>
-      <el-dialog :visible="addBrithday" title="补全生日信息"  width="600px">
+      <el-dialog :visible="addBrithday" title="补全生日信息"  width="600px" :show-close="false">
         <el-form :model="user"  :rules="brithdayRules" ref="brithdayForm" label-width="80px" >
           <el-form-item label="生日日期"  prop="brithday" style="width: 500px">
             <el-date-picker
@@ -171,6 +171,7 @@ export default {
       heartTimer:null,
       isBrithday:false,
       addBrithday:false,
+      brithdayImg:'',
       brithdayRules: {
         brithday: [
           {required: true, message: '请选择生日', trigger: 'blur'},
@@ -179,6 +180,18 @@ export default {
     };
   },
   methods: {
+    getBrithdayImg(){
+      this.$api.getBrithdayImg({'id':this.user.id}).then(re=>{
+        if(re.success){
+          this.isBrithday=true;
+          this.brithdayImg="data:image/jpg;base64,"+re.data;
+        }else {
+          console.info(re.error)
+        }
+      }).catch(er=>{
+        this.$message.error({message: '服务器异常', center: true})
+      })
+    },
     getCurrentUser(){
       this.$api.getCurrentUser({'id':this.user.id}).then(re=>{
         if(re.id==this.user.id){
@@ -477,7 +490,8 @@ export default {
       this.lmgurl=this.$root.USER.picPath?this.$root.USER.picPath:"";
       //是否弹出生日框或补全信息框
       if(this.user.isBrithday=='isBrithday'){
-        this.isBrithday=true;
+        //生成个人生日的base64图片
+        this.getBrithdayImg();
       }
       if(this.user.isBrithday=='isError'){//补全信息框
         this.addBrithday=true;
