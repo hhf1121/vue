@@ -78,6 +78,24 @@
       <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
       <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
       <base-config v-if="isConfig"></base-config>
+      <el-dialog :visible="isBrithday" @close="isBrithday = false">
+        <brithday-show />
+      </el-dialog>
+      <el-dialog :visible="addBrithday" title="补全生日信息"  width="600px">
+        <el-form :model="user"  :rules="brithdayRules" ref="brithdayForm" label-width="80px" >
+          <el-form-item label="生日日期"  prop="brithday" style="width: 500px">
+            <el-date-picker
+              v-model="user.brithday"
+              value-format="yyyy-MM-dd"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item style="width: 500px">
+            <el-button type="success" @click="updateBrithday('brithdayForm')"  >提交</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
       <!--<add-or-update v-if="addOrUpdateVisible" :addformVisable="addOrUpdateVisible" ref="addOrUpdate" @freshData="closeInfo"></add-or-update>-->
       <!-- <el-drawer
          title="消息提醒"
@@ -99,6 +117,7 @@ import PhotoInfo from '@/view/note/photoInfo'
 import tendencyMap from '@/view/note/tendencyMap'
 import ChinaMap from '@/view/ChinaMap/map'
 import MsgActive from '@/view/myComponents/MsgActive'
+import BrithdayShow from '@/view/myComponents/BrithdayShow'
 import BaseConfig from '@/view/baseConfig/BaseConfig'
 import Weather from '@/components/Weather'
 import dayjs from 'dayjs'
@@ -119,7 +138,8 @@ export default {
     UserMsg,
     MsgActive,
     BaseConfig,
-    Weather
+    Weather,
+    BrithdayShow
   },
   data() {
     return {
@@ -148,10 +168,56 @@ export default {
       vipUser:null,
       addOrUpdateVisible: false,
       restaurants:[],
-      heartTimer:null
+      heartTimer:null,
+      isBrithday:false,
+      addBrithday:false,
+      brithdayRules: {
+        brithday: [
+          {required: true, message: '请选择生日', trigger: 'blur'},
+        ]
+      }
     };
   },
   methods: {
+    getCurrentUser(){
+      this.$api.getCurrentUser({'id':this.user.id}).then(re=>{
+        if(re.id==this.user.id){
+          sessionStorage.setItem('user', JSON.stringify(re));
+          this.user=JSON.parse(sessionStorage.getItem('user'));
+        }else{
+          this.$message.error({message: '用户信息获取失败，请重新登录', center: true})
+        }
+      }).catch(er=>{
+        this.$message.error({message: '服务器异常', center: true})
+      })
+    },
+    updateBrithday(addForm){
+      this.$refs[addForm].validate((valid) => {
+        if(valid){
+          let entity = this.user;
+          if (entity.id) {
+            // 后端请求数据post
+            let newUser={};
+            newUser.id=entity.id;
+            newUser.brithday=entity.brithday;
+            this.$api.updateUser(newUser).then(res => {
+              if (res.data != null) {
+                this.$message.success({message: '更新成功', center: true})
+                this.getCurrentUser();
+                this.addBrithday=false;
+              } else {
+                this.$message.error({message: '更新失败', center: true})
+              }
+              // console.log(res)
+            }).catch(err => {
+              this.$message.error({message: '请求服务器失败', center: true})
+              console.log(err)
+            })
+          }
+        }
+
+      })
+    },
     closeInfo(){
       this.addOrUpdateVisible=false;
     },
@@ -409,6 +475,13 @@ export default {
       this.userName=this.$root.USER.name;
       // this.lmgurl="data:image/png;base64,"+this.$root.USER.picPath;
       this.lmgurl=this.$root.USER.picPath?this.$root.USER.picPath:"";
+      //是否弹出生日框或补全信息框
+      if(this.user.isBrithday=='isBrithday'){
+        this.isBrithday=true;
+      }
+      if(this.user.isBrithday=='isError'){//补全信息框
+        this.addBrithday=true;
+      }
       //开启webSocket
       this.openWebSocket();
     }else{

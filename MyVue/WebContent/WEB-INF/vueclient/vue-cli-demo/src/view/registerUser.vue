@@ -61,6 +61,7 @@
         <el-button type="success" @click="save('addForm')" style="text-align: center">注册</el-button>
         <el-button type="primary" @click="resetForm('addForm')" style="text-align: center">重置</el-button>
       </el-form-item>
+      <a @click="$router.push({name: 'Login', params: {}})" style="cursor:pointer;">返回登录</a>
     </el-form>
   </div>
 </template>

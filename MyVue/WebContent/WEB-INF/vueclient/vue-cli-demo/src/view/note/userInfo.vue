@@ -106,6 +106,7 @@ export default {
       this.$api.getCurrentUser({'id':this.userId}).then(re=>{
         if(re.id==this.userId){
           this.userData=re;
+          sessionStorage.setItem('user', JSON.stringify(re));
           if(re.picPath){
             // this.lmgurl="data:image/png;base64,"+re.picPath;
             this.lmgurl=re.picPath;
