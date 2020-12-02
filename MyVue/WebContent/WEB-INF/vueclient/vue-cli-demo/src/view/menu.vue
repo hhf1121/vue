@@ -78,8 +78,10 @@
       <user-msg v-show="isMsg" :initCount="msgCount" ref="refUserMsg"></user-msg>
       <msg-active :msgUrl="msgInfo" ref="msgVoice"></msg-active>
       <base-config v-if="isConfig"></base-config>
-      <el-dialog :visible="isBrithday" @close="isBrithday = false" title="生日卡片" width="1000px" height="500px">
-        <brithday-show :imgdata="brithdayImg" />
+      <el-dialog :visible="isBrithday"
+                 ref="isBrithdayRef" :show-close="false"  :close-on-click-modal="false"
+                 title="生日卡片" width="1000px" height="500px">
+        <brithday-show :imgdata="brithdayImg" @closeBrithday="isBrithday=false"/>
       </el-dialog>
       <el-dialog :visible="addBrithday" title="补全生日信息"  width="600px" :show-close="false">
         <el-form :model="user"  :rules="brithdayRules" ref="brithdayForm" label-width="80px" >
