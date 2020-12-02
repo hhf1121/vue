@@ -35,8 +35,15 @@
     <div style="display: inline-block;padding-top: 100px;position: relative">
       <el-table
         :data="tableData"
-        height="340"
-        style="width: 100%;text-align: center;border: lightgrey 1px dashed">
+        height="350"
+        border
+        stripe
+        :header-cell-style="{'text-align':'center','color':'#6289FF'}"
+        :row-class-name="tableRowClassName">
+        <el-table-column
+          type="selection"
+          width="55" />
+        <el-table-column type="index" label="序号" width="50" />
         <el-table-column
           prop="userName"
           label="账号"
@@ -48,6 +55,7 @@
           width="180">
         </el-table-column>
         <el-table-column
+          sortable
           prop="brithday"
           label="生日"
           :formatter="formatDate"
@@ -59,6 +67,7 @@
           width="180">
         </el-table-column>
         <el-table-column
+          sortable
           prop="createDate"
           label="创建日期"
           :formatter="formatDateTime"
@@ -117,6 +126,13 @@ export default {
     }
   },
   methods: {
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 === 1) {
+        return 'single-row';
+      } else {
+        return 'double-row';
+      }
+    },
     getData: function () {
       // 校验
       if (!this.params.yes&&!this.params.createDate) {
@@ -269,5 +285,11 @@ export default {
   .el-icon-arrow-down {
     font-size: 12px;
   }
+  /deep/ .el-table .single-row {
+    background: #EBF3F5;
+  }
 
+  /deep/ .el-table .double-row {
+    background: #F0F8FA;
+  }
 </style>

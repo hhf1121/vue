@@ -7,7 +7,7 @@
       </el-row>
       <Clock style="position:absolute;top: 0px;left: 10px;height: 126px;width: 126px;"></Clock>
       <br>
-      <h3 style="position:absolute;width:100%;top:0px;color: #8cc5ff;font-family: '宋体';font-size: 26px">系统首页</h3>
+      <h3 style="position:absolute;width:99%;top:0px;color: #8cc5ff;font-family: '宋体';font-size: 26px">系统首页</h3>
       <el-row >
         <el-col >
           <el-autocomplete
