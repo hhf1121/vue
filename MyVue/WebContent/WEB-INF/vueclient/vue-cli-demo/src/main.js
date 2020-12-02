@@ -1,6 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'// 引入ElementUI
@@ -14,6 +18,8 @@ import {server} from './providers/http-service'
 import {NoteType} from './database/notetype'
 import {User} from './view/currentUser/currentUser'
 import VueJsonp from 'vue-jsonp'
+
+
 
 Vue.prototype.NoteType = NoteType
 Vue.prototype.$USER = User
@@ -31,8 +37,7 @@ Vue.use(ElementUI)// 在所有的vue文件中，都可使用
 Vue.use(D2Crud)
 Vue.use(VCharts)
 Vue.use(VueJsonp)
-
-
+Vue.use(VXETable);
 //自定义-高亮directive
 Vue.directive('highlight', function (el, binding, vnode) {
   console.log(el)

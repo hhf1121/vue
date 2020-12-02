@@ -51,21 +51,28 @@
           <el-menu-item index="3-3"  :span="12">账单统计</el-menu-item>
         </el-submenu >
         <el-menu-item index="4">基础配置</el-menu-item>
-        <el-menu-item index="5" disabled>暂不开放</el-menu-item>
-        <el-submenu index="6">
+        <el-submenu  index="5">
+          <template slot="title">组件演示</template>
+          <el-menu-item index="5-1"  :span="12">vxe-table</el-menu-item>
+          <el-menu-item index="5-2"  :span="12" disabled>敬请期待...</el-menu-item>
+          <el-menu-item index="5-3"  :span="12" disabled>敬请期待...</el-menu-item>
+        </el-submenu >
+        <el-menu-item index="6" disabled>暂不开放</el-menu-item>
+        <el-submenu index="9">
           <template slot="title">帮助中心</template>
-          <el-menu-item index="6-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
-          <el-menu-item index="6-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
-          <el-menu-item index="6-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
+          <el-menu-item index="9-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
+          <el-menu-item index="9-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
+          <el-menu-item index="9-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
+          <el-menu-item index="9-4"><a href="https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api" target="_blank">vxe-table文档</a></el-menu-item>
         </el-submenu>
-        <el-submenu index="7" style="float: right;width: 200px">
+        <el-submenu index="10" style="float: right;width: 200px">
           <template slot="title" >你好：{{userName}}
             <img :src="lmgurl" alt="头像" title="头像" style="border: 1px #5b5b5b dashed;border-radius: 2px" width="20px" height="20px" v-if="lmgurl.length>0">
           </template>
-          <!-- <el-menu-item index="7-1" class="myUser">注销用户</el-menu-item>-->
-          <el-menu-item index="7-1"  :span="12">个人中心</el-menu-item>
-          <el-menu-item index="7-2"  :span="12">消息中心（<span :style="msgCount==0?'':'color: red'">{{msgCount}}</span>）</el-menu-item>
-          <el-menu-item index="7-3"   v-on:click="reset">退出</el-menu-item>
+          <!-- <el-menu-item index="10-1" class="myUser">注销用户</el-menu-item>-->
+          <el-menu-item index="10-1"  :span="12">个人中心</el-menu-item>
+          <el-menu-item index="10-2"  :span="12">消息中心（<span :style="msgCount==0?'':'color: red'">{{msgCount}}</span>）</el-menu-item>
+          <el-menu-item index="10-3"   v-on:click="reset">退出</el-menu-item>
         </el-submenu>
       </el-menu>
       <table-date v-show="isData&&user.yes!=1"></table-date>
@@ -125,6 +132,7 @@ import Weather from '@/components/Weather'
 import dayjs from 'dayjs'
 import Clock from 'vue-clock2'
 import addOrUpdate from '@/view/addOrUpdate'
+import MyVxeTable from '@/view/MyVxeTable'
 export default {
   name: 'myMenu',
   components: {
@@ -141,7 +149,8 @@ export default {
     MsgActive,
     BaseConfig,
     Weather,
-    BrithdayShow
+    BrithdayShow,
+    MyVxeTable
   },
   data() {
     return {
@@ -247,18 +256,18 @@ export default {
       }else{
         this.isMap=false;
       }
-      if(key=='7-1'){
+      if(key=='10-1'){
         this.isInfo=true;
       }else{
         this.isInfo=false;
       }
-      if(key=='7-2'){
+      if(key=='10-2'){
         this.isMsg=true;
         this.$refs.refUserMsg.initData();
       }else{
         this.isMsg=false;
       }
-      if(key=='3-1'){
+      if(key=='10-1'){
         //初始数据
         this.$refs.noteIndex.isQueryInit();
         this.isNote=true;
@@ -279,6 +288,12 @@ export default {
         this.isConfig=true;
       }else{
         this.isConfig=false;
+      }
+      if(key=='5-1'){// vxe-table
+        this.$router.push(
+          {
+            name: 'MyVxeTable', params: {}
+          })
       }
     },
     isChange(){

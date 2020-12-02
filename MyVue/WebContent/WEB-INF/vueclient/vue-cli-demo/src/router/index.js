@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import MyHome from '@/components/MyHome'
 import Login from '@/view/Login'
 import MyData from '@/view/TableData'
-import D2Table from '@/view/D2Table'
+import MyVxeTable from '@/view/MyVxeTable'
 import menu from '@/view/menu'
 import User from '@/view/currentUser/currentUser'
 import ChinaMap from '@/view/ChinaMap/map'
@@ -50,9 +50,9 @@ export default new Router({
       component: MyData
     },
     {
-      path: '/D2Table',
-      name: 'D2Table',
-      component: D2Table
+      path: '/MyVxeTable',
+      name: 'MyVxeTable',
+      component: MyVxeTable
     },
     {
       path: '/register',
