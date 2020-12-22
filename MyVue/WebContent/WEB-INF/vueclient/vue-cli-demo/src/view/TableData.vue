@@ -65,6 +65,14 @@
           prop="address"
           label="地址"
           width="180">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" placement="top">
+              <div slot="content" v-html="ToBreak(scope.row.address)" />
+              <div class="oneLine">
+                {{ scope.row.address }}
+              </div>
+            </el-tooltip>
+          </template>
         </el-table-column>
         <el-table-column
           sortable
@@ -126,6 +134,10 @@ export default {
     }
   },
   methods: {
+    ToBreak(val) {
+      val = val.replace(/,/g, '<br/>');
+      return val;
+    },
     tableRowClassName({ row, rowIndex }) {
       if (rowIndex % 2 === 1) {
         return 'single-row';
@@ -291,5 +303,12 @@ export default {
 
   /deep/ .el-table .double-row {
     background: #F0F8FA;
+  }
+</style>
+<style>
+  .oneLine {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 </style>

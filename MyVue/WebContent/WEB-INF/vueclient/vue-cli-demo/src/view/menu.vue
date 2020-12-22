@@ -63,7 +63,8 @@
           <el-menu-item index="9-1"><a href="https://element.eleme.cn/#/zh-CN/component/installation" target="_blank">element文档</a></el-menu-item>
           <el-menu-item index="9-2"><a href="http://10.10.4.175/#/demo/d2-crud/index" target="_blank">D2-crud文档</a></el-menu-item>
           <el-menu-item index="9-3"><a href="https://echarts.apache.org/zh/tutorial.html#5%20%E5%88%86%E9%92%9F%E4%B8%8A%E6%89%8B%20ECharts" target="_blank">echarts文档</a></el-menu-item>
-          <el-menu-item index="9-4"><a href="https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api" target="_blank">vxe-table文档</a></el-menu-item>
+          <el-menu-item index="9-4"><a href="https://v-charts.js.org/#/" target="_blank">v-charts文档</a></el-menu-item>
+          <el-menu-item index="9-5"><a href="https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api" target="_blank">vxe-table文档</a></el-menu-item>
         </el-submenu>
         <el-submenu index="10" style="float: right;width: 200px">
           <template slot="title" >你好：{{userName}}
@@ -267,7 +268,7 @@ export default {
       }else{
         this.isMsg=false;
       }
-      if(key=='10-1'){
+      if(key=='3-1'){
         //初始数据
         this.$refs.noteIndex.isQueryInit();
         this.isNote=true;
