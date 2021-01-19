@@ -168,6 +168,7 @@ export const server = {
   signRead: paramObj => post('/api/msg/signRead', paramObj),//标记已读
   deleteMsgs: paramObj => post('/api/msg/deleteMsgs', paramObj),//标记已读
   sendMsg: paramObj => post('/api/msg/sendMsg', paramObj),//用户互发信息(通过mq，未读转储到redis，标记后储存mysql)
+  sendDM: paramObj => post('/api/msg/sendDMAllWebSocket', paramObj),//弹幕系统
   sendAllWebSocket: paramObj => get('/api/msg/sendAllWebSocket', paramObj),//用户互发信息(通过mq，未读转储到redis，标记后储存mysql)
   //sendMsgByWebSocket: paramObj => post('/api/msg/sendOneWebSocket', paramObj),//用户互发信息(通过websocket)
   getDataByConfigCode: paramObj => get('/api/baseConfig/getDataByConfigCode', paramObj),//读取数据字典-基础配置

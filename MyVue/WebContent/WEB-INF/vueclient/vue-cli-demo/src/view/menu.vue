@@ -39,9 +39,9 @@
           <template slot="title">我的家园</template>
           <el-menu-item index="2-1"  :span="12">实时疫情</el-menu-item>
           <el-submenu index="2-3">
-            <template slot="title">敬请期待...</template>
-            <el-menu-item index="2-3-1">期待1.</el-menu-item>
-            <el-menu-item index="2-3-2">期待2.</el-menu-item>
+            <template slot="title">我的娱乐</template>
+            <el-menu-item index="2-3-1">视频</el-menu-item>
+            <el-menu-item index="2-3-2">游戏</el-menu-item>
           </el-submenu>
         </el-submenu>
         <el-submenu  index="3">
@@ -294,6 +294,18 @@ export default {
         this.$router.push(
           {
             name: 'MyVxeTable', params: {}
+          })
+      }
+      if(key=='2-3-1'){// 视频
+        this.$router.push(
+          {
+            name: 'MyMedia', params: {}
+          })
+      }
+      if(key=='2-3-2'){// 游戏
+        this.$router.push(
+          {
+            name: 'MyGame', params: {}
           })
       }
     },

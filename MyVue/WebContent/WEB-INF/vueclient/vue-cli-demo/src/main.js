@@ -20,6 +20,16 @@ import {User} from './view/currentUser/currentUser'
 import VueJsonp from 'vue-jsonp'
 
 
+import VueDPlayer from 'vue-dplayer';
+import 'vue-dplayer/dist/vue-dplayer.css';
+
+Vue.use(VueDPlayer);
+
+
+//不需要更改源码样式的话
+import { vueBaberrage } from 'vue-baberrage'
+Vue.use(vueBaberrage);
+
 
 Vue.prototype.NoteType = NoteType
 Vue.prototype.$USER = User

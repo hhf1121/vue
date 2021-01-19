@@ -10,6 +10,7 @@ import User from '@/view/currentUser/currentUser'
 import ChinaMap from '@/view/ChinaMap/map'
 import china from '@/view/ChinaMap/china'
 import about from '@/view/ChinaMap/about'
+import MyMedia from '@/view/recreation/MyMedia'
 
 Vue.use(Router)
 
@@ -53,6 +54,11 @@ export default new Router({
       path: '/MyVxeTable',
       name: 'MyVxeTable',
       component: MyVxeTable
+    },
+    {
+      path: '/MyMedia',
+      name: 'MyMedia',
+      component: MyMedia
     },
     {
       path: '/register',
