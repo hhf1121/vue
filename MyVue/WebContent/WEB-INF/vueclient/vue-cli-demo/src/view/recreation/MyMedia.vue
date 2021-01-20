@@ -1,17 +1,9 @@
 <template>
   <div>
-    <div class="danmu">
-      <vue-baberrage
-        :isShow= "barrageIsShow"
-        :barrageList = "barrageList"
-        :loop = "barrageLoop"
-      >
-      </vue-baberrage>
-    </div>
     <div class="dm" >
     <!-- d_screen start -->
     <div class="d_screen">
-      <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 99;font-size: 8">返回首页</a>
+      <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 99;font-size: 8px">返回首页</a>
       <div class="d_mask">
       </div>
       <div class="d_show">
@@ -34,29 +26,23 @@
 </template>
 
 <script>
-  import { MESSAGE_TYPE } from 'vue-baberrage'
   export default {
     name: 'MyMedia',
     data() {
       return {
         options: {
-            video: {
-              // url: 'http://learn.hhf.com/resources/static/video/test.mp4'
-              url: 'http://learn.hhf.com/resources/static/voice/music.mp3',
-              type:'auto'
-            },
-            autoplay:true,//自动播放
-            contextmenu: [
-              {}
-            ]
+          video: {
+            // url: 'http://learn.hhf.com/resources/static/video/test.mp4'
+            url: 'http://learn.hhf.com/resources/static/voice/music.mp3',
+            type: 'auto'
+          },
+          autoplay: true,//自动播放
+          contextmenu: [
+            {}
+          ]
         },
-        userid:'',
-        dmMsg:'',
-        msg: 'Hello vue-baberrage',
-        barrageIsShow: true,
-        currentId : 0,
-        barrageLoop: false,
-        barrageList: []
+        userid: '',
+        dmMsg: ''
       }
     },
     beforeDestroy () {
@@ -81,15 +67,6 @@
       }
     },
     methods:{
-      addToList (msg) {
-        this.barrageList.push({
-          id: ++this.currentId,
-          avatar: "./static/avatar.jpg",
-          msg: msg,
-          time: 5,
-          type: MESSAGE_TYPE.NORMAL
-        })
-      },
       sendAll(){
         const data = {
           userId: this.$root.USER.id+'',
@@ -163,13 +140,6 @@
         if(parse.type==='dmMsg'){
           this.$message.success('服务端返回：' + parse.msg)
           debugger
-          this.barrageList.push({
-            id: ++this.currentId,
-            avatar: "./static/avatar.jpg",
-            msg: parse.msg,
-            time: 5,
-            type: MESSAGE_TYPE.NORMAL
-          })
         }
       },
       setOncloseMessage () {
