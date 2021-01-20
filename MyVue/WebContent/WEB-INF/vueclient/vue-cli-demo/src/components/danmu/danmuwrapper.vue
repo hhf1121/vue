@@ -105,7 +105,6 @@
        *  弹幕相关
        ***********/
       createItem: function (text) {
-        debugger
         this.inputText=this.isText;
         this.inputisMe=this.isMe;
         let track = this.getRandomTrack();
@@ -138,12 +137,17 @@
 
 <style scoped>
   .danmu-wrapper{
-    margin-left: 10px;
-    position: relative;
+    text-align: center;
+    /*margin-left: 10px;*/
+    /*position: relative;*/
     border: 1px solid rgba(180, 71, 255, 0.6);
     overflow: hidden;
-    width: 900px;
-    height: 700px;
+    width: 1800px;
+    height: 500px;
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom:10px;
   }
   .add{
     margin-left: 200px;

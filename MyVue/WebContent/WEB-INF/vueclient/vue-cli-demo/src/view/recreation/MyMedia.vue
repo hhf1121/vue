@@ -6,7 +6,6 @@
       <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 100;font-size: 8px">返回首页</a>
      <!-- <div class="d_mask">
       </div>-->
-      <danmu-wrapper :isText="dmMsg" :isMe="isMe" ref="danmu" style="position: absolute;z-index: 99"></danmu-wrapper>
       <div class="d_show">
         <d-player id="audio" ref="player"  :options="options"></d-player>
       </div>
@@ -23,6 +22,7 @@
       </div>
     </div>
   </div>
+    <danmu-wrapper :isText="dmMsg" :isMe="isMe" ref="danmu" style="z-index: 99"></danmu-wrapper>
   </div>
 </template>
 
