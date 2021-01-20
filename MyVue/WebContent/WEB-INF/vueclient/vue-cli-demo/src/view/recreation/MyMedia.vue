@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div class="app">
     <div class="dm" >
     <!-- d_screen start -->
     <div class="d_screen">
-      <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 99;font-size: 8px">返回首页</a>
-      <div class="d_mask">
-      </div>
+      <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 100;font-size: 8px">返回首页</a>
+     <!-- <div class="d_mask">
+      </div>-->
+      <danmu-wrapper :isText="dmMsg" :isMe="isMe" ref="danmu" style="position: absolute;z-index: 99"></danmu-wrapper>
       <div class="d_show">
         <d-player id="audio" ref="player"  :options="options"></d-player>
       </div>
@@ -16,7 +17,7 @@
     <!-- send start -->
     <div class="send">
       <div class="s_filter"></div>
-      <div class="s_con">
+      <div class="s_con" style="z-index: 999">
         <el-input v-model="dmMsg" placeholder="请输入内容"  class="s_text" ></el-input>
         <el-button type="primary" class="s_submit" id="btn" @click="sendAll">发表评论</el-button>
       </div>
@@ -26,8 +27,10 @@
 </template>
 
 <script>
+  import danmuWrapper from '../../components/danmu/danmuwrapper';
   export default {
     name: 'MyMedia',
+    components:{danmuWrapper},
     data() {
       return {
         options: {
@@ -42,7 +45,8 @@
           ]
         },
         userid: '',
-        dmMsg: ''
+        dmMsg: '',
+        isMe:null
       }
     },
     beforeDestroy () {
@@ -139,7 +143,11 @@
         var parse = JSON.parse(data);
         if(parse.type==='dmMsg'){
           this.$message.success('服务端返回：' + parse.msg)
-          debugger
+          this.dmMsg=parse.msg;
+          this.isMe=parse.isMe;
+          this.$nextTick(() => {
+            this.$refs.danmu.addList();
+          })
         }
       },
       setOncloseMessage () {
@@ -161,6 +169,7 @@
 </script>
 <style scoped>
   body {
+    background: url(http://learn.hhf.com/resources/static/file/1589006596024@dorado.jpg); no-repeat:top center;
     font-size: 12px;
     font-family: "微软雅黑";
   }
@@ -212,8 +221,6 @@
 
 
   .dm .d_screen .d_mask {
-    width: 100%;
-    height: 100%;
     background: #000;
     position: absolute;
     top: 0;
@@ -292,6 +299,9 @@
     border-radius: 0 6px 6px 0;
     outline: none;
     font-size: 14px;
+    position: relative;
+    float: top;
+    z-index: 100;
     color: #fff;
     background: #65c33d;
     font-family: "微软雅黑";

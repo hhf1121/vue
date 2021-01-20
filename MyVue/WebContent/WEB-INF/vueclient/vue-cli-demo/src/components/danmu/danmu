@@ -1,0 +1,11 @@
+//danmu  数据结构
+{
+  type: int,      //1,2      1是滚动弹幕， 2是悬停弹幕  默认为1
+  text: String,   //弹幕的内容  不能为空
+  top:  int,      //弹幕的显示高度，关联style：top  不能为空
+  left: int,      //弹幕的初始左偏移量，如果type为1则滚动到右边，如果type为2则悬停lang秒   不能为空
+  duration:int  　//如果type为2则为必须，存活的秒数，type为1则忽略        默认为5
+  speed:int     　//type为1则必须，为2则忽略，弹幕移动的速度  默认为3
+  color:String  　//弹幕的颜色，可选值
+  opacity:float   //弹幕的透明度，区间在0-1，如果超出范围则忽略，默认为0.3
+}

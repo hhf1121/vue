@@ -26,11 +26,6 @@ import 'vue-dplayer/dist/vue-dplayer.css';
 Vue.use(VueDPlayer);
 
 
-//不需要更改源码样式的话
-import { vueBaberrage } from 'vue-baberrage'
-Vue.use(vueBaberrage);
-
-
 Vue.prototype.NoteType = NoteType
 Vue.prototype.$USER = User
 const Base64 = require('js-base64').Base64
