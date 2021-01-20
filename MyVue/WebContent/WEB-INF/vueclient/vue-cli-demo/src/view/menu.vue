@@ -487,7 +487,7 @@ export default {
         title: '系统提示',
         message: 'WebSocket连接关闭 状态码：' + this.websocket.readyState,
         position: 'bottom-right',
-        duration: 0
+        duration: 3000
       });
       // this.$message.error('WebSocket连接关闭 状态码：' + this.websocket.readyState)
     },

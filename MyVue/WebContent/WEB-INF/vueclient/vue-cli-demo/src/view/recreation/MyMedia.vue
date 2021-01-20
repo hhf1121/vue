@@ -3,7 +3,7 @@
     <div class="dm" >
     <!-- d_screen start -->
     <div class="d_screen">
-      <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 100;font-size: 8px">返回首页</a>
+      <a class="d_del" @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff;z-index: 100;font-size: 8px">返回</a>
      <!-- <div class="d_mask">
       </div>-->
       <div class="d_show">
@@ -17,12 +17,12 @@
     <div class="send">
       <div class="s_filter"></div>
       <div class="s_con" style="z-index: 999">
-        <el-input v-model="dmMsg" placeholder="请输入内容"  class="s_text" ></el-input>
-        <el-button type="primary" class="s_submit" id="btn" @click="sendAll">发表评论</el-button>
+        <el-input v-model="dmMsg" placeholder="请输入内容"  class="s_text"  @keyup.enter.native="sendAll" ></el-input>
+        <el-button type="primary" class="s_submit" id="btn" @click="sendAll"  >发表评论</el-button>
       </div>
     </div>
   </div>
-    <danmu-wrapper :isText="dmMsg" :isMe="isMe" ref="danmu" style="z-index: 99"></danmu-wrapper>
+    <danmu-wrapper :isText="giveMsg" :isMe="isMe" ref="danmu" style="z-index: 99"></danmu-wrapper>
   </div>
 </template>
 
@@ -35,8 +35,8 @@
       return {
         options: {
           video: {
-            // url: 'http://learn.hhf.com/resources/static/video/test.mp4'
-            url: 'http://learn.hhf.com/resources/static/voice/music.mp3',
+            url: 'http://learn.hhf.com/resources/static/video/test.mp4',
+            // url: 'http://learn.hhf.com/resources/static/voice/music.mp3',
             type: 'auto'
           },
           autoplay: true,//自动播放
@@ -46,6 +46,7 @@
         },
         userid: '',
         dmMsg: '',
+        giveMsg:'',
         isMe:null
       }
     },
@@ -142,8 +143,8 @@
         let data=event.data;
         var parse = JSON.parse(data);
         if(parse.type==='dmMsg'){
-          this.$message.success('服务端返回：' + parse.msg)
-          this.dmMsg=parse.msg;
+          // this.$message.success('服务端返回：' + parse.msg)
+          this.giveMsg=parse.msg;
           this.isMe=parse.isMe;
           this.$nextTick(() => {
             this.$refs.danmu.addList();
@@ -155,7 +156,7 @@
           title: '系统提示',
           message: 'WebSocket连接关闭 状态码：' + this.websocket.readyState,
           position: 'bottom-right',
-          duration: 0
+          duration: 3000
         });
         // this.$message.error('WebSocket连接关闭 状态码：' + this.websocket.readyState)
       },
@@ -285,7 +286,7 @@
 
 
   .send .s_con .s_text {
-    width: 800px;
+    width: 80%;
     height: 36px;
     border: 0;
     border-radius: 6px 0 0 6px;
