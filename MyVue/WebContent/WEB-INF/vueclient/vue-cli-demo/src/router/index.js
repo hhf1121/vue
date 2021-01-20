@@ -11,6 +11,7 @@ import ChinaMap from '@/view/ChinaMap/map'
 import china from '@/view/ChinaMap/china'
 import about from '@/view/ChinaMap/about'
 import MyMedia from '@/view/recreation/MyMedia'
+import MyGame from '@/view/recreation/MyGame'
 
 Vue.use(Router)
 
@@ -59,6 +60,11 @@ export default new Router({
       path: '/MyMedia',
       name: 'MyMedia',
       component: MyMedia
+    },
+    {
+      path: '/MyGame',
+      name: 'MyGame',
+      component: MyGame
     },
     {
       path: '/register',
