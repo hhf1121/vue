@@ -1,7 +1,7 @@
 <template>
   <div style="">
     <div class="danmu-wrapper" ref="wrap">
-      <item v-for="(danmu,index) in lists" :danmu="danmu" :key="index" @remove="remove" @enter="enter"></item>
+      <item v-for="(danmu,index) in lists" :ref="`All${index}`" :danmu="danmu" :key="index" @remove="remove" @enter="enter"></item>
     </div>
     <input class="add" type="text" placeholder="input" autofocus="autofocus" v-model="inputText" hidden
            @keyup.enter="addList">
@@ -21,6 +21,9 @@
       },
       isMe: {
         type: Boolean
+      },
+      userName:{
+        type: String
       }
     },
     data() {
@@ -31,7 +34,8 @@
         tracks: [],
         itemHeight: 40,
         track_max: 0,
-        inputisMe:false
+        inputisMe:false,
+        isRandomColor:''
       }
     },
     computed: {
@@ -90,7 +94,22 @@
           return;
         }
         this.lists.push(item);
+        //动态ref
+        // for (let j = 0; j < this.lists.length - 1; j++) {
+        //   console.info(this.$refs[`All${j}`][0]);
+        // }
         this.inputText = '';
+      },
+      randomStyle(){
+        //随机颜色
+        const color=Math.floor(Math.random()*16777215).toString(16);
+        // console.info(color);
+        if(this.inputisMe==true){
+          return 'border: 1px solid #f547dd;color:#' +color;
+        }else {
+          return 'color:#' + color;
+        }
+
       },
       remove: function (item) {
         this.lists = this.lists.filter((i) => {
@@ -116,11 +135,11 @@
           text: this.inputText,
           type: 1,
           isMe:this.inputisMe,
+          userName:this.userName,
           speed: 2,
           opacity: 1,
-          color: '#fff',
+          color: this.randomStyle(),
           top: track * this.itemHeight,
-//          top: 0,
           begin: wrap.offsetLeft + wrap.offsetWidth,
           end: wrap.offsetLeft
         };

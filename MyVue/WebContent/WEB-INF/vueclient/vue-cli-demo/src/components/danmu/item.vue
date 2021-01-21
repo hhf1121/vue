@@ -1,12 +1,15 @@
 <template>
-  <div ref="myself" class="item" :style="style" ><p v-if="danmu.isMe" style="border: 1px solid #f547dd;color: #8e34ff">{{danmu.text}}</p><p v-else style="color: #43a6ff">{{danmu.text}}</p></div>
+  <div ref="myself" class="item" :style="style" @click="isClickDone" >
+    <p v-if="danmu.isMe" :style="danmu.color">{{danmu.text}}</p><p v-else :style="danmu.color">{{danmu.text}}</p>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default{
     name:'item',
     props: {
-      danmu: {}
+      danmu: {},
+      // color:''
     },
     data() {
       return {
@@ -35,6 +38,9 @@
       }
     },
     methods: {
+      isClickDone(){
+        this.$message.success({message: this.danmu.userName+":"+this.danmu.text, center: true});
+      },
       move: function () {
         setInterval(() => {
           this.start = this.start - this.speed;

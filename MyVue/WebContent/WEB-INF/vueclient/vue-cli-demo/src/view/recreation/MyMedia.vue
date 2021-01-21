@@ -15,14 +15,13 @@
 
     <!-- send start -->
     <div class="send">
-      <div class="s_filter"></div>
       <div class="s_con" style="z-index: 999">
         <el-input v-model="dmMsg" placeholder="请输入内容"  class="s_text"  @keyup.enter.native="sendAll" ></el-input>
         <el-button type="primary" class="s_submit" id="btn" @click="sendAll"  >发表评论</el-button>
       </div>
     </div>
   </div>
-    <danmu-wrapper :isText="giveMsg" :isMe="isMe" ref="danmu" style="z-index: 99"></danmu-wrapper>
+    <danmu-wrapper :isText="giveMsg" :isMe="isMe" :userName="userName" ref="danmu" style="z-index: 99"></danmu-wrapper>
   </div>
 </template>
 
@@ -33,18 +32,34 @@
     components:{danmuWrapper},
     data() {
       return {
+        // options: {
+        //   container: document.getElementById('dplayer'), // 播放器容器
+        //   mutex: false, //  防止同时播放多个用户，在该用户开始播放时暂停其他用户
+        //   theme: '#b7daff', // 风格颜色，例如播放条，音量条的颜色
+        //   loop: false, // 是否自动循环
+        //   lang: 'zh-cn', // 语言，'en', 'zh-cn', 'zh-tw'
+        //   screenshot: true, // 是否允许截图（按钮），点击可以自动将截图下载到本地
+        //   hotkey: true, // 是否支持热键，调节音量，播放，暂停等
+        //   preload: 'auto', // 自动预加载
+        //   volume: 0.7, // 初始化音量
+        //   playbackSpeed: [0.5, 2, 3], // 可选的播放速度，可自定义
+        // }
         options: {
           video: {
             url: 'http://learn.hhf.com/resources/static/video/test.mp4',
+            // url: 'http://learn.hhf.com/resources/static/video/33.mp4',
             // url: 'http://learn.hhf.com/resources/static/voice/music.mp3',
             type: 'auto'
           },
           autoplay: true,//自动播放
           contextmenu: [
-            {}
-          ]
+            {'1':'xxx1'},
+            {'2':'xxx2'}
+          ],
+          loop: true
         },
         userid: '',
+        userName: '',
         dmMsg: '',
         giveMsg:'',
         isMe:null
@@ -60,6 +75,7 @@
       }
       if (this.$root.USER.id) {
         this.userid=this.$root.USER.id+'';
+        this.userName=this.$root.USER.name+'';
         //开启webSocket
         this.openWebSocket();
       }else {
@@ -235,6 +251,7 @@
   .dm .d_screen .d_show {
     position: relative;
     z-index: 2;
+    /*width: 1600px;*/
   }
 
 
@@ -257,11 +274,11 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    border: 1px solid red;
+    border: 1px solid #eceaff;
   }
 
 
-  .send .s_filter {
+ /* .send .s_filter {
     width: 100%;
     height: 76px;
     background: #000;
@@ -270,7 +287,7 @@
     left: 0;
     opacity: 0.6;
     filter: alpha(opacity = 60);
-  }
+  }*/
 
 
   .send  .s_con {
