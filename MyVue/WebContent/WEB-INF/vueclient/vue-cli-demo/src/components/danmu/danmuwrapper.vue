@@ -95,7 +95,7 @@
         }
         this.lists.push(item);
         //动态ref
-        // for (let j = 0; j < this.lists.length - 1; j++) {
+        // for (let j = 0; j < this.lists.length; j++) {
         //   console.info(this.$refs[`All${j}`][0]);
         // }
         this.inputText = '';

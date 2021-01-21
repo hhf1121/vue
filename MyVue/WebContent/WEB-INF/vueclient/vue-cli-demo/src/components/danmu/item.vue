@@ -1,7 +1,9 @@
 <template>
-  <div ref="myself" class="item" :style="style" @click="isClickDone" >
-    <p v-if="danmu.isMe" :style="danmu.color">{{danmu.text}}</p><p v-else :style="danmu.color">{{danmu.text}}</p>
-  </div>
+    <div ref="myself" class="item" :style="style" >
+      <el-tooltip :content="danmu.userName" placement="top-start" effect="light">
+      <p v-if="danmu.isMe" :style="danmu.color">{{danmu.text}}</p><p v-else :style="danmu.color">{{danmu.text}}</p>
+      </el-tooltip>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -14,7 +16,8 @@
     data() {
       return {
         start: this.danmu.begin,
-        isEmit: false
+        isEmit: false,
+        isShowName:false
       }
     },
     created: function () {
@@ -39,7 +42,8 @@
     },
     methods: {
       isClickDone(){
-        this.$message.success({message: this.danmu.userName+":"+this.danmu.text, center: true});
+        this.isShowName=true;
+        // this.$message.success({message: this.danmu.userName+":"+this.danmu.text, center: true});
       },
       move: function () {
         setInterval(() => {
