@@ -12,6 +12,9 @@ import china from '@/view/ChinaMap/china'
 import about from '@/view/ChinaMap/about'
 import MyMedia from '@/view/recreation/MyMedia'
 import MyGame from '@/view/recreation/MyGame'
+import GoodsAdd from '@/view/sellGoods/goodsAdd'
+import GoodsManager from '@/view/sellGoods/goodsManager'
+import GoodsShow from '@/view/sellGoods/goodsShow'
 
 Vue.use(Router)
 
@@ -65,6 +68,21 @@ export default new Router({
       path: '/MyGame',
       name: 'MyGame',
       component: MyGame
+    },
+    {
+      path: '/GoodsAdd',
+      name: 'GoodsAdd',
+      component: GoodsAdd
+    },
+    {
+      path: '/GoodsManager',
+      name: 'GoodsManager',
+      component: GoodsManager
+    },
+    {
+      path: '/GoodsShow',
+      name: 'GoodsShow',
+      component: GoodsShow
     },
     {
       path: '/register',

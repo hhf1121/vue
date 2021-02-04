@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button  v-if="userData.yes!==1"  icon="el-icon-sell" style="float: left;" round  @click="addGoods">发布商品</el-button>
     <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="isupdate">修改</el-button>
     <el-button @click="isupdate=!isupdate;flush()" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="!isupdate">取消</el-button>
     <el-form style="margin: 10px auto 0 auto;">
@@ -12,6 +13,7 @@
       </el-form-item>
     </el-form>
     <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" >
+
       <el-form-item :disabled="isupdate">
         <upload-img :userData="userData"  ref="imgUp" @flushData="isupdate=true" v-if="lmgurl.length==0"/>
         <img :src="lmgurl" alt="头像" title="头像" style="margin-left: -30px;border: 1px #5b5b5b dashed;border-radius: 5px" width="150px" height="150px" v-if="lmgurl.length>0" >
@@ -137,6 +139,9 @@ export default {
       }).catch(er=>{
         this.$message.error({message: '服务器异常', center: true})
       })
+    },
+    addGoods(){
+      this.$router.push({name: 'GoodsAdd'})
     }
   },
   filters:{

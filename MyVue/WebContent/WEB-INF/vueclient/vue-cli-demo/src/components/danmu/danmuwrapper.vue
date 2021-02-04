@@ -161,8 +161,8 @@
     /*position: relative;*/
     border: 1px solid rgba(180, 71, 255, 0.6);
     overflow: hidden;
-    width: 1800px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
     display: block;
     position: absolute;
     top: 10px;

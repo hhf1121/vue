@@ -175,4 +175,7 @@ export const server = {
   saveConfig: paramObj => post('/api/baseConfig/saveConfig', paramObj),//基础配置，保存
   queryVip: paramObj => get('/api/springBoot/queryVip', paramObj),//查询vip
   getBrithdayImg: paramObj => get('/api/springBoot/getBrithdayImg', paramObj),//生成生日祝福的图片
+  addGoods: paramObj => post('/api/sellGoods/saveGoods', paramObj),//新增商品
+  managerGoods: paramObj => get('/api/sellGoods/queryGoods', paramObj),//管理商品
+  showGoods: paramObj => post('/api/sellGoods/showGoods', paramObj),//展示商品
 }
