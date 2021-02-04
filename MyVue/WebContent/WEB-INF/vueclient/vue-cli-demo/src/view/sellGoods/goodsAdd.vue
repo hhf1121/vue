@@ -140,8 +140,8 @@ export default {
             dialogImageUrl: '',
             dialogWidth: '',
             imgWidth: '',
-            dictGoodsCategory: [],
-            dictSellGoodsType: []
+            dictGoodsCategory: JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
+            dictSellGoodsType: JSON.parse(sessionStorage.getItem('dictSellGoodsType'))
             // checkboxGroupValues: [''],
             // cities: ['上海', '北京', '广州', '深圳']
         };
@@ -150,8 +150,6 @@ export default {
         this.currentUser= JSON.parse(sessionStorage.getItem('user'));
         this.portalGoodsDto.userName=this.currentUser.name;
         this.portalGoodsDto.userCode=this.currentUser.userName;
-        this.listGoodsCategory();
-        this.listGoodsType();
     },
     methods: {
         onLoadImg(e) { // 由于dialog的高度是自适应的，只要获取图片宽度赋值给dialog就能实现
@@ -227,38 +225,6 @@ export default {
                     });
                 }
             });
-        },
-        listGoodsCategory() {
-          this.$api.getDataByConfigCode({"configCode":'goods_category'}).then(er=>{
-            if(er.success){
-              if(er.data.length>0){
-                this.dictGoodsCategory=er.data.map(o=>{
-                  var object={};
-                  object.label=o.typeLabel;
-                  object.value=o.typeValue;
-                  return object;
-                });
-              }
-            }
-          }).catch(err=>{
-            this.$message.error({message: '字典：[goods_category]请求错误', center: true})
-          })
-        },
-        listGoodsType() {
-          this.$api.getDataByConfigCode({"configCode":'goods_type'}).then(er=>{
-            if(er.success){
-              if(er.data.length>0){
-                this.dictSellGoodsType=er.data.map(o=>{
-                  var object={};
-                  object.label=o.typeLabel;
-                  object.value=o.typeValue;
-                  return object;
-                });
-              }
-            }
-          }).catch(err=>{
-            this.$message.error({message: '字典：[goods_type]请求错误', center: true})
-          })
         }
     }
 };

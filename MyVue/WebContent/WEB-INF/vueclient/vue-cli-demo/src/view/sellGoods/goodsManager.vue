@@ -12,7 +12,9 @@
                     删除
                 </el-button>
         </el-form>
-        <goods-model :data="item" v-for="(item,index) in dataList" :key="index" :class="{ active:index==isActive }" @click="changeValue(index)" />
+        <!--<div class="infinite-list" v-infinite-scroll="load">-->
+          <goods-model  :data="item" v-for="(item,index) in dataList" :key="index" :class="{ active:index==isActive }" @click="changeValue(index)" />
+        <!--</div>-->
         <el-pagination
             style="padding: 16px 10px"
             :pager-count="5"
@@ -52,6 +54,11 @@ export default {
         changeValue(index){
           debugger
           this.isActive=index;
+        },
+        load(){
+          debugger
+          this.pagination.pageSize+=1;
+          this.queryGoods();
         },
         soldoutSell() {
 

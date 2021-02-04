@@ -495,6 +495,40 @@ export default {
       //清掉心跳定时器
       clearInterval(this.heartTimer);
       this.websocket.close()
+    },
+    listGoodsCategory() {
+      this.$api.getDataByConfigCode({"configCode":'goods_category'}).then(er=>{
+        if(er.success){
+          if(er.data.length>0){
+            var dictGoodsCategory=er.data.map(o=>{
+              var object={};
+              object.label=o.typeLabel;
+              object.value=o.typeValue;
+              return object;
+            });
+            sessionStorage.setItem('dictGoodsCategory', JSON.stringify(dictGoodsCategory));
+          }
+        }
+      }).catch(err=>{
+        this.$message.error({message: '字典：[goods_category]请求错误', center: true})
+      })
+    },
+    listGoodsType() {
+      this.$api.getDataByConfigCode({"configCode":'goods_type'}).then(er=>{
+        if(er.success){
+          if(er.data.length>0){
+            var dictSellGoodsType=er.data.map(o=>{
+              var object={};
+              object.label=o.typeLabel;
+              object.value=o.typeValue;
+              return object;
+            });
+            sessionStorage.setItem('dictSellGoodsType', JSON.stringify(dictSellGoodsType));
+          }
+        }
+      }).catch(err=>{
+        this.$message.error({message: '字典：[goods_type]请求错误', center: true})
+      })
     }
   },
   filters: {// 过滤器
@@ -503,6 +537,8 @@ export default {
     }
   },
   mounted(){
+    this.listGoodsCategory();
+    this.listGoodsType();
     // setInterval(() => {
     //   this.defaultDate = new Date() // 动态时间
     // }, 1000)
