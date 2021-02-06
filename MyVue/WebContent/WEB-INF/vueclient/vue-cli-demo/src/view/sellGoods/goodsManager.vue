@@ -12,9 +12,9 @@
                     删除
                 </el-button>
         </el-form>
-        <!--<div class="infinite-list" v-infinite-scroll="load">-->
-          <goods-model  :data="item" v-for="(item,index) in dataList" :key="index" :class="{ active:index==isActive }" @click="changeValue(index)" />
-        <!--</div>-->
+        <div v-for="(item,index) in dataList" @click="changeValue(index)" >
+          <goods-model  :data="item" :key="index" :class="{ active:index==isActive }"  />
+        </div>
         <el-pagination
             style="padding: 16px 10px"
             :pager-count="5"
@@ -43,31 +43,49 @@ export default {
               total: 0
             },
           currentUser:{},
-          isActive:0
+          isActive:'-1',
+          isChecked:{}
         };
     },
     mounted() {
         this.currentUser= JSON.parse(sessionStorage.getItem('user'));
-        this.queryGoods();
+        if(this.currentUser){
+          this.queryGoods();
+        }else {
+          this.$router.push(
+            {
+              name: 'Login', params: {}
+            })
+        }
+
     },
     methods: {
         changeValue(index){
-          debugger
           this.isActive=index;
+          this.isChecked=this.dataList[index];
         },
         load(){
-          debugger
           this.pagination.pageSize+=1;
           this.queryGoods();
         },
         soldoutSell() {
-
+          if(!this.isChecked.idStr){
+            this.$message.error({ message: '请选中一个再操作', center: true });
+            return;
+          }
         },
         updateSell() {
+          if(!this.isChecked.idStr){
+            this.$message.error({ message: '请选中一个再操作', center: true });
+            return;
+          }
 
         },
         deleteSell() {
-
+          if(!this.isChecked.idStr){
+            this.$message.error({ message: '请选中一个再操作', center: true });
+            return;
+          }
         },
         queryGoods() {
             this.$api.managerGoods({ userCode: this.currentUser.userName, pageSize: this.pagination.pageSize, pageIndex: this.pagination.currentPage }).then((response) => {
@@ -98,6 +116,9 @@ export default {
 
 <style scoped>
 .active{
-  border: 1px solid #dc22b5;
+  border: 1px solid darkgrey;
+  box-shadow: 10px 10px 16px #bbeff2;
+  /*background: #6d92a9;*/
+  border-radius: 5px;
 }
 </style>

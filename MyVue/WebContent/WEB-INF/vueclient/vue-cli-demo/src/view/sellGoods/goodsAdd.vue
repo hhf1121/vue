@@ -167,7 +167,7 @@ export default {
             }
         },
         handleRemove(file, fileList) { // 点击删除的时候
-            this.portalGoodsDto.sellGoodsPhotos = this.portalGoodsDto.portalGoodsPhotos.filter(o => o.goodsPhoto !== file.response.data);
+            this.portalGoodsDto.sellGoodsPhotos = this.portalGoodsDto.sellGoodsPhotos.filter(o => o.goodsPhoto !== file.response.data);
         },
         handlePreview(file) { // 点击的时候
             this.imgVisible = true;
