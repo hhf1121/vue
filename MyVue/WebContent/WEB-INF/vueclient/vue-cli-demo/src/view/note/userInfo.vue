@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-button  v-if="userData.yes!==1"  icon="el-icon-sell" style="float: left;" round  @click="addGoods">发布商品</el-button>
-    <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="isupdate">修改</el-button>
+    <el-button  v-if="userData.yes!==1"  icon="el-icon-user-solid" style="float: left;" round  @click="myGoods">我的发布</el-button>
+    <el-button @click="isupdate=!isupdate" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="isupdate&&!tab">修改</el-button>
     <el-button @click="isupdate=!isupdate;flush()" style="float: right;margin-right: 100px;position:relative;z-index: 3" v-if="!isupdate">取消</el-button>
     <el-form style="margin: 10px auto 0 auto;">
       <el-form-item style="width: 600px;margin: auto">
@@ -12,7 +13,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <el-form :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" >
+    <el-form v-if="!tab" :model="userData" label-width="100px" style="width: 500px;height: 600px;margin: 10px auto 0 auto; padding-top: 50px;" >
 
       <el-form-item :disabled="isupdate">
         <upload-img :userData="userData"  ref="imgUp" @flushData="isupdate=true" v-if="lmgurl.length==0"/>
@@ -53,12 +54,24 @@
         <el-button type="primary" @click="updateForm" v-show="!isupdate">确定</el-button>
       </el-form-item>
     </el-form>
+    <el-tabs style="position: relative;z-index: 1" v-model="editableTabsValue" type="card" ref="mytabs" v-if="tab" closable @tab-remove="removeTab">
+      <el-tab-pane
+        v-for="(item, index) in editableTabs"
+        :key="item.name"
+        :label="item.title"
+        :name="item.name">
+        <component :is="item.content" style="margin-left: 50px"  @jumpManager="addManager()"></component><!--根据入参，自动选择是哪个组件-->
+        <!-- <district-map v-if="item.content=='省市区配置'"></district-map>
+         <d2-table v-if="item.content=='花销类型配置'"></d2-table>-->
+      </el-tab-pane>
+    </el-tabs>
   </div>
-
 </template>
 
 <script>
   import uploadImg from './uploadImg';
+  import goodsAdd from './../sellGoods/goodsAdd';
+  import goodsManager from './../sellGoods/goodsManager';
 export default {
   name: 'userInfo',
   props: {
@@ -67,7 +80,7 @@ export default {
     }
   },
   components:{
-    uploadImg
+    uploadImg,goodsManager,goodsAdd
   },
   data() {
     return {
@@ -76,10 +89,54 @@ export default {
       isupdate:true,
       options: [{key: 1, value: '普通用户'}, {key: 2, value: 'VIP'}, {key: 3, value: '管理员'}],
       lmgurl:'',
-      sendInfo:false
+      sendInfo:false,
+      tab:false,
+      editableTabsValue: '',
+      editableTabs: [],
+      tabIndex: 0
     }
   },
   methods: {
+    addTab(targetName) {
+      var tabs = this.editableTabs;
+      var filter = tabs.filter(o=>o.title==targetName);
+      if(filter.length!=0){//存在此标签
+        this.editableTabsValue = filter[0].name;
+
+        return;
+      }
+      let newTabName = targetName;
+      let componentName='';
+      if(targetName=="发布商品"){//设置组件的名称
+        componentName="goodsAdd";
+      }
+      if(targetName=="我的发布"){
+        componentName="goodsManager";
+      }
+      this.editableTabs.push({
+        title: targetName,
+        name: newTabName,
+        content: componentName,
+        // component:districtMap,
+      });
+      this.editableTabsValue = newTabName;
+    },
+    removeTab(targetName) {
+      let tabs = this.editableTabs;
+      let activeName = this.editableTabsValue;
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1];
+            if (nextTab) {
+              activeName = nextTab.name;
+            }
+          }
+        });
+      }
+      this.editableTabsValue = activeName;
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+    },
     updateForm() {//修改
       if(this.lmgurl.length>0){
         let User={
@@ -141,7 +198,18 @@ export default {
       })
     },
     addGoods(){
-      this.$router.push({name: 'GoodsAdd'})
+      // this.$router.push({name: 'GoodsAdd'})
+      this.tab=true;
+      this.addTab('发布商品');
+    },
+    myGoods(){
+      this.tab=true;
+      this.addTab('我的发布');
+      // this.$router.push({name: 'GoodsManager'})
+    },
+    addManager(){
+      this.removeTab('发布商品');
+      this.addTab('我的发布');
     }
   },
   filters:{
@@ -150,6 +218,13 @@ export default {
       if(e==2)return "VIP";
       if(e==3)return "管理员";
       return e;
+    }
+  },
+  watch:{
+    editableTabs(val){
+      if(val.length==0){
+        this.tab=false;
+      }
     }
   },
   mounted() {

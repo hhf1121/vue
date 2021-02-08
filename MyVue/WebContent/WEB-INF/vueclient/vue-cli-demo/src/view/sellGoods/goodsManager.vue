@@ -1,18 +1,21 @@
 <template>
     <div>
         <el-form :inline="true" class="demo-form-inline" style="text-align: left;margin-bottom: 10px">
-              <el-button type="primary" style="float: right" @click="$router.push({name: 'menu', params: {}})">返回</el-button>
-                <el-button type="warning" round @click="soldoutSell">
+              <el-button style="float: right;border: none;" @click="queryGoods();" class="el-icon-refresh" :loading="isLoading"></el-button>
+                <el-button :disabled="isStatus!=2||isStatus==1" type="primary" plain round @click="soldupSell">
+                  上架
+                </el-button>
+                <el-button :disabled="isStatus==2||isStatus==1"  type="warning" plain round @click="soldoutSell">
                     下架
                 </el-button>
-                <el-button type="success" round @click="updateSell">
+                <el-button  :disabled="isStatus==1"  type="success" plain round @click="updateSell">
                     修改
                 </el-button>
-                <el-button type="danger" round @click="deleteSell">
+                <el-button :disabled="isStatus==1"  type="danger" plain round @click="deleteSell">
                     删除
                 </el-button>
         </el-form>
-        <div v-for="(item,index) in dataList" @click="changeValue(index)" >
+        <div v-for="(item,index) in dataList" @click="changeValue(item,index)" >
           <goods-model  :data="item" :key="index" :class="{ active:index==isActive }"  />
         </div>
         <el-pagination
@@ -32,7 +35,7 @@
 <script>
 import goodsModel from './goodsModel';
 export default {
-    name: 'GoodsShow',
+    name: 'GoodsManager',
     components: { goodsModel },
     data() {
         return {
@@ -44,7 +47,9 @@ export default {
             },
           currentUser:{},
           isActive:'-1',
-          isChecked:{}
+          isChecked:{},
+          isLoading:false,
+          isStatus:''
         };
     },
     mounted() {
@@ -60,9 +65,10 @@ export default {
 
     },
     methods: {
-        changeValue(index){
+        changeValue(data,index){
           this.isActive=index;
-          this.isChecked=this.dataList[index];
+          this.isChecked=data;
+          this.isStatus=data.sellStatus;
         },
         load(){
           this.pagination.pageSize+=1;
@@ -73,6 +79,13 @@ export default {
             this.$message.error({ message: '请选中一个再操作', center: true });
             return;
           }
+        },
+        soldupSell() {
+          if(!this.isChecked.idStr){
+            this.$message.error({ message: '请选中一个再操作', center: true });
+            return;
+          }
+
         },
         updateSell() {
           if(!this.isChecked.idStr){
@@ -88,20 +101,26 @@ export default {
           }
         },
         queryGoods() {
-            this.$api.managerGoods({ userCode: this.currentUser.userName, pageSize: this.pagination.pageSize, pageIndex: this.pagination.currentPage }).then((response) => {
+          this.isLoading=true;
+            setTimeout(()=>{
+              this.$api.managerGoods({ userCode: this.currentUser.userName, pageSize: this.pagination.pageSize, pageIndex: this.pagination.currentPage }).then((response) => {
                 if (response != null) {
-                    if (response.success) {
-                        this.dataList = response.data.records;
-                        this.pagination.total = response.data.total;
-                        this.$message.success({ message: '操作成功', center: true });
-                    } else {
-                        this.$message.error({ message: response.errorMessages, center: true });
-                    }
+                  if (response.success) {
+                    this.dataList = response.data.records;
+                    this.pagination.total = response.data.total;
+                    this.$message.success({ message: '操作成功', center: true });
+                    this.isLoading=false;
+                  } else {
+                    this.$message.error({ message: response.errorMessages, center: true });
+                    this.isLoading=false;
+                  }
                 } else {
-                    this.$message.error({ message: '系统异常，请联系开发者', center: true });
+                  this.$message.error({ message: '系统异常，请联系开发者', center: true });
+                  this.isLoading=false;
                 }
-            });
-        },
+              });
+            },1000)
+          },
         handleSizeChange(sizes) {
             this.pagination.pageSize = sizes;
             this.queryGoods();
@@ -116,9 +135,11 @@ export default {
 
 <style scoped>
 .active{
-  border: 1px solid darkgrey;
-  box-shadow: 10px 10px 16px #bbeff2;
-  /*background: #6d92a9;*/
+  border: 1px solid #a91b3c;
+  box-shadow: -10px -10px 10px #a9a9a9 ;
+  background: #bbeff2;
+  /*box-shadow: 0 0 7px #b53;*/
+  /*background: #95a;*/
   border-radius: 5px;
 }
 </style>

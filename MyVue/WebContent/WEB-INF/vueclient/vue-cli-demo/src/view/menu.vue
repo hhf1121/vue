@@ -42,6 +42,7 @@
             <template slot="title">我的娱乐</template>
             <el-menu-item index="2-3-1">视频</el-menu-item>
             <el-menu-item index="2-3-2">游戏</el-menu-item>
+            <el-menu-item index="2-3-3">购物</el-menu-item>
           </el-submenu>
         </el-submenu>
         <el-submenu  index="3">
@@ -306,6 +307,12 @@ export default {
         this.$router.push(
           {
             name: 'MyGame', params: {}
+          })
+      }
+      if(key=='2-3-3'){// 购物
+        this.$router.push(
+          {
+            name: 'GoodsShow', params: {}
           })
       }
     },

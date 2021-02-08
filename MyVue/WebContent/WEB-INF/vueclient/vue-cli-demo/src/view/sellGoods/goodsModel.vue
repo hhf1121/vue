@@ -10,8 +10,10 @@
           </div>
       </el-aside>
       <el-main style="text-align: left">
-        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  <el-button style="float: right"  type="danger" plain disabled >{{data.sellType | sellTypeStr }}&nbsp;|&nbsp;{{data.sellCategory | sellCategoryStr}}</el-button> </b>
+        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  <el-button style="float: right"  type="danger" plain disabled >{{data.sellType | sellTypeStr(dictSellGoodsType) }}&nbsp;|&nbsp;{{data.sellCategory | sellCategoryStr(dictGoodsCategory)}}</el-button> </b>
         <p style="height: 70px">内容：{{data.sellContent}}</p>
+        <el-button style="float: right" class="el-icon-finished" v-if="data.sellStatus==1">已完成</el-button>
+        <img :src="isxiajiaImg" alt="已下架" height="70px" width="85px" style="float: right;border: 1px solid #a3b3ff" v-if="data.sellStatus==2">
         <p>联系人:{{data.userName}}&nbsp;&nbsp;&nbsp;联系电话:{{data.userPhone}}</p>
         <p>发布日期:{{data.createTime}}</p>
       </el-main>
@@ -20,8 +22,6 @@
 </template>
 
 <script>
-  var dictGoodsCategory=JSON.parse(sessionStorage.getItem('dictGoodsCategory'));
-  var dictSellGoodsType=JSON.parse(sessionStorage.getItem('dictSellGoodsType'));
 export default {
     name: 'GoodsModel',
     props: {
@@ -30,17 +30,26 @@ export default {
     data() {
         return {
             photos: [],
-            index:0
+            index:0,
+            dictGoodsCategory:JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
+            dictSellGoodsType:JSON.parse(sessionStorage.getItem('dictSellGoodsType')),
+            isxiajiaImg:'http://learn.hhf.com/resources/static/img/xiajia.jpg'
         };
     },
-    mounted() {
-        // console.info(this.data);
-        // this.photos = this.data.sellGoodsPhotos.filter(o => o.isShow === 1)[0].goodsPhoto;
-        this.photos = this.data.sellGoodsPhotos.map(o=>{
-          return o.goodsPhoto;
-        });
-        console.info(this.photos)
-    },
+    // beforeCreate() {
+    //     // console.info(this.data);
+    //     // this.photos = this.data.sellGoodsPhotos.filter(o => o.isShow === 1)[0].goodsPhoto;
+    //   this.dictGoodsCategory=JSON.parse(sessionStorage.getItem('dictGoodsCategory'));
+    //   this.dictSellGoodsType=JSON.parse(sessionStorage.getItem('dictSellGoodsType'));
+    //   console.info(this.dictGoodsCategory);
+    //   console.info(this.dictSellGoodsType);
+    // },
+  mounted(){
+    this.photos = this.data.sellGoodsPhotos.map(o=>{
+      return o.goodsPhoto;
+    });
+    // console.info(this.photos)
+  },
   methods:{
       prev(){
         if(this.index<=0){
@@ -50,7 +59,7 @@ export default {
         }
       },
       next(){
-          if(this.index>=this.photos.length-2){
+          if(this.index>=this.photos.length-1){
             this.index=0;
           }else{
             this.index++;
@@ -58,11 +67,17 @@ export default {
        }
   },
   filters: {// 过滤器
-    sellTypeStr: function (cellValue) {
-      return dictSellGoodsType.filter(o=>o.value==cellValue)[0].label;
+    sellTypeStr: function (cellValue,dict) {
+      // var ts = this.dictSellGoodsType.filter(o=>o.value==cellValue);
+      var ts = dict.filter(o=>o.value==cellValue);
+      // console.info(ts)
+      return ts[0].label;
     },
-    sellCategoryStr: function (cellValue) {
-      return dictGoodsCategory.filter(o=>o.value==cellValue)[0].label;
+    sellCategoryStr: function (cellValue,dict) {
+      // var ts = this.dictGoodsCategory.filter(o=>o.value==cellValue);
+      var ts = dict.filter(o=>o.value==cellValue);
+      // console.info(ts)
+      return ts[0].label;
     },
   },
 };

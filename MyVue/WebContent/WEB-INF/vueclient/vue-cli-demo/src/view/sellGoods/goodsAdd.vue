@@ -199,23 +199,23 @@ export default {
         },
         cancelForm() {
             this.$refs.goodsForm.resetFields();
-            // this.$emit('flushIndex'); // 调用父组件，的freshData事件，实现数据刷新
-
-            this.$router.go(-1);
+            this.$emit('jumpManager'); // 调用父组件，的freshData事件，实现数据刷新
+            // this.$router.go(-1);
+          // this.$refs.mytab.removeTab('发布商品');
+          // this.$refs.mytab.addTab('我的发布');
         },
         onSubmit(form) {
-            console.info(this.portalGoodsDto);
             this.$refs[form].validate((valid) => {
                 if (valid) {
-                    console.info(this.portalGoodsDto);
+                    // console.info(this.portalGoodsDto);
                   this.$api.addGoods(this.portalGoodsDto).then((response) => {
-                    debugger
                         if (response != null) {
                             if (response.success) {
                                 this.$message.success({ message: '操作成功', center: true });
-                                this.$router.push({
-                                  name:'GoodsManager'
-                                });//返回上一层
+                                this.$emit('jumpManager');
+                              // this.$router.push({
+                                //   name:'GoodsManager'
+                                // });//返回上一层
                             } else {
                                 this.$message.error({ message: response.errorMessages, center: true });
                             }
