@@ -178,4 +178,6 @@ export const server = {
   addGoods: paramObj => post('/api/sellGoods/saveGoods', paramObj),//新增商品
   managerGoods: paramObj => get('/api/sellGoods/queryGoods', paramObj),//管理商品
   showGoods: paramObj => post('/api/sellGoods/showGoods', paramObj),//展示商品
+  updateStatusGoods: paramObj => post('/api/sellGoods/updateStatusGoods', paramObj),//商品状态
+  updateGoods: paramObj => post('/api/sellGoods/updateGoods', paramObj),//商品更新
 }

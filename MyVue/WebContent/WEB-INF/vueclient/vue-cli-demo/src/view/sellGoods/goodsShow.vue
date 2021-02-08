@@ -1,6 +1,25 @@
 <template>
   <div>
-    <a @click="$router.push({name: 'menu', params: {}})" style="cursor:pointer;color: #8cc5ff">返回首页</a>
+    <el-button @click="$router.push({name: 'menu', params: {}})" circle style="cursor:pointer;color: #8cc5ff;position: absolute;right: 0px;top:0px ">首页</el-button>
+    <el-button style="float: right;border: none;" @click="queryGoods(0)" class="el-icon-refresh"></el-button>
+    <el-form style="float: left;">
+        <el-radio-group v-model="sellCategory" type="success" plain @change="queryGoods(1)">
+          <el-radio-button
+            v-for="(item,index) in dictGoodsCategory"
+            :key="index"
+            :label="item.value">
+            {{ item.label }}
+          </el-radio-button>
+        </el-radio-group>
+        <el-radio-group v-model="sellType" type="primary" plain @change="queryGoods(2)" >
+          <el-radio-button  v-for="(item,index) in dictSellGoodsType" :key="index" :label="item.value">
+            {{ item.label }}
+          </el-radio-button>
+        </el-radio-group>
+    </el-form>
+    <br/>
+    <br/>
+    <br/>
     <div v-for="(item,index) in dataList" @click="changeValue(index)" >
       <goods-model  :data="item" :key="index" :class="{ active:index==isActive }" style="margin-bottom: 5px"  />
     </div>
@@ -33,13 +52,17 @@
         },
         currentUser:{},
         isActive:'-1',
-        isChecked:{}
+        isChecked:{},
+        sellCategory:'',
+        sellType:'',
+        dictGoodsCategory: JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
+        dictSellGoodsType: JSON.parse(sessionStorage.getItem('dictSellGoodsType'))
       };
     },
     mounted() {
       this.currentUser= JSON.parse(sessionStorage.getItem('user'));
       if(this.currentUser){
-        this.queryGoods();
+        this.queryGoods(0);
       }else {
         this.$router.push(
           {
@@ -55,34 +78,26 @@
       },
       load(){
         this.pagination.pageSize+=1;
-        this.queryGoods();
+        this.queryGoods(0);
       },
-      soldoutSell() {
-        if(!this.isChecked.idStr){
-          this.$message.error({ message: '请选中一个再操作', center: true });
-          return;
+      queryGoods(type) {
+        if(type===0){
+          this.sellCategory='';
+          this.sellType='';
         }
-      },
-      updateSell() {
-        if(!this.isChecked.idStr){
-          this.$message.error({ message: '请选中一个再操作', center: true });
-          return;
-        }
-
-      },
-      deleteSell() {
-        if(!this.isChecked.idStr){
-          this.$message.error({ message: '请选中一个再操作', center: true });
-          return;
-        }
-      },
-      queryGoods() {
-        this.$api.managerGoods({ userCode: this.currentUser.userName, pageSize: this.pagination.pageSize, pageIndex: this.pagination.currentPage }).then((response) => {
+        var param={
+          sellCategory:this.sellCategory,
+          sellType:this.sellType,
+          pageSize: this.pagination.pageSize,
+          pageIndex: this.pagination.currentPage,
+        };
+        // console.info(param)
+        this.$api.showGoods(param).then((response) => {
           if (response != null) {
             if (response.success) {
               this.dataList = response.data.records;
               this.pagination.total = response.data.total;
-              this.$message.success({ message: '操作成功', center: true });
+              // this.$message.success({ message: '操作成功', center: true });
             } else {
               this.$message.error({ message: response.errorMessages, center: true });
             }
@@ -93,11 +108,11 @@
       },
       handleSizeChange(sizes) {
         this.pagination.pageSize = sizes;
-        this.queryGoods();
+        this.queryGoods(1);
       },
       handleCurrentChange(currentPage) {
         this.pagination.currentPage = currentPage;
-        this.queryGoods();
+        this.queryGoods(1);
       }
     }
   };

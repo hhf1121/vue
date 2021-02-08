@@ -109,13 +109,14 @@ export default {
     left: 10px;
     cursor:pointer;
     background-color: rgb(206,197,180);
+    opacity: 0.5;
   }
   .right{
     position: absolute;
     right: 10px;
     top:80px;
     cursor:pointer;
-    background-color: rgba(206, 197, 180, 0.99);
+    background-color: rgb(206,197,180);
     opacity: 0.5;
   }
   .sum{

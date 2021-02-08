@@ -433,6 +433,7 @@ export default {
       window.onbeforeunload = this.onbeforeunload
     },
     setErrorMessage (data) {
+      console.info("ws连接错误，重连")
       // this.$message.error('WebSocket连接发生错误   状态码：' + this.websocket.readyState)
         this.$notify({
           title: '系统提示',
@@ -440,6 +441,7 @@ export default {
           position: 'bottom-right',
           duration: 0
         });
+        this.openWebSocket();
     },
     setOnopenMessage () {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
@@ -490,6 +492,7 @@ export default {
       // this.$message.success('服务端返回：' + event.data)
     },
     setOncloseMessage () {
+      // console.info("ws连接关闭，重连")
       this.$notify({
         title: '系统提示',
         message: 'WebSocket连接关闭 状态码：' + this.websocket.readyState,
@@ -497,6 +500,7 @@ export default {
         duration: 3000
       });
       // this.$message.error('WebSocket连接关闭 状态码：' + this.websocket.readyState)
+      // this.openWebSocket();
     },
     onbeforeunload () {
       //清掉心跳定时器

@@ -14,6 +14,9 @@
                 <el-button :disabled="isStatus==1"  type="danger" plain round @click="deleteSell">
                     删除
                 </el-button>
+                <el-button :disabled="isStatus==2||isStatus==1"  type="info" class="el-icon-s-goods" plain round @click="finishedSell">
+                    交易完成
+                </el-button>
         </el-form>
         <div v-for="(item,index) in dataList" @click="changeValue(item,index)" >
           <goods-model  :data="item" :key="index" :class="{ active:index==isActive }"  />
@@ -34,6 +37,7 @@
 </template>
 <script>
 import goodsModel from './goodsModel';
+// import goodsModel from './goodsModel';
 export default {
     name: 'GoodsManager',
     components: { goodsModel },
@@ -74,18 +78,71 @@ export default {
           this.pagination.pageSize+=1;
           this.queryGoods();
         },
-        soldoutSell() {
+        soldoutSell() {//下架
           if(!this.isChecked.idStr){
             this.$message.error({ message: '请选中一个再操作', center: true });
             return;
           }
+          var data={
+            sellStatus:2,
+            idStr:this.isChecked.idStr
+          }
+          this.$api.updateStatusGoods(data).then((response) => {
+            if (response != null) {
+              if (response.success) {
+                // this.$message.success({ message: '删除成功', center: true });
+                this.queryGoods();
+              } else {
+                this.$message.error({ message: response.errorMessages, center: true });
+              }
+            } else {
+              this.$message.error({ message: '系统异常，请联系开发者', center: true });
+            }
+          });
         },
-        soldupSell() {
+        finishedSell() {//完成
           if(!this.isChecked.idStr){
             this.$message.error({ message: '请选中一个再操作', center: true });
             return;
           }
-
+          var data={
+            sellStatus:1,
+            idStr:this.isChecked.idStr
+          }
+          this.$api.updateStatusGoods(data).then((response) => {
+            if (response != null) {
+              if (response.success) {
+                // this.$message.success({ message: '删除成功', center: true });
+                this.queryGoods();
+              } else {
+                this.$message.error({ message: response.errorMessages, center: true });
+              }
+            } else {
+              this.$message.error({ message: '系统异常，请联系开发者', center: true });
+            }
+          });
+        },
+        soldupSell() {//上架
+          if(!this.isChecked.idStr){
+            this.$message.error({ message: '请选中一个再操作', center: true });
+            return;
+          }
+          var data={
+            sellStatus:3,
+            idStr:this.isChecked.idStr
+          }
+          this.$api.updateStatusGoods(data).then((response) => {
+            if (response != null) {
+              if (response.success) {
+                // this.$message.success({ message: '删除成功', center: true });
+                this.queryGoods();
+              } else {
+                this.$message.error({ message: response.errorMessages, center: true });
+              }
+            } else {
+              this.$message.error({ message: '系统异常，请联系开发者', center: true });
+            }
+          });
         },
         updateSell() {
           if(!this.isChecked.idStr){
@@ -94,13 +151,30 @@ export default {
           }
 
         },
-        deleteSell() {
+        deleteSell() {//删除
           if(!this.isChecked.idStr){
             this.$message.error({ message: '请选中一个再操作', center: true });
             return;
           }
+          var data={
+            isDelete:1,
+            idStr:this.isChecked.idStr
+          }
+          this.$api.updateStatusGoods(data).then((response) => {
+            if (response != null) {
+              if (response.success) {
+                // this.$message.success({ message: '删除成功', center: true });
+                this.queryGoods();
+              } else {
+                this.$message.error({ message: response.errorMessages, center: true });
+              }
+            } else {
+              this.$message.error({ message: '系统异常，请联系开发者', center: true });
+            }
+          });
         },
         queryGoods() {
+          this.isActive='-1';
           this.isLoading=true;
             setTimeout(()=>{
               this.$api.managerGoods({ userCode: this.currentUser.userName, pageSize: this.pagination.pageSize, pageIndex: this.pagination.currentPage }).then((response) => {
