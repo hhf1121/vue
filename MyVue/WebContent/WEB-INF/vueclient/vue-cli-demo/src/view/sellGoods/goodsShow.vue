@@ -164,9 +164,13 @@
 
 <style scoped>
   .active{
-    border: 1px solid darkgrey;
-    box-shadow: 10px 10px 16px #bbeff2;
+    border: 1px solid #a9298d;
+    box-shadow: 10px 10px 16px #a3b6f2;
     /*background: #6d92a9;*/
+    border-radius: 5px;
+    background: #86a7f2;
+    /*box-shadow: 0 0 7px #b53;*/
+    /*background: #95a;*/
     border-radius: 5px;
   }
 </style>

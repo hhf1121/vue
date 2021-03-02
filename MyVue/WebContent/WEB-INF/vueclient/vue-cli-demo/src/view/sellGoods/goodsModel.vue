@@ -10,13 +10,17 @@
           </div>
       </el-aside>
       <el-main style="text-align: left">
-        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  <el-button style="float: right"  type="danger" plain disabled >{{data.sellType | sellTypeStr(dictSellGoodsType) }}&nbsp;|&nbsp;{{data.sellCategory | sellCategoryStr(dictGoodsCategory)}}</el-button> </b>
+        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  </b>
         <p style="height: 70px">内容：{{data.sellContent}}</p>
-        <el-button style="float: right" class="el-icon-finished" v-if="data.sellStatus==1">已完成</el-button>
-        <img :src="isxiajiaImg" alt="已下架" height="70px" width="85px" style="float: right;border: 1px solid #a3b3ff" v-if="data.sellStatus==2">
-        <p>联系人:{{data.userName}}&nbsp;&nbsp;&nbsp;联系电话:{{data.userPhone}}</p>
-        <p>发布日期:{{data.createTime}}</p>
+        <p><b>联系人:</b>{{data.userName}}&nbsp;&nbsp;&nbsp;联系电话:{{data.userPhone}}</p>
+        <p><b>发布日期:</b>{{data.createTime}}</p>
       </el-main>
+      <el-aside width="200px" style="position: relative">
+        <el-button style="position: absolute;right: 5px;bottom: 5px" class="el-icon-finished" v-if="data.sellStatus==1">已完成</el-button>
+        <el-button style="position: absolute;right: 5px"  type="danger" plain disabled >{{data.sellType | sellTypeStr(dictSellGoodsType) }}&nbsp;|&nbsp;{{data.sellCategory | sellCategoryStr(dictGoodsCategory)}}</el-button>
+        <img :src="isxiajiaImg" alt="已下架" height="70px" width="85px" style="position: absolute;border: 1px solid #a3b3ff;right: 5px;bottom: 5px" v-if="data.sellStatus==2">
+        <b style="color: red;text-align: center;font-size: 30px;position: absolute;top:36%;right: 15px">{{ data.goodsFee }}元</b>
+      </el-aside>
     </el-container>
   </div>
 </template>

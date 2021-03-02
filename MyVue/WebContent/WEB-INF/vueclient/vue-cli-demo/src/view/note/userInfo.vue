@@ -60,7 +60,7 @@
         :key="item.name"
         :label="item.title"
         :name="item.name">
-        <component :is="item.content" style="margin-left: 50px"  @jumpManager="addManager()"></component><!--根据入参，自动选择是哪个组件-->
+        <component :is="item.content" style="margin-left: 50px"  @jumpManager="addManager()" @editGoods="editTab" :editData="editData"></component><!--根据入参，自动选择是哪个组件-->
         <!-- <district-map v-if="item.content=='省市区配置'"></district-map>
          <d2-table v-if="item.content=='花销类型配置'"></d2-table>-->
       </el-tab-pane>
@@ -93,10 +93,15 @@ export default {
       tab:false,
       editableTabsValue: '',
       editableTabs: [],
-      tabIndex: 0
+      tabIndex: 0,
+      editData:{}
     }
   },
   methods: {
+    editTab(data){
+      this.editData=data;
+      this.addTab('编辑商品');
+    },
     addTab(targetName) {
       var tabs = this.editableTabs;
       var filter = tabs.filter(o=>o.title==targetName);
@@ -109,9 +114,14 @@ export default {
       let componentName='';
       if(targetName=="发布商品"){//设置组件的名称
         componentName="goodsAdd";
+        this.editData={};
       }
       if(targetName=="我的发布"){
         componentName="goodsManager";
+        this.editData={};
+      }
+      if(targetName=="编辑商品"){
+        componentName="goodsAdd";
       }
       this.editableTabs.push({
         title: targetName,
@@ -208,8 +218,10 @@ export default {
       // this.$router.push({name: 'GoodsManager'})
     },
     addManager(){
-      this.removeTab('发布商品');
+      this.tab=false;
+      this.editableTabs=[];
       this.addTab('我的发布');
+      // this.myGoods();
     }
   },
   filters:{

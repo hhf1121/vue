@@ -6,7 +6,7 @@
         <el-form-item label="内容" prop="sellContent">
             <el-input v-model="portalGoodsDto.sellContent" type="textarea" :disabled="isEdit!==0" />
         </el-form-item>
-        <el-dialog :visible.sync="imgVisible" :modal="false" :width="dialogWidth">
+        <el-dialog :visible.sync="imgVisible" :modal="false" :title="dialogImageName" :width="dialogWidth">
             <img :src="dialogImageUrl" :width="imgWidth" alt="" @load="onLoadImg">
         </el-dialog>
         <el-form-item label="附件" prop="sellGoodsPhotos">
@@ -79,6 +79,9 @@
 <script>
 export default {
     name: 'GoodsAdd',
+    props:{
+      editData:{}
+    },
     data() {
         const checkPhone = (rule, value, callback) => {
             const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
@@ -138,6 +141,7 @@ export default {
             filelimit: 10,
             imgVisible: false,
             dialogImageUrl: '',
+            dialogImageName: '',
             dialogWidth: '',
             imgWidth: '',
             dictGoodsCategory: JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
@@ -147,9 +151,20 @@ export default {
         };
     },
     mounted() {
+      debugger
         this.currentUser= JSON.parse(sessionStorage.getItem('user'));
         this.portalGoodsDto.userName=this.currentUser.name;
         this.portalGoodsDto.userCode=this.currentUser.userName;
+        if(this.editData&&this.editData.id){
+          this.portalGoodsDto=this.editData;
+          this.fileList=this.portalGoodsDto.sellGoodsPhotos.map(o=>{
+            let data={
+              name:o.photoName,
+              url:o.goodsPhoto
+            };
+            return data;
+          })
+        }
     },
     methods: {
         onLoadImg(e) { // 由于dialog的高度是自适应的，只要获取图片宽度赋值给dialog就能实现
@@ -167,7 +182,14 @@ export default {
             }
         },
         handleRemove(file, fileList) { // 点击删除的时候
-            this.portalGoodsDto.sellGoodsPhotos = this.portalGoodsDto.sellGoodsPhotos.filter(o => o.goodsPhoto !== file.response.data);
+            debugger
+            let filterData = '';
+            if (!file.response || !file.response.data) {
+              filterData = file.url;
+            } else {
+              filterData = file.response.data;
+            }
+            this.portalGoodsDto.sellGoodsPhotos = this.portalGoodsDto.sellGoodsPhotos.filter(o => o.goodsPhoto !== filterData);
         },
         handlePreview(file) { // 点击的时候
             this.imgVisible = true;
@@ -176,11 +198,13 @@ export default {
             } else {
                 this.dialogImageUrl = file.url;
             }
+            this.dialogImageName = file.name;
         },
         handleAvatarSuccess(res, file) { // 请求成功之后
             const obj = {
                 id: null,
-                goodsPhoto: res.data
+                goodsPhoto: res.data,
+                photoName: file.name
             };
             this.portalGoodsDto.sellGoodsPhotos.push(obj);
         },

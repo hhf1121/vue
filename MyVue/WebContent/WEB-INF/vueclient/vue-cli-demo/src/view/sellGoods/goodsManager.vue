@@ -18,7 +18,7 @@
                     交易完成
                 </el-button>
         </el-form>
-        <div v-for="(item,index) in dataList" @click="changeValue(item,index)" >
+        <div v-for="(item,index) in dataList"  @click="changeValue(item,index)" >
           <goods-model  :data="item" :key="index" :class="{ active:index==isActive }"  />
         </div>
         <el-pagination
@@ -149,7 +149,7 @@ export default {
             this.$message.error({ message: '请选中一个再操作', center: true });
             return;
           }
-
+          this.$emit('editGoods',this.isChecked); // 调用父组件，的editGoods事件
         },
         deleteSell() {//删除
           if(!this.isChecked.idStr){
