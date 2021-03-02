@@ -211,7 +211,7 @@ export default {
 .active{
   border: 1px solid #a91b3c;
   box-shadow: -10px -10px 10px #a9a9a9 ;
-  background: #bbeff2;
+  background: #a0c1f2;
   /*box-shadow: 0 0 7px #b53;*/
   /*background: #95a;*/
   border-radius: 5px;

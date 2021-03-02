@@ -3,6 +3,7 @@
     <el-button @click="$router.push({name: 'menu', params: {}})" circle style="cursor:pointer;color: #8cc5ff;position: absolute;right: 0px;top:0px ">首页</el-button>
     <el-button style="float: right;border: none;" @click="queryGoods(0)" class="el-icon-refresh"></el-button>
     <el-form style="float: left;">
+      <b style="color: #66b1ff">商品类别：</b>
         <el-radio-group v-model="sellCategory" type="success" plain @change="queryGoods(1)">
           <el-radio-button
             v-for="(item,index) in dictGoodsCategory"
@@ -11,12 +12,39 @@
             {{ item.label }}
           </el-radio-button>
         </el-radio-group>
-        <el-radio-group v-model="sellType" type="primary" plain @change="queryGoods(2)" >
+      <br/>
+      <b style="color: #66b1ff">商品类型：</b>
+      <el-button
+        ref="isType0"
+        plain
+        style="border: none;color: #ff1824"
+        value=""
+        @click="queryGoodsType(undefined,'isType0',dictSellGoodsType.length)">
+        全部
+      </el-button>
+      <span style="margin-right: 0px;display: inline-block">|</span>
+      <div
+        v-for="(item,index) in dictSellGoodsType"
+        :key="index"
+        style="display: inline-block">
+        <el-button
+          :ref="`dictType${(index+1)}`"
+          style="border: none"
+          plain
+          :label="item.label"
+          :value="item.value"
+          @click="queryGoodsType(item.value,(index+1),dictSellGoodsType.length)">
+          {{ item.label }}
+        </el-button>
+        <span v-if="dictSellGoodsType.length-1!==index" style="margin-right: 0px;display: inline-block">|</span>
+      </div>
+        <!--<el-radio-group v-model="sellType" type="primary" plain @change="queryGoods(2)" >
           <el-radio-button  v-for="(item,index) in dictSellGoodsType" :key="index" :label="item.value">
             {{ item.label }}
           </el-radio-button>
-        </el-radio-group>
+        </el-radio-group>-->
     </el-form>
+    <br/>
     <br/>
     <br/>
     <br/>
@@ -72,6 +100,22 @@
 
     },
     methods: {
+      queryGoodsType(data, index, length) {
+        if (data === undefined) {
+          this.$refs.isType0.$el.style.color = '#ff1824';
+          for (let i = 1; i < length + 1; i++) {
+            this.$refs[`dictType${i}`][0].$el.style.color = '';
+          }
+        } else {
+          for (let j = 1; j < length + 1; j++) {
+            if (index !== j) { this.$refs[`dictType${j}`][0].$el.style.color = ''; }
+            if (index === j) { this.$refs[`dictType${j}`][0].$el.style.color = '#ff1824'; }
+          }
+          this.$refs.isType0.$el.style.color = '';
+        }
+        this.sellType = data;
+        this.queryGoods(1);
+      },
       changeValue(index){
         this.isActive=index;
         this.isChecked=this.dataList[index];
