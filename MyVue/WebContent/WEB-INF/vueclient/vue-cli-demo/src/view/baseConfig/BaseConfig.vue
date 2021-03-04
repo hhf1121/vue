@@ -27,6 +27,7 @@
             <i class="el-icon-setting"></i>
             <span slot="title">字典配置</span>
           </template>
+            <el-menu-item index="2-0" @click="addTab('字典类型')"><div style="margin-right: -80px">字典类型</div></el-menu-item>
             <el-menu-item index="2-1" @click="addTab('花销类型配置')"><div style="margin-right: -80px">花销类型</div></el-menu-item>
         </el-submenu>
         <!--<el-submenu>-->
@@ -43,7 +44,7 @@
         :key="item.name"
         :label="item.title"
         :name="item.name">
-        <component :is="item.content" style="margin-left: 50px"></component><!--根据入参，自动选择是哪个组件-->
+        <component :is="item.content" style="margin-left: 50px" @closedTab="closeThisTab"></component><!--根据入参，自动选择是哪个组件-->
        <!-- <district-map v-if="item.content=='省市区配置'"></district-map>
         <d2-table v-if="item.content=='花销类型配置'"></d2-table>-->
       </el-tab-pane>
@@ -54,9 +55,10 @@
 <script>
 import districtMap from '@/view/myComponents/districtMap'
 import ConfigEdit from "@/view/ConfigEdit";
+import BaseDict from "@/view/baseConfig/BaseDict";
     export default {
         name: "BaseConfig",
-        components:{ConfigEdit, districtMap},
+        components:{ConfigEdit, districtMap,BaseDict},
         data() {
           return {
             editableTabsValue: '',
@@ -65,6 +67,10 @@ import ConfigEdit from "@/view/ConfigEdit";
           }
         },
         methods: {
+          closeThisTab(data){
+              let tabs = this.editableTabs;
+              this.editableTabs = tabs.filter(tab => tab.title !== data);
+          },
           handleOpen(key, keyPath) {
             // if(key=='1-1'){
             //   this.addTab("省市区配置");
@@ -92,6 +98,9 @@ import ConfigEdit from "@/view/ConfigEdit";
             let componentName='';
             if(targetName=="省市区配置"){//设置组件的名称
               componentName="districtMap";
+            }
+            if(targetName=="字典类型"){
+              componentName="BaseDict";
             }
             if(targetName=="花销类型配置"){
               componentName="ConfigEdit";
