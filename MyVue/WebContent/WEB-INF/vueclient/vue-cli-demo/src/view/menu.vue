@@ -435,13 +435,13 @@ export default {
     setErrorMessage (data) {
       console.info("ws连接错误，重连")
       // this.$message.error('WebSocket连接发生错误   状态码：' + this.websocket.readyState)
-      //   this.$notify({
-      //     title: '系统提示',
-      //     message: '连接错误',
-      //     position: 'bottom-right',
-      //     duration: 0
-      //   });
-        // this.openWebSocket();
+        this.$notify({
+          title: '系统提示',
+          message: '连接错误',
+          position: 'bottom-right',
+          duration: 0
+        });
+        this.openWebSocket();
     },
     setOnopenMessage () {
       // this.$message.success('WebSocket连接成功    状态码：' + this.websocket.readyState)
