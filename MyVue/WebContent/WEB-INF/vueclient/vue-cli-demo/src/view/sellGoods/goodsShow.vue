@@ -48,10 +48,9 @@
     <br/>
     <br/>
     <br/>
-    <div v-for="(item,index) in dataList" @click="changeValue(index)" @dblclick="showDetailInfo(item,index)">
-      <goods-model  :data="item" :key="index" :class="{ active:index==isActive }" style="margin-bottom: 5px"  />
+    <div v-for="(item,index) in dataList" @click="changeValue(index)" >
+      <goods-model  :data="item" :key="index" :class="{ active:index==isActive }" @refreshGoods="refreshGoods" style="margin-bottom: 5px"  />
     </div>
-    <goods-detail v-if="dialogShow" :dialog-show="dialogShow" :data="isChecked" @flushGoods="flushGoods" />
     <el-pagination
       style="padding: 16px 10px"
       :pager-count="5"
@@ -68,10 +67,9 @@
 </template>
 <script>
   import goodsModel from './goodsModel';
-  import goodsDetail from './goodsDetail';
   export default {
     name: 'GoodsShow',
-    components: { goodsModel,goodsDetail },
+    components: { goodsModel },
     data() {
       return {
         dataList: [],
@@ -87,7 +85,6 @@
         sellType:'',
         dictGoodsCategory: JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
         dictSellGoodsType: JSON.parse(sessionStorage.getItem('dictSellGoodsType')),
-        dialogShow:false,
         isLoading:false
       };
     },
@@ -104,6 +101,9 @@
 
     },
     methods: {
+      refreshGoods(){
+        this.queryGoods(0);
+      },
       queryGoodsType(data, index, length) {
         if (data === undefined) {
           this.$refs.isType0.$el.style.color = '#ff1824';
@@ -119,29 +119,6 @@
         }
         this.sellType = data;
         this.queryGoods(1);
-      },
-      flushGoods() {
-        this.dialogShow = false;
-        this.queryGoods(0);
-      },
-      showDetailInfo(data, index) {
-        this.isChecked = data;
-        this.dialogShow = true;
-        // 浏览量+1
-        this.$api.addGoodsViews({ id: this.isChecked.id }).then((response) => {
-          if (response != null) {
-            if (response.success) {
-              // this.dataList = response.data.list;
-              // this.pagination.total = response.data.total;
-              // this.$message.success({ message: '操作成功', center: true });
-              // this.queryGoods();
-            } else {
-              this.$message.error({ message: response.error, center: true });
-            }
-          } else {
-            this.$message.error({ message: '系统异常，请联系开发者', center: true });
-          }
-        });
       },
       changeValue(index){
         this.isActive=index;

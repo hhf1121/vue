@@ -10,7 +10,7 @@
           </div>
       </el-aside>
       <el-main style="text-align: left">
-        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  <span style="font-size: 6px;margin-left: 300px">浏览次数:</span><span style="color:red;font-size: 6px;">{{ data.goodsViews }}</span></b>
+        <b style="position:relative;top: -15px"><span><a v-if="!isMySelf" href="#" style="text-decoration: none;" @click="showDetailInfo">{{data.sellTitle}}</a></span><span v-if="isMySelf">{{data.sellTitle}}</span>  <span style="font-size: 8px;color:red;margin-left:70%">浏览量:{{ data.goodsViews }}</span></b>
 
         <p style="height: 70px">内容：{{data.sellContent}}</p>
         <p><b>联系人:</b>{{data.userName}}&nbsp;&nbsp;&nbsp;<b>联系电话</b>:{{data.userPhone}}</p>
@@ -23,12 +23,15 @@
         <b style="color: red;text-align: center;font-size: 30px;position: absolute;top:36%;right: 15px">{{ data.goodsFee }}元</b>
       </el-aside>
     </el-container>
+    <goods-detail v-if="dialogShow" :dialog-show="dialogShow" :data="data" @flushGoods="flushGoods" />
   </div>
 </template>
 
 <script>
+  import goodsDetail from './goodsDetail';
 export default {
     name: 'GoodsModel',
+    components: { goodsDetail },
     props: {
         data: Object
     },
@@ -38,7 +41,9 @@ export default {
             index:0,
             dictGoodsCategory:JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
             dictSellGoodsType:JSON.parse(sessionStorage.getItem('dictSellGoodsType')),
-            isxiajiaImg:'http://learn.hhf.com/resources/static/img/xiajia.png'
+            isxiajiaImg:'http://learn.hhf.com/resources/static/img/xiajia.png',
+            isMySelf:false,
+            dialogShow:false
         };
     },
     // beforeCreate() {
@@ -53,9 +58,30 @@ export default {
     this.photos = this.data.sellGoodsPhotos.map(o=>{
       return o.goodsPhoto;
     });
+      this.isMySelf=this.data.userCode===this.$root.USER.userName?true:false;
     // console.info(this.photos)
   },
   methods:{
+      showDetailInfo() {
+        this.dialogShow = true;
+        // 浏览量+1
+        this.$api.addGoodsViews({ id: this.data.id }).then((response) => {
+          if (response != null) {
+            if (response.success) {
+
+            } else {
+              this.$message.error({ message: response.error, center: true });
+            }
+          } else {
+            this.$message.error({ message: '系统异常，请联系开发者', center: true });
+          }
+        });
+      },
+      flushGoods() {
+        this.dialogShow = false;
+        // this.queryGoods(0);
+        this.$emit('refreshGoods');
+      },
       prev(){
         if(this.index<=0){
           this.index=this.photos.length-1;

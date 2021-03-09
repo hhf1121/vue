@@ -492,15 +492,15 @@ export default {
       // this.$message.success('服务端返回：' + event.data)
     },
     setOncloseMessage () {
-      // console.info("ws连接关闭，重连")
-      this.$notify({
-        title: '系统提示',
-        message: 'WebSocket连接关闭 状态码：' + this.websocket.readyState,
-        position: 'bottom-right',
-        duration: 3000
-      });
+      console.info("ws连接关闭，重连")
+      // this.$notify({
+      //   title: '系统提示',
+      //   message: 'WebSocket连接关闭 状态码：' + this.websocket.readyState,
+      //   position: 'bottom-right',
+      //   duration: 3000
+      // });
       // this.$message.error('WebSocket连接关闭 状态码：' + this.websocket.readyState)
-      // this.openWebSocket();
+      this.openWebSocket();
     },
     onbeforeunload () {
       //清掉心跳定时器
