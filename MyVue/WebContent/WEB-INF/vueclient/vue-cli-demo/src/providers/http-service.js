@@ -183,4 +183,5 @@ export const server = {
   managerGoods: paramObj => get('/api/sellGoods/queryGoods', paramObj),//管理商品
   showGoods: paramObj => post('/api/sellGoods/showGoods', paramObj),//展示商品
   updateStatusGoods: paramObj => post('/api/sellGoods/updateStatusGoods', paramObj),//商品状态
+  addGoodsViews: paramObj => get('/api/sellGoods/addGoodsViews', paramObj),//商品浏览量
 }

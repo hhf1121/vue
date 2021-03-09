@@ -1,10 +1,10 @@
 <template>
     <el-form ref="goodsForm" :model="portalGoodsDto" :rules="goodsRules" label-width="100px" style="width: 50%">
         <el-form-item label="标题" prop="sellTitle">
-            <el-input v-model="portalGoodsDto.sellTitle" :disabled="isEdit!==0" />
+            <el-input v-model="portalGoodsDto.sellTitle" maxlength="20" show-word-limit :disabled="isEdit!==0" />
         </el-form-item>
         <el-form-item label="内容" prop="sellContent">
-            <el-input v-model="portalGoodsDto.sellContent" type="textarea" :disabled="isEdit!==0" />
+            <el-input v-model="portalGoodsDto.sellContent"  maxlength="100" show-word-limit type="textarea" :disabled="isEdit!==0" />
         </el-form-item>
         <el-dialog :visible.sync="imgVisible" :modal="false" :title="dialogImageName" :width="dialogWidth">
             <img :src="dialogImageUrl" :width="imgWidth" alt="" @load="onLoadImg">
@@ -151,7 +151,6 @@ export default {
         };
     },
     mounted() {
-      debugger
         this.currentUser= JSON.parse(sessionStorage.getItem('user'));
         this.portalGoodsDto.userName=this.currentUser.name;
         this.portalGoodsDto.userCode=this.currentUser.userName;

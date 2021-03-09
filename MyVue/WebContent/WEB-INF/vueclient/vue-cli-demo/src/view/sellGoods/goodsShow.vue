@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="$router.push({name: 'menu', params: {}})" circle style="cursor:pointer;color: #8cc5ff;position: absolute;right: 0px;top:0px ">首页</el-button>
-    <el-button style="float: right;border: none;" @click="queryGoods(0)" class="el-icon-refresh"></el-button>
+    <el-button style="float: right;border: none;" :loading="isLoading" @click="queryGoods(0)" class="el-icon-refresh"></el-button>
     <el-form style="float: left;">
       <b style="color: #66b1ff">商品类别：</b>
         <el-radio-group v-model="sellCategory" type="success" plain @change="queryGoods(1)">
@@ -48,9 +48,10 @@
     <br/>
     <br/>
     <br/>
-    <div v-for="(item,index) in dataList" @click="changeValue(index)" >
+    <div v-for="(item,index) in dataList" @click="changeValue(index)" @dblclick="showDetailInfo(item,index)">
       <goods-model  :data="item" :key="index" :class="{ active:index==isActive }" style="margin-bottom: 5px"  />
     </div>
+    <goods-detail v-if="dialogShow" :dialog-show="dialogShow" :data="isChecked" @flushGoods="flushGoods" />
     <el-pagination
       style="padding: 16px 10px"
       :pager-count="5"
@@ -67,9 +68,10 @@
 </template>
 <script>
   import goodsModel from './goodsModel';
+  import goodsDetail from './goodsDetail';
   export default {
     name: 'GoodsShow',
-    components: { goodsModel },
+    components: { goodsModel,goodsDetail },
     data() {
       return {
         dataList: [],
@@ -84,7 +86,9 @@
         sellCategory:'',
         sellType:'',
         dictGoodsCategory: JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
-        dictSellGoodsType: JSON.parse(sessionStorage.getItem('dictSellGoodsType'))
+        dictSellGoodsType: JSON.parse(sessionStorage.getItem('dictSellGoodsType')),
+        dialogShow:false,
+        isLoading:false
       };
     },
     mounted() {
@@ -116,6 +120,29 @@
         this.sellType = data;
         this.queryGoods(1);
       },
+      flushGoods() {
+        this.dialogShow = false;
+        this.queryGoods(0);
+      },
+      showDetailInfo(data, index) {
+        this.isChecked = data;
+        this.dialogShow = true;
+        // 浏览量+1
+        this.$api.addGoodsViews({ id: this.isChecked.id }).then((response) => {
+          if (response != null) {
+            if (response.success) {
+              // this.dataList = response.data.list;
+              // this.pagination.total = response.data.total;
+              // this.$message.success({ message: '操作成功', center: true });
+              // this.queryGoods();
+            } else {
+              this.$message.error({ message: response.error, center: true });
+            }
+          } else {
+            this.$message.error({ message: '系统异常，请联系开发者', center: true });
+          }
+        });
+      },
       changeValue(index){
         this.isActive=index;
         this.isChecked=this.dataList[index];
@@ -129,6 +156,10 @@
           this.sellCategory='';
           this.sellType='';
         }
+        this.isLoading=true;
+        setTimeout(()=>{
+          this.isLoading=false;
+        },500)
         var param={
           sellCategory:this.sellCategory,
           sellType:this.sellType,
@@ -168,7 +199,7 @@
     box-shadow: 10px 10px 16px #a3b6f2;
     /*background: #6d92a9;*/
     border-radius: 5px;
-    background: #86a7f2;
+    background: #cfe7f2;
     /*box-shadow: 0 0 7px #b53;*/
     /*background: #95a;*/
     border-radius: 5px;

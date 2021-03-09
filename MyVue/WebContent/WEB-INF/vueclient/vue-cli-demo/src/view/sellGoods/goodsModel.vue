@@ -10,15 +10,16 @@
           </div>
       </el-aside>
       <el-main style="text-align: left">
-        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  </b>
+        <b style="position:relative;top: -15px">标题：{{data.sellTitle}}  <span style="font-size: 6px;margin-left: 300px">浏览次数:</span><span style="color:red;font-size: 6px;">{{ data.goodsViews }}</span></b>
+
         <p style="height: 70px">内容：{{data.sellContent}}</p>
-        <p><b>联系人:</b>{{data.userName}}&nbsp;&nbsp;&nbsp;联系电话:{{data.userPhone}}</p>
+        <p><b>联系人:</b>{{data.userName}}&nbsp;&nbsp;&nbsp;<b>联系电话</b>:{{data.userPhone}}</p>
         <p><b>发布日期:</b>{{data.createTime}}</p>
       </el-main>
       <el-aside width="200px" style="position: relative">
         <el-button style="position: absolute;right: 5px;bottom: 5px" class="el-icon-finished" v-if="data.sellStatus==1">已完成</el-button>
         <el-button style="position: absolute;right: 5px"  type="danger" plain disabled >{{data.sellType | sellTypeStr(dictSellGoodsType) }}&nbsp;|&nbsp;{{data.sellCategory | sellCategoryStr(dictGoodsCategory)}}</el-button>
-        <img :src="isxiajiaImg" alt="已下架" height="70px" width="85px" style="position: absolute;border: 1px solid #a3b3ff;right: 5px;bottom: 5px" v-if="data.sellStatus==2">
+        <img :src="isxiajiaImg" alt="已下架" height="70px" width="85px" style="position: absolute;right: 5px;bottom: 5px" v-if="data.sellStatus==2">
         <b style="color: red;text-align: center;font-size: 30px;position: absolute;top:36%;right: 15px">{{ data.goodsFee }}元</b>
       </el-aside>
     </el-container>
@@ -37,7 +38,7 @@ export default {
             index:0,
             dictGoodsCategory:JSON.parse(sessionStorage.getItem('dictGoodsCategory')),
             dictSellGoodsType:JSON.parse(sessionStorage.getItem('dictSellGoodsType')),
-            isxiajiaImg:'http://learn.hhf.com/resources/static/img/xiajia.jpg'
+            isxiajiaImg:'http://learn.hhf.com/resources/static/img/xiajia.png'
         };
     },
     // beforeCreate() {
