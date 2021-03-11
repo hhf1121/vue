@@ -147,7 +147,7 @@ export default {
 
 <style scoped>
   .mybody{
-    background:url(../../static/background-xj.jpg);
+    background:url(../../static/background-lz.jpg);/*登录背景图*/
     width:100%;
     height:100%;
     position:fixed;
