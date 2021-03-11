@@ -156,7 +156,7 @@ export default {
   .loginstyle{
     position: absolute;
     top:30%;
-    left: 30%;
+    right: 10%;
     width: 300px;
     height: 280px;
     border-radius: 15px;
