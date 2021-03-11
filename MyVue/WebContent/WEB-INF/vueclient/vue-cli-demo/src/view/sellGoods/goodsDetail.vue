@@ -63,11 +63,6 @@
 import dayjs from 'dayjs';
 export default {
     name: 'GoodsDetail',
-    filters: {
-        myFormatDate(data) {
-            return data != null ? dayjs(data).format('YYYY-MM-DD HH:mm:ss') : null;
-        }
-    },
     props: {
         data: {
             type: Object,
@@ -107,18 +102,21 @@ export default {
         }
     },
   filters: {// 过滤器
-  sellTypeStr: function (cellValue,dict) {
-    // var ts = this.dictSellGoodsType.filter(o=>o.value==cellValue);
-    var ts = dict.filter(o=>o.value==cellValue);
-    // console.info(ts)
-    return ts[0].label;
-  },
-  sellCategoryStr: function (cellValue,dict) {
-    // var ts = this.dictGoodsCategory.filter(o=>o.value==cellValue);
-    var ts = dict.filter(o=>o.value==cellValue);
-    // console.info(ts)
-    return ts[0].label;
-  },
+    sellTypeStr: function (cellValue,dict) {
+      // var ts = this.dictSellGoodsType.filter(o=>o.value==cellValue);
+      var ts = dict.filter(o=>o.value==cellValue);
+      // console.info(ts)
+      return ts[0].label;
+    },
+    sellCategoryStr: function (cellValue,dict) {
+      // var ts = this.dictGoodsCategory.filter(o=>o.value==cellValue);
+      var ts = dict.filter(o=>o.value==cellValue);
+      // console.info(ts)
+      return ts[0].label;
+    },
+    myFormatDate(data) {
+      return data != null ? dayjs(data).format('YYYY-MM-DD HH:mm:ss') : null;
+    }
 }
 };
 </script>
