@@ -240,7 +240,7 @@ export default {
                                 //   name:'GoodsManager'
                                 // });//返回上一层
                             } else {
-                                this.$message.error({ message: response.errorMessages, center: true });
+                                this.$message.error({ message: response.error, center: true });
                             }
                         } else {
                             this.$message.error({ message: '系统异常，请联系开发者', center: true });
