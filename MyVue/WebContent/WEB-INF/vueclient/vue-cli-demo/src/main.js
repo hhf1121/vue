@@ -16,6 +16,7 @@ import axios from 'axios'
 import {server} from './providers/http-service'
 
 import {NoteType} from './database/notetype'
+import {WorkType} from './database/worktype'
 import {User} from './view/currentUser/currentUser'
 import VueJsonp from 'vue-jsonp'
 
@@ -27,6 +28,7 @@ Vue.use(VueDPlayer);
 
 
 Vue.prototype.NoteType = NoteType
+Vue.prototype.WorkType = WorkType
 Vue.prototype.$USER = User
 const Base64 = require('js-base64').Base64
 

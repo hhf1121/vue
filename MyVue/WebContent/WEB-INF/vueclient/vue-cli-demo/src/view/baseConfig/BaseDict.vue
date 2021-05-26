@@ -152,8 +152,8 @@
                 callback(new Error('不能存在空格'));
               } else if(isNaN(value)){
                 callback(new Error('必须是数字'));
-              }else if(parseInt(value)>9||parseInt(value)<0){
-                callback(new Error('必须是0-9的数字'));
+              }else if(parseInt(value)>99||parseInt(value)<0){
+                callback(new Error('必须是0-99的数字'));
               }else {
                 callback();
               }

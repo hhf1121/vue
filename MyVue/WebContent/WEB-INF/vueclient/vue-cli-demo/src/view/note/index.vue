@@ -91,6 +91,19 @@ export default {
           },
         },
         {
+          title: '职业',
+          key: 'workTypes',
+          minWidth: '12%',
+          size: 'small',
+          sortable: true,//排序
+          component: {
+            name: 'el-select',
+            options: this.WorkType,
+            disabled: true,
+            multiple:true
+          },
+        },
+        {
           title: '地址',
           key: 'noteAddressName',
           /*component: {//级联选择器el-cascader
@@ -225,8 +238,8 @@ export default {
       //   console.log(e.__ob__.dep.subs[0].vm.resultData);
       // })
       columns[1].component.disabled = false
-      columns[3].component.disabled = false
       columns[4].component.disabled = false
+      columns[5].component.disabled = false
       let button = this.rowHandle.custom
       button[0].show = false
       button[1].show = true
@@ -263,8 +276,8 @@ export default {
       button[1].show = false
       let row = this.columns
       row[1].component.disabled = true
-      row[3].component.disabled = true
       row[4].component.disabled = true
+      row[5].component.disabled = true
     },
     remove() {
         let length = this.selectionDataId.length;

@@ -37,6 +37,11 @@
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" ></el-option>
     </el-select>
   </el-form-item>
+  <el-form-item  label="职业" prop="workTypes">
+    <el-select clearable multiple  v-model="queryData.workTypes" @click="typeChecked=!typeChecked" :checked="typeChecked" placeholder="选择类型" >
+      <el-option v-for="item in workOptions" :key="item.value" :label="item.label" :value="item.value" ></el-option>
+    </el-select>
+  </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="onSubmit">查询</el-button>
     <el-button type="primary" @click="onClear('queryForm')">重置</el-button>
@@ -66,6 +71,7 @@ export default {
       detail:false,
       // options:this.NoteType,//读取前端静态文件notetype.js
       options:[],// 改为后端配置，调用接口
+      workOptions:[],// 改为后端配置，调用接口
       selectloading:false,
       selectoptions:[],
       initdata:[],
@@ -118,7 +124,21 @@ export default {
         }
       }).catch(err=>{
         this.$message.error({message: '字典：[cost_type]请求错误', center: true})
-      })
+      });
+      this.$api.getDataByConfigCode({"configCode":'work_type'}).then(er=>{
+        if(er.success){
+          if(er.data.length>0){
+            this.workOptions=er.data.map(o=>{
+              var object={};
+              object.label=o.typeLabel;
+              object.value=o.typeValue;
+              return object;
+            });
+          }
+        }
+      }).catch(err=>{
+        this.$message.error({message: '字典：[work_type]请求错误', center: true})
+      });
     }
   },
   mounted(){//初始带出所有的数据

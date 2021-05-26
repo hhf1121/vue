@@ -37,6 +37,11 @@
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="职业" prop="workTypes">
+        <el-select filterable v-model="ruleForm.workTypes" multiple placeholder="请选择" style="float: left">
+          <el-option v-for="item in workOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="地址" prop="noteAddress">
         <el-cascader filterable style="width: 400px;float: left"
                      :options="addressOptions"
@@ -93,6 +98,7 @@ export default {
           noteMoney: '',
           userName:'',
           imgCode:'',
+          workTypes:[],
           imgVos:[]
         }
       }
@@ -140,12 +146,16 @@ export default {
         ],
         noteRemark: [
           {required: true, message: '请填写备注信息', trigger: 'blur'}
+        ],
+        workTypes:[
+          {required: true, message: '请选择职业', trigger: 'blur'}
         ]
       },
       myloading:false,
       isShow: false,
       // options: this.NoteType,
       options: [],
+      workOptions: [],
       imageUrl: '',
       dialogVisible: false,
       disabled: false,
@@ -263,7 +273,24 @@ export default {
         this.$message.error('上传文件大小不能超过 2MB!');
       }
       return  isLt2M;
+    },
+    getWorkTypeDict(){
+      this.$api.getDataByConfigCode({"configCode":'work_type'}).then(er=>{
+        if(er.success){
+          if(er.data.length>0){
+            this.workOptions=er.data.map(o=>{
+              var object={};
+              object.label=o.typeLabel;
+              object.value=o.typeValue;
+              return object;
+            });
+          }
+        }
+      }).catch(err=>{
+        this.$message.error({message: '字典：[work_type]请求错误', center: true})
+      });
     }
+
   },
   mounted(){
     //初始页面时，查询数据
@@ -275,6 +302,7 @@ export default {
       }
     });
     //数据字典
+    this.getWorkTypeDict();
     this.$api.getDataByConfigCode({"configCode":'cost_type'}).then(er=>{
       if(er.success){
         if(er.data.length>0){
