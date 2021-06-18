@@ -385,7 +385,6 @@ export default {
     reset(){
       const USER=JSON.parse(sessionStorage.getItem('user'));
       if(USER){
-        sessionStorage.removeItem("user");
         this.$api.downUser().then(re=>{
           this.$root.USER =USER;
           sessionStorage.removeItem("user");

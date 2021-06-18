@@ -3,10 +3,11 @@ import rootVm from '../main.js'
 
 axios.defaults.timeout = 5000
 axios.defaults.baseURL = '' //填写域名//http request 拦截器
-const userJson=sessionStorage.getItem('user');
-const user=userJson?JSON.parse(userJson):"";
-console.info(user,"http.user.........");
+
 axios.interceptors.request.use(config => {
+    const userJson=sessionStorage.getItem('user');
+    const user=userJson?JSON.parse(userJson):"";
+    // console.info(user,"http.user.........");
     config.data = JSON.stringify(config.data)
     config.headers = {
       'Content-Type': 'application/json' ,
