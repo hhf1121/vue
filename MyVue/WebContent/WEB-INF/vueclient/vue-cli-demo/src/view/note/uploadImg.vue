@@ -3,6 +3,7 @@
     <el-upload
       class="avatar-uploader" :limit="1"
       :action="myPath"
+      :headers="headerObj"
       :data="userData"
       :auto-upload="false"
       accept="image/jpeg,image/gif,image/png"
@@ -35,6 +36,9 @@
         dialogVisible:false,
         dialogImageUrl:'',
         isfile:Object,
+        headerObj:{
+          authToken: JSON.parse(sessionStorage.getItem('user')).id!=undefined?JSON.parse(sessionStorage.getItem('user')).token:"",
+        },
       };
     },
     methods: {
@@ -48,7 +52,10 @@
         fd.append('id',this.userData.id);//传其他参数
         let config = {
           //添加请求头
-          headers: { 'Content-Type':'multipart/form-data'}
+          headers: {
+            'Content-Type':'multipart/form-data',
+            'authToken': JSON.parse(sessionStorage.getItem('user')).id!=undefined?JSON.parse(sessionStorage.getItem('user')).token:""
+          }
         };
         const instance=axios.create({
           withCredentials: true

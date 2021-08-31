@@ -1,6 +1,6 @@
 <template>
   <div class="mybody">
-      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="loginstyle">
+      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="loginstyle" v-if="!isWx">
           <h4 style="margin-top: -20px">用户登录</h4>
         <el-form-item label="账号" prop="username">
           <el-input type="text" v-model="ruleForm.username"  style="width: 220px;float: left" @blur="getVerifyCode"></el-input>
@@ -18,16 +18,28 @@
         <el-form-item style="z-index: 1">
           <el-button @click="resetForm('ruleForm')">重置</el-button>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <a style="float: left;z-index: 2;position: relative;" href="#" @click="wxLogin">二维码登录</a>
         </el-form-item>
       </el-form>
+    <el-form  label-width="50px" v-if="isWx" class="loginstyle">
+      <h4 style="margin-top: -20px">扫码登录</h4>
+      <el-form-item style="z-index: 1">
+        <img style="margin-left: -50px;" :src="isWxPicture" width="200px" height="200px" >
+      </el-form-item>
+      <el-form-item >
+        <a style="margin-left: -50px;" href="#" @click="returnLogin">返回</a>
+      </el-form-item >
+    </el-form>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
+import GoodsModel from './sellGoods/goodsModel';
 
 export default {
   name: 'Login',
+  components: {GoodsModel},
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -69,7 +81,9 @@ export default {
           {validator: validateverifycode, trigger: 'blur'}
         ]
       },
-      websocket:null
+      websocket:null,
+      isWx:false,
+      isWxPicture:''
     }
   },
   methods: {
@@ -119,6 +133,18 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
+    wxLogin(){
+        //请求二维码
+        this.$api.queryWxPicture().then(rs=>{
+            console.info(rs);
+            this.isWxPicture = rs.data;
+        })
+        this.isWx=true;
+    },
+    returnLogin(){
+      this.isWx=false;
+      this.isWxPicture = '';
+    },
     getVerifyCode(){
       if(this.ruleForm.username){
         this.$api.getVerifyCode({"userName":this.ruleForm.username}).then(result=>{
@@ -158,7 +184,7 @@ export default {
     top:30%;
     right: 10%;
     width: 300px;
-    height: 280px;
+    height: 300px;
     border-radius: 15px;
     background-color: rgba(98, 137, 255, 0.5);
     padding-top: 30px;
